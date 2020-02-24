@@ -9,23 +9,32 @@ import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 public class RiderMainPage extends FragmentActivity implements OnMapReadyCallback {
 
+    private static final String TAG = "RiderMainPage";
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+    private static final int DEFAULT_ZOOM = 16;
+
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
+
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +47,14 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+        if(mLocationPermissionsGranted){
+            getDeviceLocation();
+
+            // makes a blue dot on the map showing current location
+            mMap.setMyLocationEnabled(true);
+
+        }
     }
 
     private void initMap() {
@@ -45,6 +62,35 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(RiderMainPage.this);
     }
 
+    private void getDeviceLocation(){
+        /* get the device's current location */
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        try{
+            if(mLocationPermissionsGranted){
+                Task location = mFusedLocationProviderClient.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful()){
+                            Location currentLocation = (Location) task.getResult();
+                            moveCamera(new LatLng(currentLocation.getLatitude(),
+                                    currentLocation.getLongitude()), DEFAULT_ZOOM);
+                        }else{
+                            Toast.makeText(RiderMainPage.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        }catch (SecurityException e){
+            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
+        }
+    }
+
+    private void moveCamera(LatLng latLng, float zoom){
+        /* moves the camera to latitude and longitude at zoom level */
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+    }
 
     private void getLocationPermission() {
         /*
@@ -62,6 +108,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                     Manifest.permission.ACCESS_COARSE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED){
                 mLocationPermissionsGranted = true;
+                initMap();
             }else{
                 ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
             }
