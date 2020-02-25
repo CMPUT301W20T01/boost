@@ -14,18 +14,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button button = findViewById(R.id.signUpButton);
+        Button signUpButton = findViewById(R.id.signUpButton);
+        Button loginButton = findViewById(R.id.loadButton);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gotoMap();
+                gotoRiderMap();
+            }
+        });
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoDriverMap();
             }
         });
     }
 
-    public void gotoMap(){
+    public void gotoRiderMap(){
         Intent intent = new Intent(this, RiderMainPage.class);
+        startActivity(intent);
+    }
+
+    public void gotoDriverMap(){
+        Intent intent = new Intent(this, DriverMainPage.class);
         startActivity(intent);
     }
 }
