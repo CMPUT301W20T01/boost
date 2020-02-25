@@ -1,75 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical"
-    android:background="#FF030303">
+    android:background="#ffffff"
+    tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <EditText
+        android:id="@+id/sign_in_password"
+        android:layout_width="222dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/yellow_background_home_screen"
+        app:layout_constraintVertical_bias="0.499" />
+
+    <View
+        android:id="@+id/yellow_background_home_screen"
+        android:layout_width="0dp"
+        android:layout_height="218dp"
+        android:background="#FFAA1D"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/boost_text"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="100dp">
+        android:gravity="center"
+        android:text="@string/boost"
+        android:textColor="#FFFFFF"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:elevation="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.147" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/boost">
-        </ImageView>
+    <EditText
+        android:id="@+id/sign_in_email"
+        android:layout_width="222dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/yellow_background_home_screen"
+        app:layout_constraintVertical_bias="0.395" />
 
-    </LinearLayout>
+    <Button
+        android:id="@+id/sign_in_button"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="228dp"
+        android:background="@drawable/button"
+        android:text="@string/sign_in"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/yellow_background_home_screen"
+        app:layout_constraintVertical_bias="0.997" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/linearLayout1"
-        android:layout_marginTop="50dp">
+    <Button
+        android:id="@+id/sign_up_button"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:background="@drawable/button"
+        android:text="@string/sign_up"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/yellow_background_home_screen"
+        app:layout_constraintVertical_bias="0.644" />
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Username"
-            android:textColorHint="#FFFFFFFF"
-            android:textColor="#FFFFFFFF"
-            android:layout_gravity="center"
-            android:textAlignment="center"
-            android:id="@+id/userNameLogin">
-        </EditText>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Password"
-            android:textColorHint="#FFFFFFFF"
-            android:textColor="#FFFFFFFF"
-            android:layout_gravity="center"
-            android:textAlignment="center"
-            android:id="@+id/passwordLogin">
-        </EditText>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Login"
-            android:textAllCaps="false"
-            android:id="@+id/loadButton"
-            android:background="@drawable/custombutton"
-            android:layout_marginBottom="5dp">
-        </Button>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sign Up"
-            android:id="@+id/signUpButton"
-            android:textAllCaps="false"
-            android:background="@drawable/custombutton">
-        </Button>
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

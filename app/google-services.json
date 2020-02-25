@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1006071843560",
+    "firebase_url": "https://boost-59aac.firebaseio.com",
+    "project_id": "boost-59aac",
+    "storage_bucket": "boost-59aac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006071843560:android:4e8ec740a0bd3c929bd75d",
+        "android_client_info": {
+          "package_name": "ca.ualberta.boost"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1006071843560-iihlf0mtca56q9s8g0uv0h4bjukuct9o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2ziLc6S_nRuNQw6MzJW_C_lUbvRadkuY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1006071843560-iihlf0mtca56q9s8g0uv0h4bjukuct9o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
