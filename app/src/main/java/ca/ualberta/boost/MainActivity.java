@@ -10,22 +10,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
-    private static final String TAG = "MainActivity";
-    private static final String USERNAME= "name";
-    private static final String EMAIL = "email";
-
-    private EditText editTextName;
-    private EditText editTextEmail;
-
+    private EditText email;
+    private EditText password;
 
     private Button signUpButton;
     private Button signInButton;
-
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
 
 
     @Override
@@ -33,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        editTextName = findViewById(R.id.sign_in_email);
-        editTextName = findViewById(R.id.sign_in_password);
+        email = findViewById(R.id.sign_in_email);
+        password = findViewById(R.id.sign_in_password);
 
 
 
@@ -47,17 +38,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //click signIn to go to user homepage
         signInButton = findViewById(R.id.sign_in_button);
 
 
     }
-
-    //sign in
-    public void saveNote(View v){
-        String name = editTextName.getText().toString();
-
-    }
-
 
     //method to open SignUp activity
     public void openSignUpActivity(){

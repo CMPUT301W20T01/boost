@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1006071843560-k7h7s0ul8mdkb9iaol2me1f6236jijeg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ca.ualberta.boost",
+            "certificate_hash": "a74855ea0bfbdf75eca6f41ad4bb9bc8e32539c0"
+          }
+        },
+        {
           "client_id": "1006071843560-iihlf0mtca56q9s8g0uv0h4bjukuct9o.apps.googleusercontent.com",
           "client_type": 3
         }

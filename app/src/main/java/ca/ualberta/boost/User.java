@@ -5,18 +5,18 @@ public class User {
     private String firstName;
     private String lastName;
     private String userName;
-    private String password;
-    private String confirmpassword;
+    //private String password;
     private String email;
-    private int phoneNumber;
+    private String phoneNumber;
+
+    public User(){}
 
     //constructor
-    public User(String firstName, String lastName, String userName, String password, String confirmpassword, String email,int phoneNumber ){
+    public User(String firstName, String lastName, String userName,  String email, String phoneNumber ){
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
-        this.password = password;
-        this.confirmpassword = password;
+        //this.password = password;
         this.email = email;
         this.phoneNumber = phoneNumber;
 
@@ -37,19 +37,19 @@ public class User {
         this.userName = userName;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+   // public void setPassword(String password) {
+       // this.password = password;
+    //}
 
-    public void setConfirmpassword(String confirmpassword) {
+  /*  public void setConfirmpassword(String confirmpassword) {
         this.confirmpassword = confirmpassword;
-    }
+    }*/
 
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 }
