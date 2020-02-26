@@ -125,6 +125,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                         || actionId == EditorInfo.IME_ACTION_DONE
                         || event.getAction() == KeyEvent.ACTION_DOWN
                         || event.getAction() == KeyEvent.KEYCODE_ENTER){
+                    Log.d("RIDER", "Got input");
                     geoLocate(searchPickupText, "Pickup");
                 }
                 return false;
@@ -145,17 +146,12 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         });
     }
 
+
     private void geoLocate(EditText searchEditText, String markerTitle) {
         String searchString = searchEditText.getText().toString();
-        Geocoder geocoder = new Geocoder(RiderMainPage.this);
-        List<Address> results = new ArrayList<>();
-        try{
-            results = geocoder.getFromLocationName(searchString, 1);
-        }catch (IOException e){
-            // show error message that location was not found
-            // THIS never happens even if no location shows up ?
-            Toast.makeText(this, "Could not find location", Toast.LENGTH_SHORT).show();
-        }
+        //Geocoder geocoder = new Geocoder(RiderMainPage.this);
+        List<Address> results = new geoLocate(RiderMainPage.this).doInBackground(searchString);
+
         if (results.size() > 0){
             Address address = results.get(0);
             //searchEditText.setText(address.getFeatureName());
@@ -174,6 +170,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         setRiderMainPageVisibility();
         searchDestinationText.setText("");
         searchPickupText.setText("");
+        mMap.clear();
     }
 
     private void setRequestLocationPageVisibility() {
