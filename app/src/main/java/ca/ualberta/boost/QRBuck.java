@@ -1,23 +1,32 @@
 package ca.ualberta.boost;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 //generate QR code
-public class QRBuck {
+public class QRBuck{
     private int money; //total money a User has
+    Activity mActivity;
 
-    QRBuck(int money){
+    QRBuck(int money, Activity a){
+//        super();
         this.money = money;
+        this.mActivity = a;
     }
 
     public Integer getMoney(){
@@ -55,4 +64,20 @@ public class QRBuck {
         }
         return QRcode;
     }
+
+    public void ScanQR(){
+        try {
+            Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+            intent.putExtra("SCAN_MODE", "QR_CODE_MODE"); // "PRODUCT_MODE for bar codes
+            mActivity.startActivityForResult(intent, 0);
+        } catch (Exception e) {
+
+            Uri marketUri = Uri.parse("market://details?id=com.google.zxing.client.android");
+            Intent marketIntent = new Intent(Intent.ACTION_VIEW,marketUri);
+            mActivity.startActivity(marketIntent);
+
+        }
+
+    }
+
 }
