@@ -33,13 +33,14 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.sign_up);
+        //setContentView(R.layout.activity_sign_up);
 
         auth = FirebaseAuth.getInstance();
-        email = findViewById(R.id.emailSignup);
-        age = findViewById(R.id.ageSignup);
-        password = findViewById(R.id.passwordSignup);
-        signUpButton = findViewById(R.id.signUpButton);
+        email = findViewById(R.id.sign_up_email);
+        age = findViewById(R.id.sign_up_age);
+        password = findViewById(R.id.sign_up_password);
+        signUpButton = findViewById(R.id.confirm_sign_up_button);
         ref = FirebaseFirestore.getInstance().collection("users");
 
         //Create and add user when button clicked
