@@ -52,11 +52,11 @@
                 android:textSize="12sp" />
 
             <EditText
-                android:id="@+id/sign_up_last_name"
+                android:id="@+id/sign_up_age"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="Last Name"
+                android:hint="Age"
                 android:textSize="12sp" />
 
             <EditText

@@ -7,12 +7,12 @@ public class Ride {
     private Location endLocation;
     private float fare;
     private float distance;
-    private Driver driver;
-    private Rider rider;
+    private User driver;
+    private User rider;
     RideStatus rideStatus;
 
     // constructor without distance
-    public Ride(Location startLocation, Location endLocation, float fare, Driver driver, Rider rider, RideStatus rideStatus) {
+    public Ride(Location startLocation, Location endLocation, float fare, User driver, User rider, RideStatus rideStatus) {
         this.startLocation = startLocation;
         this.endLocation = endLocation;
         this.fare = fare;
@@ -54,19 +54,19 @@ public class Ride {
         this.distance = distance;
     }
 
-    public Driver getDriver() {
+    public User getDriver() {
         return driver;
     }
 
-    public void setDriver(Driver driver) {
+    public void setDriver(User driver) {
         this.driver = driver;
     }
 
-    public Rider getRider() {
+    public User getRider() {
         return rider;
     }
 
-    public void setRider(Rider rider) {
+    public void setRider(User rider) {
         this.rider = rider;
     }
 
