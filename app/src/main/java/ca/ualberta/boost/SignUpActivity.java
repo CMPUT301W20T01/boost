@@ -6,8 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,19 +25,19 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private FirebaseAuth auth;
     private EditText email;
     private EditText password;
     private EditText age;
     private Button signUpButton;
+    private Spinner spinner;
     CollectionReference ref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_up);
-        //setContentView(R.layout.activity_sign_up);
 
         auth = FirebaseAuth.getInstance();
         email = findViewById(R.id.sign_up_email);
@@ -42,6 +45,15 @@ public class SignUpActivity extends AppCompatActivity {
         password = findViewById(R.id.sign_up_password);
         signUpButton = findViewById(R.id.confirm_sign_up_button);
         ref = FirebaseFirestore.getInstance().collection("users");
+
+        //Reference spinner
+        spinner = findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this , R.array.userType, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(this);
+
 
         //Create and add user when button clicked
         signUpButton.setOnClickListener(new View.OnClickListener() {
@@ -123,5 +135,18 @@ public class SignUpActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+
+    //spinner methods
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+       String text = adapterView.getItemAtPosition(i).toString();
+       //Toast.makeText(adapterView.getContext(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }
