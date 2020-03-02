@@ -41,6 +41,8 @@ public class HomeActivityRider extends AppCompatActivity {
         ref1 = db.collection("users");
         auth = FirebaseAuth.getInstance();
         signout = findViewById(R.id.signoutButton);
+        //test button
+
         textViewEmail = findViewById(R.id.textViewEmail);
         textViewId = findViewById(R.id.textViewID);
         textViewAge = findViewById(R.id.textViewAge);
@@ -54,6 +56,7 @@ public class HomeActivityRider extends AppCompatActivity {
                 finish();
             }
         });
+
     }
 
     //launch home page
@@ -81,4 +84,5 @@ public class HomeActivityRider extends AppCompatActivity {
         });
 
     }
+
 }

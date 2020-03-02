@@ -8,24 +8,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-
-//    private static final String TAG = "MainActivity";
-//    private static final String USERNAME= "name";
-//    private static final String EMAIL = "email";
-
 
     private EditText editTextEmail;
     private EditText editTextPassword;
     private Button signUpButton;
     private Button signInButton;
+
+    Button test;
 
     private FirebaseFirestore db;
     private FirebaseAuth auth;
@@ -49,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
         //get references to firestore
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
+
+        //test
+        test = findViewById(R.id.button1);
 
         //initialize views
         editTextEmail = findViewById(R.id.sign_in_email);
@@ -74,6 +76,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchRides();
+            }
+        });
+
 
     }
 
@@ -88,11 +97,21 @@ public class MainActivity extends AppCompatActivity {
                             currentUserId = auth.getCurrentUser().getEmail().toString();
                             launchHome();
                         }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            if(e.toString().matches("com.google.firebase.auth.FirebaseAuthInvalidCredentialsException: The password is invalid or the user does not have a password.")){
+                                Toast.makeText(MainActivity.this, "The password is invalid or the user does not have a password", Toast.LENGTH_SHORT).show();
+                            } else {
+                            Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                            Log.i("error message", e.toString()); }
+                        }
                     });
         }
     }
 
-
+    //todo: this function should take a string that is either rider or driver and launch the respective homescreen
     private void launchHome(){
         Intent intent = new Intent(this, HomeActivityRider.class);
         startActivity(intent);
@@ -118,5 +137,10 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    private void launchRides() {
+        Intent intent = new Intent(this, DisplayActiveRideRequestsActivity.class);
+        startActivity(intent);
     }
 }
