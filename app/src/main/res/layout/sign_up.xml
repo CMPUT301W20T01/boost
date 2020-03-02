@@ -52,37 +52,12 @@
                 android:textSize="12sp" />
 
             <EditText
-                android:id="@+id/sign_up_age"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:hint="Age"
-                android:textSize="12sp" />
-
-            <EditText
                 android:id="@+id/sign_up_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:hint="Username"
                 android:textSize="12sp" />
-
-            <EditText
-                android:id="@+id/sign_up_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:hint="Password"
-                android:textSize="12sp" />
-
-            <EditText
-                android:id="@+id/sign_up_confirm_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:hint="Confirm Password"
-                android:textSize="12sp" />
-
             <EditText
                 android:id="@+id/sign_up_email"
                 android:layout_width="match_parent"
@@ -97,6 +72,15 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:hint="Phone Number"
+                android:textSize="12sp" />
+
+
+            <EditText
+                android:id="@+id/sign_up_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="Password"
                 android:textSize="12sp" />
 
             <Button
