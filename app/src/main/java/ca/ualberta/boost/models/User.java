@@ -30,6 +30,40 @@ public abstract class User {
 
     public abstract Map<String, String> data();
 
+    // getters
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public Location getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public double getQrBalance() {
+        return qrBalance;
+    }
+
+    @Nullable
+    public Ride getActiveRide() {
+        return activeRide;
+    }
+
     // setters
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -59,32 +93,7 @@ public abstract class User {
         this.qrBalance = qrBalance;
     }
 
-    // getters
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public Location getCurrentLocation() {
-        return currentLocation;
-    }
-
-    public double getQrBalance() {
-        return qrBalance;
+    public void setActiveRide(@Nullable Ride activeRide) {
+        this.activeRide = activeRide;
     }
 }

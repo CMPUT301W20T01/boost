@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class Driver extends User{
 
-    private ArrayList<Ride> allRides; // TODO: create Ride class
+    private ArrayList<Ride> allRides;
     private int rating;
     private int numRates;
 
@@ -42,6 +42,6 @@ public class Driver extends User{
         map.put("password", this.getPassword());
         map.put("email", this.getEmail());
         map.put("phoneNumber", this.getPhoneNumber());
-
+        return map;
     }
 }
