@@ -1,6 +1,7 @@
 package ca.ualberta.boost;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;

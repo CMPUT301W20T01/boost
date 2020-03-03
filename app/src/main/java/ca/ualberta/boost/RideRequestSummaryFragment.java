@@ -21,7 +21,7 @@ public class RideRequestSummaryFragment extends DialogFragment{
     private TextView fromText;
     private TextView toText;
     private TextView costText;
-    private TextView durationText;
+  //  private TextView durationText;
 
 
     RideRequestSummaryFragment(Ride ride){
@@ -29,7 +29,7 @@ public class RideRequestSummaryFragment extends DialogFragment{
     }
 
     public interface OnFragmentInteractionListener {
-        void onOkPressed();
+        void onAcceptPressed();
     }
 
     @Override
@@ -47,16 +47,17 @@ public class RideRequestSummaryFragment extends DialogFragment{
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_ride_request_summary, null);
+        View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_ride_summary, null);
         fromText = view.findViewById(R.id.fromText);
         toText = view.findViewById(R.id.toText);
         costText = view.findViewById(R.id.costText);
-        durationText = view.findViewById(R.id.durationText);
+       // durationText = view.findViewById(R.id.durationText);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         // building the dialog
         return builder
                 .setView(view)
-                .setTitle("Ride Summary")
+                .setCustomTitle(titleView)
                 .setNegativeButton("Cancel", null) // null -> does nothing
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     @Override
@@ -65,7 +66,8 @@ public class RideRequestSummaryFragment extends DialogFragment{
                         toText.setText(ride.getEndLocation().toString());
                         costText.setText(Float.toString(ride.getFare()));
 
-                        listener.onOkPressed();
+                        // send ride request in parent activity
+                        listener.onAcceptPressed();
 
 
                     }
