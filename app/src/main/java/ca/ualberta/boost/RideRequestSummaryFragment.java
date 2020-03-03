@@ -62,9 +62,11 @@ public class RideRequestSummaryFragment extends DialogFragment{
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        fromText.setText(ride.getStartLocation().toString());
-                        toText.setText(ride.getEndLocation().toString());
-                        costText.setText(Float.toString(ride.getFare()));
+                        //fromText.setText(ride.getStartLocation().toString());
+                        //toText.setText(ride.getEndLocation().toString());
+                        fromText.setText(ride.getRider().getFirstName());
+                        toText.setText(ride.getRider().getLastName());
+                        costText.setText(Double.toString(ride.getFare()));
 
                         // send ride request in parent activity
                         listener.onAcceptPressed();

@@ -5,14 +5,14 @@ import android.location.Location;
 public class Ride {
     private Location startLocation;
     private Location endLocation;
-    private float fare;
+    private double fare;
     private float distance;
     private User driver;
     private User rider;
     RideStatus rideStatus;
 
     // constructor without distance
-    public Ride(Location startLocation, Location endLocation, float fare, User driver, User rider, RideStatus rideStatus) {
+    public Ride(Location startLocation, Location endLocation, double fare, User driver, User rider, RideStatus rideStatus) {
         this.startLocation = startLocation;
         this.endLocation = endLocation;
         this.fare = fare;
@@ -38,7 +38,7 @@ public class Ride {
         this.endLocation = endLocation;
     }
 
-    public float getFare() {
+    public double getFare() {
         return fare;
     }
 
@@ -79,6 +79,6 @@ public class Ride {
     }
 
     public float calculateDistance(Location startLocation, Location endLocation){
-        return startLocation.distanceTo(endLocation);
+        return 12; //startLocation.distanceTo(endLocation);
     }
 }

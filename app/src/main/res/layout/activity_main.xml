@@ -90,5 +90,19 @@
         app:layout_constraintTop_toBottomOf="@+id/yellow_background_home_screen"
         app:layout_constraintVertical_bias="0.644" />
 
+    <Button
+        android:id="@+id/testButton"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="228dp"
+        android:background="@drawable/button"
+        android:text="test"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/yellow_background_home_screen"
+        app:layout_constraintVertical_bias="0.997" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

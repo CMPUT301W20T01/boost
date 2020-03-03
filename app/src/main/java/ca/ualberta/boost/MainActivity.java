@@ -16,7 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RideRequestSummaryFragment.OnFragmentInteractionListener {
 
 //    private static final String TAG = "MainActivity";
 //    private static final String USERNAME= "name";
@@ -75,6 +75,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // test ride request fragment
+        Button testButton = findViewById(R.id.testButton);
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RideStatus rideStatus = new RideStatus();
+                User user = new User("Michelle", "Aubin", "meesh", "password1", "password1", "phiangda@ualberta.ca", 1234567);
+                Ride ride = new Ride(null, null, 13.60, null, user, rideStatus);
+                new RideRequestSummaryFragment(ride).show(getSupportFragmentManager(), "ADD_CITY");
+            }
+        });
 
     }
 
@@ -119,5 +130,10 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onAcceptPressed() {
+        
     }
 }
