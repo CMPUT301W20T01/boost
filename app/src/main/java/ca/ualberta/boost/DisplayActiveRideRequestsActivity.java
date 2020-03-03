@@ -23,6 +23,7 @@ public class DisplayActiveRideRequestsActivity extends AppCompatActivity {
 
     public ArrayList<RideRequest> arr;
     ListView requests;
+    public RideRequestListAdapter adapter;
 
     FirebaseFirestore db;
     CollectionReference ref1;
@@ -40,7 +41,7 @@ public class DisplayActiveRideRequestsActivity extends AppCompatActivity {
         requests = findViewById(R.id.activeRequestsListView);
         arr = new ArrayList<>();
 //        arr.add(new RideRequest("edmonton", "calgary", "20","alex"));
-        RideRequestListAdapter adapter = new RideRequestListAdapter(this, R.layout.riderequestlayout, arr);
+        adapter = new RideRequestListAdapter(this, R.layout.riderequestlayout, arr);
         requests.setAdapter(adapter);
 
         ref1.get()
@@ -60,6 +61,7 @@ public class DisplayActiveRideRequestsActivity extends AppCompatActivity {
                                 RideRequest rideRequest = new RideRequest(test1, test2, test3, test4);
                                 arr.add(new RideRequest("vancouver", "toronto", "200","alex"));
                                 arr.add(rideRequest);
+                                adapter.notifyDataSetChanged();
                             }
                         }
                     }
@@ -87,7 +89,7 @@ public class DisplayActiveRideRequestsActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
-        adapter.notifyDataSetChanged();
+
 
     }
 
