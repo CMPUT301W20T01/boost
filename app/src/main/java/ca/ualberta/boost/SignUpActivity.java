@@ -80,6 +80,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         });
     }
 
+    // adds user to database 
     private void addUser() {
         if(authenticate()) {
             auth.createUserWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim())
