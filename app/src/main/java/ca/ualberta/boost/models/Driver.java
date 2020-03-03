@@ -42,6 +42,8 @@ public class Driver extends User {
         map.put("password", this.getPassword());
         map.put("email", this.getEmail());
         map.put("phoneNumber", this.getPhoneNumber());
+        map.put("rating", Integer.toString(this.rating));
+        map.put("rates", Integer.toString(this.numRates));
         return map;
     }
 }
