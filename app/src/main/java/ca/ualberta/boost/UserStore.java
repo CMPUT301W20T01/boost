@@ -1,4 +1,4 @@
-package ca.ualberta.boost.models;
+package ca.ualberta.boost;
 
 
 import androidx.annotation.NonNull;
@@ -11,6 +11,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Map;
+
+import ca.ualberta.boost.models.User;
 
 public class UserStore {
     private static final String TAG = "UserStore";

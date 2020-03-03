@@ -1,9 +1,11 @@
-package ca.ualberta.boost.models;
+package ca.ualberta.boost;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Map;
+
+import ca.ualberta.boost.models.Ride;
 
 public class RideStore {
     private static final String TAG = "RideStore";
@@ -12,6 +14,5 @@ public class RideStore {
     public RideStore(Ride ride) {
         rideCollection = FirebaseFirestore.getInstance().collection("rides");
         Map<String, String> data = ride.data();
-
     }
 }

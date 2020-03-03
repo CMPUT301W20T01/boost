@@ -19,13 +19,12 @@ public abstract class User {
     private @Nullable Ride activeRide; //TODO: create Ride class
 
     // constructor
-    public User(String firstName, String lastName, String username, String password, String email, String phoneNumber, Location currentLocation) {
+    public User(String firstName, String username, String password, String email, String phoneNumber) {
         this.username = username;
         this.firstName = firstName;
         this.password = password;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.currentLocation = currentLocation;
     }
 
     public abstract Map<String, String> data();

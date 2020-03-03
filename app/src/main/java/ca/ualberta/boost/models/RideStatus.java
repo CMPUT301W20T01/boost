@@ -20,4 +20,4 @@ public enum RideStatus {
                 throw new IllegalArgumentException("Bad status");
         }
     }
-};
+}

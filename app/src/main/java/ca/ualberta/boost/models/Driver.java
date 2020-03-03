@@ -6,14 +6,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Driver extends User{
+public class Driver extends User {
 
     private ArrayList<Ride> allRides;
     private int rating;
     private int numRates;
 
-    public Driver(String firstName, String lastName, String username, String password, String email, String phoneNumber, Location currentLocation) {
-        super(firstName, lastName, username, password, email, phoneNumber, currentLocation);
+    public Driver(String firstName, String username, String password, String email, String phoneNumber) {
+        super(firstName, username, password, email, phoneNumber);
     }
 
     public ArrayList<Ride> getAllRides() {

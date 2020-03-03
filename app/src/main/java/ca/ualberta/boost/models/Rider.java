@@ -10,8 +10,8 @@ public class Rider extends User {
 
     // both riders and drivers have active rides
 
-    public Rider(String firstName, String lastName, String username, String password, String email, String phoneNumber, Location currentLocation) {
-        super(firstName, lastName, username, password, email, phoneNumber, currentLocation);
+    public Rider(String firstName, String username, String password, String email, String phoneNumber) {
+        super(firstName, username, password, email, phoneNumber);
     }
 
     @Override
