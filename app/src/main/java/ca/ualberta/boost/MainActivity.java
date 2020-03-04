@@ -134,6 +134,6 @@ public class MainActivity extends AppCompatActivity implements RideRequestSummar
 
     @Override
     public void onAcceptPressed() {
-        
+
     }
 }
