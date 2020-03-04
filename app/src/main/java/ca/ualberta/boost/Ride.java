@@ -2,6 +2,7 @@ package ca.ualberta.boost;
 
 import android.location.Location;
 
+import ca.ualberta.boost.models.User;
 
 
 public class Ride {
