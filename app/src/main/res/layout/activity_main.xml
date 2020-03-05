@@ -51,7 +51,7 @@
         android:id="@+id/sign_in_email"
         android:layout_width="222dp"
         android:layout_height="48dp"
-        android:hint="Username"
+        android:hint="Email"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
