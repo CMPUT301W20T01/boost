@@ -171,6 +171,22 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
             }
         });
 
+        confirmRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new RideRequestSummaryFragment(ride).show(getSupportFragmentManager(), "RIDE_SUM");
+            }
+        });
+
+    }
+
+    /**
+     *  Creates a pending ride for the rider and adds it to the database.
+     *  This method is run when "accept" is pressed from the RideRequestSummaryFragment
+     */
+    @Override
+    public void onAcceptPressed() {
+
     }
 
     /**
@@ -264,6 +280,9 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         }
     }
 
+    /**
+     * hides views associated with ride requesting
+     */
     private void handleCancelRideClick() {
         setRiderMainPageVisibility();
         searchDestinationText.setText("");
@@ -271,12 +290,18 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         mMap.clear();
     }
 
+    /**
+     * shows views associated with ride requesting
+     */
     private void setRequestLocationPageVisibility() {
         viewRequestLayout.setVisibility(View.GONE);
         confirmCancelLayout.setVisibility(View.VISIBLE);
         searchesLayout.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * shows views associated with the main home page
+     */
     private void setRiderMainPageVisibility() {
         viewRequestLayout.setVisibility(View.VISIBLE);
         confirmCancelLayout.setVisibility(View.GONE);
@@ -395,13 +420,4 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         }
     }
 
-
-    /**
-     *  Creates a pending ride for the rider and adds it to the database.
-     *  This method is run when "accept" is pressed from the RideRequestSummaryFragment
-     */
-    @Override
-    public void onAcceptPressed() {
-
-    }
 }
