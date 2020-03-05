@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import ca.ualberta.boost.models.Ride;
+
 public class RideRequestSummaryFragment extends DialogFragment{
     private OnFragmentInteractionListener listener;
     private Ride ride;
@@ -64,9 +66,7 @@ public class RideRequestSummaryFragment extends DialogFragment{
                     public void onClick(DialogInterface dialog, int which) {
                         //fromText.setText(ride.getStartLocation().toString());
                         //toText.setText(ride.getEndLocation().toString());
-                        fromText.setText(ride.getRider().getFirstName());
-                        toText.setText(ride.getRider().getLastName());
-                        costText.setText(Double.toString(ride.getFare()));
+                        //costText.setText(Double.toString(ride.getFare()));
 
                         // send ride request in parent activity
                         listener.onAcceptPressed();
