@@ -29,6 +29,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -50,8 +51,10 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private static final int DEFAULT_ZOOM = 16;
 
     private Boolean mLocationPermissionsGranted = false;
-    private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
+    private GoogleMap mMap;
+    private Marker pickupMarker;
+    private Marker destinationMarker;
 
     private Button requestRideButton;
     private Button viewProfileButton;
@@ -85,7 +88,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     }
 
     /**
-     * Initializes the map object
+     * Initializes the map object and markers
      *
      * @param googleMap
      *      the map object
@@ -97,10 +100,26 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
             getDeviceLocation();
             // makes a blue dot on the map showing current location
             mMap.setMyLocationEnabled(true);
-            // get rid of top right corner button to center location
-            //mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            // get rid of top right corner button that centers location
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
             // enable all zoom, rotate, tilt, etc gesture
             // mMap.getUiSettings().setAllGesturesEnabled(true);
+
+            // init markers and make them invisible
+            pickupMarker = mMap.addMarker(new  MarkerOptions()
+                    .title("Pickup")
+                    .position(new LatLng(0,0))
+                    .draggable(true)
+                    .visible(false)
+            );
+
+            destinationMarker = mMap.addMarker(new  MarkerOptions()
+                    .title("Destination")
+                    .position(new LatLng(0,0))
+                    .draggable(true)
+                    .visible(false)
+            );
+
             init();
             
         }
@@ -177,16 +196,30 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
             Address address = results.get(0);
             //searchEditText.setText(address.getFeatureName());
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+            if (markerTitle.equals("Pickup")){
+                placeMarker(pickupMarker, latLng);
+            } else {
+                placeMarker(destinationMarker, latLng);
+            }
             moveCamera(latLng, DEFAULT_ZOOM);
 
-            MarkerOptions options = new MarkerOptions()
-                    .position(latLng)
-                    .title(markerTitle);
-            mMap.addMarker(options);
 
         }
     }
-    
+
+    /**
+     * Places a marker or moves an existing one
+     *
+     * @param marker
+     *      The marker to move/place
+     * @param latLng
+     *      the new Latlng position for the marker
+     */
+    private void placeMarker(Marker marker, LatLng latLng){
+        marker.setPosition(latLng);
+        marker.setVisible(true);
+
+    }
     private void handleCancelRideClick() {
         setRiderMainPageVisibility();
         searchDestinationText.setText("");
