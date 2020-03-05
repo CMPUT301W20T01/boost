@@ -230,9 +230,6 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
             } else {
                 placeMarker(destinationMarker, latLng);
             }
-            moveCamera(latLng, DEFAULT_ZOOM);
-
-
         }
     }
 
@@ -247,6 +244,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private void placeMarker(Marker marker, LatLng latLng){
         marker.setPosition(latLng);
         marker.setVisible(true);
+        moveCamera(latLng, DEFAULT_ZOOM);
         updateRideLocation(marker);
     }
 
