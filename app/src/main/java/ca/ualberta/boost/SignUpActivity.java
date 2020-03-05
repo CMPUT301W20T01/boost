@@ -28,22 +28,39 @@ import java.util.Map;
 public class SignUpActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private FirebaseAuth auth;
+
+    private EditText firstName;
+    private EditText userName;
     private EditText email;
+    private EditText phoneNumber;
     private EditText password;
-    private EditText age;
+
+
+
     private Button signUpButton;
     private Spinner spinner;
+
+    //fireStore reference to users
     CollectionReference ref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_up);
 
+        //get references to fireStore
         auth = FirebaseAuth.getInstance();
+
+        //get reference to EditTexts
+        firstName = findViewById(R.id.sign_up_first_name);
+        userName = findViewById(R.id.sign_up_username);
         email = findViewById(R.id.sign_up_email);
-        age = findViewById(R.id.sign_up_age);
+        phoneNumber = findViewById(R.id.sign_up_phone_number);
         password = findViewById(R.id.sign_up_password);
+
         signUpButton = findViewById(R.id.confirm_sign_up_button);
+
+        //fireStore reference to users
         ref = FirebaseFirestore.getInstance().collection("users");
 
         //Reference spinner
@@ -51,7 +68,6 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this , R.array.userType, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
         spinner.setOnItemSelectedListener(this);
 
 
@@ -64,6 +80,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         });
     }
 
+    // adds user to database
     private void addUser() {
         if(authenticate()) {
             auth.createUserWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim())
@@ -95,9 +112,11 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     //stores user into database users
     private void storeUser() {
         Map<String, String> map = new HashMap<>();
-        map.put("email", email.getText().toString());
-        map.put("password", password.getText().toString());
-        map.put("age", age.getText().toString());
+        map.put("Name", firstName.getText().toString());
+        map.put("Username", userName.getText().toString());
+        map.put("Email", email.getText().toString());
+        map.put("Phone", firstName.getText().toString());
+        map.put("Password", password.getText().toString());
         map.put("id", auth.getUid());
         ref.document(auth.getUid()).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -141,7 +160,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     //spinner methods
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-       String text = adapterView.getItemAtPosition(i).toString();
+       //String text = adapterView.getItemAtPosition(i).toString();
        //Toast.makeText(adapterView.getContext(), text, Toast.LENGTH_SHORT).show();
     }
 
