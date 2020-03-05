@@ -16,7 +16,7 @@ public abstract class User {
     private String phoneNumber;
     private Location currentLocation;
     private double qrBalance;
-    private @Nullable Ride activeRide; //TODO: create Ride class
+    private @Nullable Ride activeRide;
 
     // constructor
     public User(String firstName, String username, String password, String email, String phoneNumber) {

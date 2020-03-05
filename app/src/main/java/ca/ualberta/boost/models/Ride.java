@@ -1,25 +1,30 @@
 package ca.ualberta.boost.models;
 
+import android.annotation.SuppressLint;
 import android.location.Location;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 public class Ride {
     private Location startLocation;
     private Location endLocation;
     private double fare;
-    private Driver driver;
+    private @Nullable Driver driver = null;
     private Rider rider;
     private RideStatus status;
+    private Date requestTime;
 
-    public Ride(Location startLocation, Location endLocation, double fare, Driver driver, Rider rider) {
+    public Ride(Location startLocation, Location endLocation, double fare, Rider rider) {
         this.startLocation = startLocation;
         this.endLocation = endLocation;
         this.fare = fare;
-        this.driver = driver;
         this.rider = rider;
         this.status = RideStatus.PENDING;
+        this.requestTime = new Date(); // assigned when ride is requested
     }
 
     public Map<String, String> data() {
@@ -31,6 +36,11 @@ public class Ride {
         map.put("rider", this.rider.getUsername());
         map.put("status", this.status.toString());
         return map;
+    }
+
+    @SuppressLint("DefaultLocale")
+    public String id() {
+        return String.format("%s_%d", rider.getUsername(), requestTime.getTime());
     }
 
     public Location getStartLocation() {
