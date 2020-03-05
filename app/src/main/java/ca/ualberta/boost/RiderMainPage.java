@@ -34,6 +34,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /* This class is partly based off of code from the YouTube tutorial series
@@ -161,9 +163,16 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
 
     private void geoLocate(EditText searchEditText, String markerTitle) {
         String searchString = searchEditText.getText().toString();
-        //Geocoder geocoder = new Geocoder(RiderMainPage.this);
-        List<Address> results = new geoLocate(RiderMainPage.this).doInBackground(searchString);
-
+        Geocoder geocoder = new Geocoder(RiderMainPage.this);
+        List<Address> results = new ArrayList<>();
+        // get a list of results from the search location string
+        try{
+            results = geocoder.getFromLocationName(searchString, 20);
+        }catch (IOException e){
+            Toast.makeText(RiderMainPage.this,
+                    "unable to find location", Toast.LENGTH_SHORT).show();
+        }
+        // successful results
         if (results.size() > 0){
             Address address = results.get(0);
             //searchEditText.setText(address.getFeatureName());
