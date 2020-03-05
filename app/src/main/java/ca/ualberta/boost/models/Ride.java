@@ -1,25 +1,31 @@
 package ca.ualberta.boost.models;
 
-import android.location.Location;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Ride {
-    private Location startLocation;
-    private Location endLocation;
+    private LatLng startLocation;
+    private LatLng endLocation;
     private double fare;
     private Driver driver;
     private Rider rider;
     private RideStatus status;
 
-    public Ride(Location startLocation, Location endLocation, double fare, Driver driver, Rider rider) {
+    public Ride(LatLng startLocation, LatLng endLocation, double fare, Driver driver, Rider rider) {
         this.startLocation = startLocation;
         this.endLocation = endLocation;
         this.fare = fare;
         this.driver = driver;
         this.rider = rider;
         this.status = RideStatus.PENDING;
+    }
+
+    // empty constructor
+    public Ride(){
+
     }
 
     public Map<String, String> data() {
@@ -33,11 +39,11 @@ public class Ride {
         return map;
     }
 
-    public Location getStartLocation() {
+    public LatLng getStartLocation() {
         return startLocation;
     }
 
-    public Location getEndLocation() {
+    public LatLng getEndLocation() {
         return endLocation;
     }
 
@@ -57,11 +63,11 @@ public class Ride {
         return status;
     }
 
-    public void setStartLocation(Location startLocation) {
+    public void setStartLocation(LatLng startLocation) {
         this.startLocation = startLocation;
     }
 
-    public void setEndLocation(Location endLocation) {
+    public void setEndLocation(LatLng endLocation) {
         this.endLocation = endLocation;
     }
 

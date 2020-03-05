@@ -39,6 +39,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.ualberta.boost.models.Ride;
+
 /* This class is partly based off of code from the YouTube tutorial series
     "Google Maps & Google Places Android Course"
     (https://www.youtube.com/playlist?list=PLgCYzUzKIBE-vInwQhGSdnbyJ62nixHCt)
@@ -46,16 +48,19 @@ import java.util.List;
 
 public class RiderMainPage extends FragmentActivity implements OnMapReadyCallback, RideRequestSummaryFragment.OnFragmentInteractionListener {
 
+    // constant values
     private static final String TAG = "RiderMainPage";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final int DEFAULT_ZOOM = 16;
 
+    // map specific attributes
     private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private GoogleMap mMap;
     private Marker pickupMarker;
     private Marker destinationMarker;
 
+    // views
     private Button requestRideButton;
     private Button viewProfileButton;
     private Button confirmRequestButton;
@@ -66,6 +71,8 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private LinearLayout confirmCancelLayout;
     private LinearLayout viewRequestLayout;
 
+    // ride to be requested
+    private Ride ride;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +95,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     }
 
     /**
-     * Initializes the map object and markers
+     * Initializes the map object, markers and ride
      *
      * @param googleMap
      *      the map object
@@ -120,13 +127,15 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                     .visible(false)
             );
 
+            ride = new Ride();
+
             init();
             
         }
     }
 
     /**
-     * Initializes button listeners
+     * Initialize listeners
      */
     private void init() {
         requestRideButton.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +148,26 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 handleCancelRideClick();
+            }
+        });
+
+        // listener for marker drag
+        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {
+
+            }
+
+            @Override
+            public void onMarkerDrag(Marker marker) {
+
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                updateRideLocation(marker);
+                // TODO: update the text in the search bar to match the marker's new position
+
             }
         });
 
@@ -211,15 +240,32 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
      * Places a marker or moves an existing one
      *
      * @param marker
-     *      The marker to move/place
+     *      The marker to move/place from a searched location
      * @param latLng
      *      the new Latlng position for the marker
      */
     private void placeMarker(Marker marker, LatLng latLng){
         marker.setPosition(latLng);
         marker.setVisible(true);
-
+        updateRideLocation(marker);
     }
+
+    /**
+     * update the ride with the marker's new position
+     *
+     * @param marker
+     *      the marker to get the position with which we update ride
+     */
+    private void updateRideLocation(Marker marker){
+        if (marker.getTitle().equals(pickupMarker.getTitle())){
+            ride.setStartLocation(marker.getPosition());
+            Toast.makeText(RiderMainPage.this, "updated start location", Toast.LENGTH_SHORT).show();
+        } else{
+            ride.setEndLocation(marker.getPosition());
+            Toast.makeText(RiderMainPage.this, "updated end location", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void handleCancelRideClick() {
         setRiderMainPageVisibility();
         searchDestinationText.setText("");
