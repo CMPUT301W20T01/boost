@@ -18,14 +18,12 @@
         <activity android:name=".QRActivity" android:exported="true"></activity>
         <activity android:name=".SignUp"></activity>
         <activity android:name=".SignUpActivity"></activity>
-        <activity android:name=".HomeActivityRider" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                  <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-   
     </application>
 
 </manifest>
