@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Boost</string>
+    <string name="cancel">Cancel</string>
+    <string name="sign_in">sign in</string>
+    <string name="sign_up">sign up</string>
+    <string name="boost">Boost</string>
+    <string-array name="userType">
+        <item>Rider</item>
+        <item>Driver</item>
+    </string-array>
     <string name="title_activity_rider_main_page">Map</string>
 </resources>
