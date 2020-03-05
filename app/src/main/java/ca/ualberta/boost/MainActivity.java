@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
     //method to open Rider or Driver HomePage
     private void launchHome(){
-        Intent intent = new Intent(this, HomeActivityRider.class);
+        Intent intent = new Intent(this, RiderMainPage.class);
         startActivity(intent);
     }
 
