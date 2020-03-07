@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static ca.ualberta.boost.models.UserType.RIDER;
+
 public class Rider extends User {
 
     // both riders and drivers have active rides
@@ -17,6 +19,7 @@ public class Rider extends User {
     @Override
     public Map<String, String> data() {
         Map<String, String> map = new HashMap<>();
+        map.put("type", RIDER.toString());
         map.put("username", this.getUsername());
         map.put("firstName", this.getFirstName());
         map.put("password", this.getPassword());

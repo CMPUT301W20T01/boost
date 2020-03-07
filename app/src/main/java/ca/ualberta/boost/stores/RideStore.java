@@ -1,4 +1,4 @@
-package ca.ualberta.boost;
+package ca.ualberta.boost.stores;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;

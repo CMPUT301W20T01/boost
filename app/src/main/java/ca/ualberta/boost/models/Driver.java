@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static ca.ualberta.boost.models.UserType.DRIVER;
+
 public class Driver extends User {
 
     private ArrayList<Ride> allRides;
@@ -37,6 +39,7 @@ public class Driver extends User {
     @Override
     public Map<String, String> data() {
         Map<String, String> map = new HashMap<>();
+        map.put("type", DRIVER.toString());
         map.put("username", this.getUsername());
         map.put("firstName", this.getFirstName());
         map.put("password", this.getPassword());
