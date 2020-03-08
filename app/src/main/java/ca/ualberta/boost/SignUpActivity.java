@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,6 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import ca.ualberta.boost.models.Driver;
 
 public class SignUpActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -103,9 +106,12 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     //launches the home activity
-    //todo: depending on role launch either the rider or driver home page
-    private void launchHome(){
-        Intent intent = new Intent(this, HomeActivityRider.class);
+    private void launchHomeRider(){
+        Intent intent = new Intent(this, RiderMainPage.class);
+        startActivity(intent);
+    }
+    private void launchHomeDriver(){
+        Intent intent = new Intent(this, DriverMainPage.class);
         startActivity(intent);
     }
 
@@ -118,6 +124,8 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         map.put("Phone", firstName.getText().toString());
         map.put("Password", password.getText().toString());
         map.put("id", auth.getUid());
+        map.put("role",spinner.getSelectedItem().toString());
+        Log.i("value",spinner.getSelectedItem().toString());
         ref.document(auth.getUid()).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -133,7 +141,11 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            launchHome();
+                            if(spinner.getSelectedItem().toString().matches("Rider")) {
+                                launchHomeRider();
+                            } else {
+                                launchHomeDriver();
+                            }
                         }
                     });
         }
