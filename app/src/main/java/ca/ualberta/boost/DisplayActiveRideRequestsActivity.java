@@ -59,7 +59,7 @@ public class DisplayActiveRideRequestsActivity extends AppCompatActivity {
                                 String test4 = document.get("email").toString();
                                 Log.i("testValue",document.get("email").toString());
                                 RideRequest rideRequest = new RideRequest(test1, test2, test3, test4);
-                                arr.add(new RideRequest("vancouver", "toronto", "200","alex"));
+//                                arr.add(new RideRequest("vancouver", "toronto", "200","alex"));
                                 arr.add(rideRequest);
                                 adapter.notifyDataSetChanged();
                             }
