@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void launchRides() {
-        Intent intent = new Intent(this, DisplayActiveRideRequestsActivity.class);
+        Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
     }
 }
