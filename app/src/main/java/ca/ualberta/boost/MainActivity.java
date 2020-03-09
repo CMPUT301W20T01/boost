@@ -43,6 +43,14 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+        // put your code here...
+        circleProgressBar.setAlpha(0);
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
