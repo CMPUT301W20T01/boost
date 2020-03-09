@@ -5,9 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,25 +26,53 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SignUpActivity extends AppCompatActivity {
+import ca.ualberta.boost.models.Driver;
+
+public class SignUpActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private FirebaseAuth auth;
+
+    private EditText firstName;
+    private EditText userName;
     private EditText email;
+    private EditText phoneNumber;
     private EditText password;
-    private EditText age;
+
+
+
     private Button signUpButton;
+    private Spinner spinner;
+
+    //fireStore reference to users
     CollectionReference ref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.sign_up);
 
+        //get references to fireStore
         auth = FirebaseAuth.getInstance();
-        email = findViewById(R.id.emailSignup);
-        age = findViewById(R.id.ageSignup);
-        password = findViewById(R.id.passwordSignup);
-        signUpButton = findViewById(R.id.signUpButton);
+
+        //get reference to EditTexts
+        firstName = findViewById(R.id.sign_up_first_name);
+        userName = findViewById(R.id.sign_up_username);
+        email = findViewById(R.id.sign_up_email);
+        phoneNumber = findViewById(R.id.sign_up_phone_number);
+        password = findViewById(R.id.sign_up_password);
+
+        signUpButton = findViewById(R.id.confirm_sign_up_button);
+
+        //fireStore reference to users
         ref = FirebaseFirestore.getInstance().collection("users");
+
+        //Reference spinner
+        spinner = findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this , R.array.userType, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+
 
         //Create and add user when button clicked
         signUpButton.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +83,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+    // adds user to database
     private void addUser() {
         if(authenticate()) {
             auth.createUserWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim())
@@ -73,19 +106,26 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     //launches the home activity
-    //todo: depending on role launch either the rider or driver home page
-    private void launchHome(){
-        Intent intent = new Intent(this, HomeActivityRider.class);
+    private void launchHomeRider(){
+        Intent intent = new Intent(this, RiderMainPage.class);
+        startActivity(intent);
+    }
+    private void launchHomeDriver(){
+        Intent intent = new Intent(this, DriverMainPage.class);
         startActivity(intent);
     }
 
     //stores user into database users
     private void storeUser() {
         Map<String, String> map = new HashMap<>();
-        map.put("email", email.getText().toString());
-        map.put("password", password.getText().toString());
-        map.put("age", age.getText().toString());
+        map.put("Name", firstName.getText().toString());
+        map.put("Username", userName.getText().toString());
+        map.put("Email", email.getText().toString());
+        map.put("Phone", firstName.getText().toString());
+        map.put("Password", password.getText().toString());
         map.put("id", auth.getUid());
+        map.put("role",spinner.getSelectedItem().toString());
+        Log.i("value",spinner.getSelectedItem().toString());
         ref.document(auth.getUid()).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -101,7 +141,11 @@ public class SignUpActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            launchHome();
+                            if(spinner.getSelectedItem().toString().matches("Rider")) {
+                                launchHomeRider();
+                            } else {
+                                launchHomeDriver();
+                            }
                         }
                     });
         }
@@ -122,5 +166,18 @@ public class SignUpActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+
+    //spinner methods
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+       //String text = adapterView.getItemAtPosition(i).toString();
+       //Toast.makeText(adapterView.getContext(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }
