@@ -64,8 +64,8 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private GoogleMap mMap;
-    private Marker pickupMarker;
-    private Marker destinationMarker;
+    public Marker pickupMarker;
+    public Marker destinationMarker;
 
     // views
     private Button requestRideButton;
@@ -79,7 +79,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private LinearLayout viewRequestLayout;
 
     // ride to be requested
-    private Ride ride;
+    public Ride ride;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
