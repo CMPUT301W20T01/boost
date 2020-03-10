@@ -41,11 +41,18 @@ import java.util.List;
 
 import ca.ualberta.boost.models.Ride;
 
-/* This class is partly based off of code from the YouTube tutorial series
-    "Google Maps & Google Places Android Course"
-    (https://www.youtube.com/playlist?list=PLgCYzUzKIBE-vInwQhGSdnbyJ62nixHCt)
-    by CodingWithMitch (https://www.youtube.com/channel/UCoNZZLhPuuRteu02rh7bzsw) */
 
+/**
+ * RiderMainPage contains the Home Page Activity for Riders
+ * This class presents the map and necessary views for Riders to
+ * view their profile and/or request a ride
+ */
+
+/*
+ TODO: Increase cohesion and make this more MVC-like. /
+  Maybe split this class into separate classes: /
+  One that is responsible for the map and one that is responsible for the rest
+ */
 public class RiderMainPage extends FragmentActivity implements OnMapReadyCallback, RideRequestSummaryFragment.OnFragmentInteractionListener {
 
     // constant values
@@ -135,6 +142,15 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     }
 
     /**
+     *  Creates a pending ride for the rider and adds it to the database.
+     *  This method is run when "accept" is pressed from the RideRequestSummaryFragment
+     */
+    @Override
+    public void onAcceptPressed() {
+
+    }
+
+    /**
      * Initialize listeners
      */
     private void init() {
@@ -180,14 +196,6 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
 
     }
 
-    /**
-     *  Creates a pending ride for the rider and adds it to the database.
-     *  This method is run when "accept" is pressed from the RideRequestSummaryFragment
-     */
-    @Override
-    public void onAcceptPressed() {
-
-    }
 
     /**
      * Allows user to choose start and end location, price, and request a ride
@@ -265,7 +273,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     }
 
     /**
-     * update the ride with the marker's new position
+     * Update the ride with the marker's new position
      *
      * @param marker
      *      the marker to get the position with which we update ride
@@ -281,7 +289,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     }
 
     /**
-     * hides views associated with ride requesting
+     * Hides views associated with ride requesting
      */
     private void handleCancelRideClick() {
         setRiderMainPageVisibility();
@@ -291,7 +299,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     }
 
     /**
-     * shows views associated with ride requesting
+     * Shows views associated with ride requesting
      */
     private void setRequestLocationPageVisibility() {
         viewRequestLayout.setVisibility(View.GONE);
@@ -300,7 +308,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     }
 
     /**
-     * shows views associated with the main home page
+     * Shows views associated with the main home page
      */
     private void setRiderMainPageVisibility() {
         viewRequestLayout.setVisibility(View.VISIBLE);
@@ -317,6 +325,10 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(RiderMainPage.this);
     }
 
+    /* This following methods are based off of code from the YouTube tutorial series
+    "Google Maps & Google Places Android Course"
+    (https://www.youtube.com/playlist?list=PLgCYzUzKIBE-vInwQhGSdnbyJ62nixHCt)
+    by CodingWithMitch (https://www.youtube.com/channel/UCoNZZLhPuuRteu02rh7bzsw) */
 
     /**
      *  Gets the device's current location

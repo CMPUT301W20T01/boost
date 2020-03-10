@@ -17,6 +17,9 @@ import androidx.fragment.app.DialogFragment;
 
 import ca.ualberta.boost.models.Ride;
 
+/**
+ *
+ */
 public class RideRequestSummaryFragment extends DialogFragment{
     private OnFragmentInteractionListener listener;
     private Ride ride;
