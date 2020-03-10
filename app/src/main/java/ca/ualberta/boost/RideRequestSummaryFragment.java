@@ -18,7 +18,9 @@ import androidx.fragment.app.DialogFragment;
 import ca.ualberta.boost.models.Ride;
 
 /**
- *
+ * RideRequestSummaryFragment defines a fragment that displays
+ * a preliminary summary for a Ride request, showing the Ride's start location,
+ * end location, and cost. The Rider requests a Ride using this fragment.
  */
 public class RideRequestSummaryFragment extends DialogFragment{
     private OnFragmentInteractionListener listener;
@@ -33,6 +35,11 @@ public class RideRequestSummaryFragment extends DialogFragment{
         this.ride = ride;
     }
 
+    /**
+     * Interface that enforces the implementing class to handle
+     * what happens when the fragment's
+     * positive button (accept) is pressed
+     */
     public interface OnFragmentInteractionListener {
         void onAcceptPressed();
     }

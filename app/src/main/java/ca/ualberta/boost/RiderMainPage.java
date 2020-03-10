@@ -43,14 +43,14 @@ import ca.ualberta.boost.models.Ride;
 
 
 /**
- * RiderMainPage contains the Home Page Activity for Riders
+ * RiderMainPage defines the Home Page activity for Riders
  * This class presents the map and necessary views for Riders to
- * view their profile and/or request a ride
+ * view their profile and/or request a ride.
  */
 
 /*
  TODO: Increase cohesion and make this more MVC-like. /
-  Maybe split this class into separate classes: /
+  Split this class into separate classes: /
   One that is responsible for the map and one that is responsible for the rest
  */
 public class RiderMainPage extends FragmentActivity implements OnMapReadyCallback, RideRequestSummaryFragment.OnFragmentInteractionListener {
