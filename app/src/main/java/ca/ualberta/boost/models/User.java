@@ -27,7 +27,7 @@ public abstract class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public abstract Map<String, String> data();
+    public abstract Map<String, Object> data();
 
     // getters
     public String getFirstName() {

@@ -1,5 +1,9 @@
 package ca.ualberta.boost.models;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import ca.ualberta.boost.stores.UserStore;
+
 public class ActiveUser {
     private static User user = null;
 
@@ -9,7 +13,13 @@ public class ActiveUser {
         return user;
     }
 
-    public static boolean login(String username, String password) {
-        return true;
+    public static void login(String username, final String password) {
+        UserStore.getUser(username)
+            .addOnSuccessListener(new OnSuccessListener<User>() {
+                @Override
+                public void onSuccess(User user) {
+                    ActiveUser.user = user;
+                }
+            });
     }
 }

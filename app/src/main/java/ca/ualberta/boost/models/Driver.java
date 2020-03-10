@@ -37,16 +37,26 @@ public class Driver extends User {
     }
 
     @Override
-    public Map<String, String> data() {
-        Map<String, String> map = new HashMap<>();
-        map.put("type", DRIVER.toString());
+    public Map<String, Object> data() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("type", DRIVER);
         map.put("username", this.getUsername());
         map.put("firstName", this.getFirstName());
         map.put("password", this.getPassword());
         map.put("email", this.getEmail());
         map.put("phoneNumber", this.getPhoneNumber());
-        map.put("rating", Integer.toString(this.rating));
-        map.put("rates", Integer.toString(this.numRates));
+        map.put("rating", this.rating);
+        map.put("rates", this.numRates);
         return map;
     }
+
+    public static Driver build(Map<String, Object> data) {
+        return new Driver(
+                (String) data.get("firstName"),
+                (String) data.get("username"),
+                (String) data.get("password"),
+                (String) data.get("email"),
+                (String) data.get("phoneNumber"));
+    }
+
 }

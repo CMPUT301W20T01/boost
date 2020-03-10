@@ -7,9 +7,9 @@ public enum UserType {
     static String toString(UserType type) {
         switch (type) {
             case RIDER:
-                return "rider";
+                return "RIDER";
             case DRIVER:
-                return "driver";
+                return "DRIVER";
             default:
                 throw new IllegalArgumentException("Bad type");
         }
