@@ -13,17 +13,19 @@ public abstract class User {
     private String password;
     private String email;
     private String phoneNumber;
+    private String userType;
     private Location currentLocation;
     private double qrBalance;
     private @Nullable Ride activeRide;
 
     // constructor
-    public User(String firstName, String username, String password, String email, String phoneNumber) {
+    public User(String firstName, String username, String password, String email, String phoneNumber, String userType) {
         this.username = username;
         this.firstName = firstName;
         this.password = password;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.username = userType;
     }
 
     public abstract Map<String, Object> data();
@@ -47,6 +49,10 @@ public abstract class User {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public String getUserType() {
+        return userType;
     }
 
     public Location getCurrentLocation() {
@@ -85,6 +91,10 @@ public abstract class User {
 
     public void setCurrentLocation(Location currentLocation) {
         this.currentLocation = currentLocation;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
     public void setQrBalance(double qrBalance) {
