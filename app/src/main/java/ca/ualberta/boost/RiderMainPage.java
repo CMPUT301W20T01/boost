@@ -157,7 +157,10 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
      */
     @Override
     public void onAcceptPressed() {
-
+        ride.setEndLocation(destinationMarker.getPosition());
+        ride.setStartLocation(pickupMarker.getPosition());
+        ride.setPending();
+       // ride.setRider();
     }
 
     /**

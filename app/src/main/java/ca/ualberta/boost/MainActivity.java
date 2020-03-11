@@ -116,8 +116,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                             //check if user is rider or a driver
                             //function to check if user that just signed in is a driver or rider respectively
                             checkRole(currentUserId);
-                            //function to check if user that just signed in is a driver or rider respectively
-                            launchHome();
+
 
 
                         }
