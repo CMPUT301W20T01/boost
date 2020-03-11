@@ -5,29 +5,45 @@ package ca.ualberta.boost;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Process;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+
+import com.google.android.gms.tasks.OnCompleteListener;
+
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Runnable {
 
     // Views
     private EditText loginEmail;
     private EditText loginPassword;
     private Button signUpButton;
     private Button signInButton;
-
     // Declare firebase Auth variable
+
+    private ProgressBar circleProgressBar;
     private FirebaseAuth auth;
+    private FirebaseFirestore db;
+    private CollectionReference handler;
 
     //Stores User's generated ID from firebase
     private String currentUserId;
@@ -44,11 +60,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+        // put your code here...
+        circleProgressBar.setAlpha(0);
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
     }
+
 
     /**
      *  Initialize listeners
@@ -58,8 +83,13 @@ public class MainActivity extends AppCompatActivity {
      */
     private void init(){
 
-        // Initialize firebase Auth
+        circleProgressBar = findViewById(R.id.progressBar);
+        circleProgressBar.setAlpha(0);
+
+        //get references to fireStore
         auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        handler = db.collection("users");
 
         //initialize views
         loginEmail = findViewById(R.id.sign_in_email);
@@ -79,8 +109,9 @@ public class MainActivity extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Log.i("values","works");
-                signInUser();
+              signInUser();
+              run();
+
             }
         });
 
@@ -99,28 +130,51 @@ public class MainActivity extends AppCompatActivity {
      * launchHome for Driver or Rider
      */
     private void signInUser() {
+        circleProgressBar.setAlpha(1);
         if (authenticate()) {
             auth.signInWithEmailAndPassword(loginEmail.getText().toString().trim(), loginPassword.getText().toString().trim())
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            Toast.makeText(MainActivity.this, "Sign In Successful!", Toast.LENGTH_SHORT).show();
-                            FirebaseUser currentUser = auth.getCurrentUser();
+                            Toast.makeText(MainActivity.this, "Sign In Successful!", Toast.LENGTH_SHORT).show()
 
-                            //todo: ask how to get the userType and launch different main pages for either of them
+                            currentUserId = auth.getCurrentUser().getEmail().toString();
+
+                            //figure out if user is a rider or driver
+                            currentUserId= auth.getUid();
+                            //check if user is rider or a driver
+                            //function to check if user that just signed in is a driver or rider respectively
+                            checkRole(currentUserId);
+                            //function to check if user that just signed in is a driver or rider respectively
                             launchHome();
+
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            circleProgressBar.setAlpha(0);
                         }
                     });
+        } else{
+            circleProgressBar.setAlpha(0);
         }
     }
+
 
     /**
      * launch RiderMainPage or DriverMainPage based on userType
      */
-    //todo: should take in a parameter userType
-    private void launchHome(){
-        Intent intent = new Intent(this, RiderMainPage.class);
-        startActivity(intent);
+    private void launchHome(String role){
+        if(role.matches("Rider")) {
+            Intent intent = new Intent(this, RiderMainPage.class);
+            startActivity(intent);
+        } else{
+            Intent intent = new Intent(this, DriverMainPage.class);
+            startActivity(intent);
+        }
+
     }
 
 
@@ -143,4 +197,34 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    @Override
+    public void run(){
+        android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_DISPLAY);
+        signInUser();
+    }
+  
+    private void checkRole(final String id){
+        handler.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot document: task.getResult()){
+                                if(id.matches(document.get("id").toString())){
+                                    Log.i("value",document.get("id").toString());
+                                    launchHome(document.get("role").toString());
+                                }
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(MainActivity.this, "Something went wrong please contact the database administrator", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
 }

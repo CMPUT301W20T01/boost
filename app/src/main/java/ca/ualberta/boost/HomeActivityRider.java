@@ -74,7 +74,7 @@ public class HomeActivityRider extends AppCompatActivity {
                 if(task.isSuccessful()){
                     for(QueryDocumentSnapshot document : task.getResult()){
                         textViewId.setText("ID: "+document.get("id").toString());
-                        textViewAge.setText("Age: "+document.get("age").toString());
+//                        textViewAge.setText("Age: "+document.get("age").toString());
                     }
                 }
             }
