@@ -1,10 +1,12 @@
 package ca.ualberta.boost.models;
 
+
 import android.annotation.SuppressLint;
 //import android.location.Location;
 //import com.google.android.gms.maps.GoogleMap;
-//import com.google.android.gms.maps.model.LatLng;
-import ca.ualberta.boost.models.LatLng;
+import com.google.android.gms.maps.model.LatLng;
+//import ca.ualberta.boost.models.LatLng;
+
 
 import java.util.Date;
 import java.util.HashMap;
@@ -29,6 +31,7 @@ public class Ride {
         this.status = RideStatus.PENDING;
         this.requestTime = new Date(); // assigned when ride is requested
     }
+
 
     public Map<String, Object> data() {
         Map<String, Object> map = new HashMap<>();

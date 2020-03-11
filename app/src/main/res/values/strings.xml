@@ -8,4 +8,5 @@
         <item>Rider</item>
         <item>Driver</item>
     </string-array>
+    <string name="title_activity_rider_main_page">Map</string>
 </resources>
