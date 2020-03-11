@@ -1,12 +1,14 @@
 package ca.ualberta.boost;
 
 import android.app.Activity;
+import android.view.Display;
 import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.robotium.solo.Solo;
 
@@ -18,6 +20,7 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 
 import ca.ualberta.boost.models.Ride;
 
@@ -56,12 +59,15 @@ public class RiderMainPageTest {
     public void testPickupSearchBar(){
         solo.assertCurrentActivity("Wrong Activity", RiderMainPage.class);
         RiderMainPage activity = (RiderMainPage) solo.getCurrentActivity();
+        Marker marker = activity.pickupMarker;
+     //   LatLng oldLocation = marker.getPosition();
         solo.clickOnButton("Request Ride");
         solo.enterText((EditText) solo.getView(R.id.searchPickupEditText), "University of Alberta");
         solo.pressSoftKeyboardSearchButton();
         solo.waitForText("updated start location", 1, 4000);
-        //Marker marker = activity.pickupMarker;
-        //assertTrue(marker.isVisible());
+
+     //  LatLng newLocation = marker.getPosition();
+     //   assertNotEquals(oldLocation, newLocation);
 
     }
 
