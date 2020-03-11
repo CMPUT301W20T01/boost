@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -85,31 +86,69 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/viewRequestLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:layout_gravity="bottom">
 
-        <Button
-            android:id="@+id/viewProfileButton"
-            android:layout_width="5dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:text="View Profile" />
+            android:layout_gravity="center"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/requestRideButton"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_width="5dp"
+            <Button
+                android:id="@+id/decrease_cost_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-" />
+
+            <EditText
+                android:id="@+id/cost_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:textColor="#000000"
+                android:textSize="12dp"
+                android:paddingHorizontal="5dp"
+                android:text="0" />
+
+            <Button
+                android:id="@+id/increase_cost_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/viewRequestLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:text="Request Ride" />
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/viewProfileButton"
+                android:layout_width="5dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:text="View Profile" />
+
+            <Button
+                android:id="@+id/requestRideButton"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="5dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:text="Request Ride" />
+        </LinearLayout>
 
     </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/confirmCancelLayout"
@@ -138,6 +177,8 @@
             android:text="Confirm" />
 
     </LinearLayout>
+
+
 
 
 </FrameLayout>
