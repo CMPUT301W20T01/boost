@@ -1,4 +1,4 @@
-package ca.ualberta.boost;
+package ca.ualberta.boost.stores;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -13,6 +13,6 @@ public class RideStore {
 
     public RideStore(Ride ride) {
         rideCollection = FirebaseFirestore.getInstance().collection("rides");
-        Map<String, String> data = ride.data();
+        Map<String, Object> data = ride.data();
     }
 }
