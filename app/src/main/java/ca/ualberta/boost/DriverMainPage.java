@@ -6,10 +6,13 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -31,12 +34,21 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
+    private Button viewRequestsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_main_page);
         getLocationPermission();
+
+        viewRequestsButton = findViewById(R.id.viewRequestsButton);
+        viewRequestsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayRequests();
+            }
+        });
     }
 
     @Override
@@ -137,6 +149,11 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
                 }
             }
         }
+    }
+
+    private void displayRequests(){
+        Intent intent = new Intent(this, ViewRideRequestsActivity.class);
+        startActivity(intent);
     }
 
 }
