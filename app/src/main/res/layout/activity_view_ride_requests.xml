@@ -19,7 +19,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/activeRequestsListView"
         android:layout_marginTop="35dp"
-        android:layout_marginBottom="65dp">
+        android:layout_marginBottom="65dp"
+        android:listSelector="@android:color/holo_green_light"
+        android:choiceMode="singleChoice">
     </ListView>
 
 </LinearLayout>
