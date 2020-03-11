@@ -1,8 +1,7 @@
 package ca.ualberta.boost.models;
 
-import android.location.Location;
-
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,15 +9,15 @@ import static ca.ualberta.boost.models.UserType.DRIVER;
 
 public class Driver extends User {
 
-    private ArrayList<Ride> allRides;
-    private int rating;
+    private ArrayList<Ride> allRides = new ArrayList<>();
+    private int rating = 0;
     private int numRates;
 
     public Driver(String firstName, String username, String password, String email, String phoneNumber) {
         super(firstName, username, password, email, phoneNumber);
     }
 
-    public ArrayList<Ride> getAllRides() {
+    public Collection<Ride> getAllRides() {
         return allRides;
     }
 
@@ -26,14 +25,18 @@ public class Driver extends User {
         return rating;
     }
 
-    public void setAllRides(ArrayList<Ride> allRides) {
-        this.allRides = allRides;
+    public int getNumRates() {
+        return numRates;
+    }
+
+    public void addRide(Ride ride) {
+        allRides.add(ride);
     }
 
     public void updateRating(int newRating) {
         // rating = old + (1 / (num + 1)) * (new - old)
-        this.rating = this.rating + ((1 / (numRates + 1)) * (newRating - this.rating));
-        this.numRates++;
+        numRates++;
+        rating += ((1.0 / (double) numRates) * (newRating - rating));
     }
 
     @Override

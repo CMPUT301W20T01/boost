@@ -1,7 +1,10 @@
 package ca.ualberta.boost.models;
 
 import android.annotation.SuppressLint;
-import android.location.Location;
+//import android.location.Location;
+//import com.google.android.gms.maps.GoogleMap;
+//import com.google.android.gms.maps.model.LatLng;
+import ca.ualberta.boost.models.LatLng;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -10,15 +13,15 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 public class Ride {
-    private Location startLocation;
-    private Location endLocation;
+    private LatLng startLocation;
+    private LatLng endLocation;
     private double fare;
     private @Nullable Driver driver = null;
     private Rider rider;
     private RideStatus status;
     private Date requestTime;
 
-    public Ride(Location startLocation, Location endLocation, double fare, Rider rider) {
+    public Ride(LatLng startLocation, LatLng endLocation, double fare, Rider rider) {
         this.startLocation = startLocation;
         this.endLocation = endLocation;
         this.fare = fare;
@@ -27,10 +30,10 @@ public class Ride {
         this.requestTime = new Date(); // assigned when ride is requested
     }
 
-    public Map<String, String> data() {
-        Map<String, String> map = new HashMap<>();
-//        map.put("start_location", this.startLocation);
-//        map.put("end_location", this.endLocation);
+    public Map<String, Object> data() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("start_location", this.startLocation);
+        map.put("end_location", this.endLocation);
         map.put("fare", Double.toString(this.fare));
         map.put("driver", this.driver.getUsername());
         map.put("rider", this.rider.getUsername());
@@ -43,11 +46,11 @@ public class Ride {
         return String.format("%s_%d", rider.getUsername(), requestTime.getTime());
     }
 
-    public Location getStartLocation() {
+    public LatLng getStartLocation() {
         return startLocation;
     }
 
-    public Location getEndLocation() {
+    public LatLng getEndLocation() {
         return endLocation;
     }
 
@@ -67,11 +70,11 @@ public class Ride {
         return status;
     }
 
-    public void setStartLocation(Location startLocation) {
+    public void setStartLocation(LatLng startLocation) {
         this.startLocation = startLocation;
     }
 
-    public void setEndLocation(Location endLocation) {
+    public void setEndLocation(LatLng endLocation) {
         this.endLocation = endLocation;
     }
 
@@ -86,10 +89,6 @@ public class Ride {
     public void setRider(Rider rider) {
         this.rider = rider;
     }
-
-//    public void setRideStatus(RideStatus rideStatus) {
-//        this.rideStatus = rideStatus;
-//    }
 
     public void setPending() {
         this.status = RideStatus.PENDING;

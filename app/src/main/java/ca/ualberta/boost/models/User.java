@@ -2,7 +2,6 @@ package ca.ualberta.boost.models;
 
 import android.location.Location;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nullable;

@@ -13,6 +13,6 @@ public class RideStore {
 
     public RideStore(Ride ride) {
         rideCollection = FirebaseFirestore.getInstance().collection("rides");
-        Map<String, String> data = ride.data();
+        Map<String, Object> data = ride.data();
     }
 }
