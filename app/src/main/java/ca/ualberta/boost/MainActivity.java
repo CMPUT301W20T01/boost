@@ -1,5 +1,8 @@
 package ca.ualberta.boost;
 
+/* This class class is used to sign in user into the app
+* //todo: ask alex for citation */
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Process;
@@ -18,6 +21,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -29,22 +33,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
 
+    // Views
     private EditText loginEmail;
     private EditText loginPassword;
-
     private Button signUpButton;
     private Button signInButton;
+    // Declare firebase Auth variable
 
     private ProgressBar circleProgressBar;
-
     private FirebaseAuth auth;
     private FirebaseFirestore db;
     private CollectionReference handler;
 
     //Stores User's generated ID from firebase
-    String currentUserId;
+    private String currentUserId;
 
-    //check if user is already signed in
+    /**
+     *  Check if user is signed in using currentUserId
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -65,6 +71,17 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        init();
+    }
+
+
+    /**
+     *  Initialize listeners
+     *  initialize views
+     *  openSignUpActivity when signUpButton is clicked
+     *  signInUser when signInButton is clicked
+     */
+    private void init(){
 
         circleProgressBar = findViewById(R.id.progressBar);
         circleProgressBar.setAlpha(0);
@@ -74,12 +91,13 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         db = FirebaseFirestore.getInstance();
         handler = db.collection("users");
 
-        //initialize EditText views
+        //initialize views
         loginEmail = findViewById(R.id.sign_in_email);
         loginPassword = findViewById(R.id.sign_in_password);
+        signUpButton = findViewById(R.id.sign_up_button);
+        signInButton = findViewById(R.id.sign_in_button);
 
         //open SignUp activity when the sign_up_button is clicked by calling openSignUpActivity
-        signUpButton = findViewById(R.id.sign_up_button);
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,19 +106,29 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         });
 
         //Call signInUser when signInButton is clicked
-        signInButton = findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("values","works");
-//                signInUser();
-                //launching a thread here
-                run();
+              signInUser();
+              run();
+
             }
         });
+
     }
 
-    //sign in as a Driver or a rider
+    /**
+     *  opens a new SignUpActivity
+     */
+    public void openSignUpActivity(){
+        Intent intent = new Intent(this, SignUpActivity.class );
+        startActivity(intent);
+    }
+
+    /**
+     * Sign in user with Email and password
+     * launchHome for Driver or Rider
+     */
     private void signInUser() {
         circleProgressBar.setAlpha(1);
         if (authenticate()) {
@@ -108,7 +136,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            Toast.makeText(MainActivity.this, "Sign In Successful!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Sign In Successful!", Toast.LENGTH_SHORT).show()
+
                             currentUserId = auth.getCurrentUser().getEmail().toString();
 
                             //figure out if user is a rider or driver
@@ -132,7 +161,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         }
     }
 
-    //method to open Rider or Driver HomePage
+
+    /**
+     * launch RiderMainPage or DriverMainPage based on userType
+     */
     private void launchHome(String role){
         if(role.matches("Rider")) {
             Intent intent = new Intent(this, RiderMainPage.class);
@@ -145,13 +177,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     }
 
 
-    //method to open SignUp activity
-    public void openSignUpActivity(){
-        Intent intent = new Intent(this, SignUpActivity.class );
-        startActivity(intent);
-    }
-
-    //method to check if user to login has signed up already
+    /**
+     * Authenticate user using Email and password
+     */
     private boolean authenticate(){
         if(loginEmail.getText().toString().matches("")){
             Toast.makeText(this, "Enter a Email", Toast.LENGTH_SHORT).show();
@@ -161,8 +189,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             Toast.makeText(this, "Enter a password", Toast.LENGTH_SHORT).show();
             return false;
         }
+        // password should not be less than 6 characters
         if(loginEmail.getText().toString().length() < 6){
-            Toast.makeText(this, "password too short lol", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "password has to be 6 character or more", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

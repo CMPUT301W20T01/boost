@@ -11,8 +11,9 @@ import static ca.ualberta.boost.models.UserType.RIDER;
 public class Rider extends User {
 
     // both riders and drivers have active rides
-    public Rider(String firstName, String username, String password, String email, String phoneNumber) {
-        super(firstName, username, password, email, phoneNumber);
+    public Rider(String firstName, String username, String password, String email, String phoneNumber, String userType ) {
+        super(firstName, username, password, email, phoneNumber, userType);
+
     }
 
     @Override
@@ -24,8 +25,10 @@ public class Rider extends User {
         map.put("password", this.getPassword());
         map.put("email", this.getEmail());
         map.put("phoneNumber", this.getPhoneNumber());
-        map.put("rating", null);
-        map.put("rates", null);
+        map.put("userType", this.getUserType());
+        map.put("rating", "");
+        map.put("rates", "");
+
         return map;
     }
 

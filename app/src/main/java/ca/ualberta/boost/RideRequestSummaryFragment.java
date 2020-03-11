@@ -63,11 +63,15 @@ public class RideRequestSummaryFragment extends DialogFragment{
         fromText = view.findViewById(R.id.fromText);
         toText = view.findViewById(R.id.toText);
         costText = view.findViewById(R.id.costText);
+
        // durationText = view.findViewById(R.id.durationText);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+
         // building the dialog
         return builder
+
                 .setView(view)
                 .setCustomTitle(titleView)
                 .setNegativeButton("Cancel", null) // null -> does nothing
