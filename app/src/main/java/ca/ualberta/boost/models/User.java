@@ -2,7 +2,6 @@ package ca.ualberta.boost.models;
 
 import android.location.Location;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -16,7 +15,7 @@ public abstract class User {
     private String phoneNumber;
     private Location currentLocation;
     private double qrBalance;
-    private @Nullable Ride activeRide; //TODO: create Ride class
+    private @Nullable Ride activeRide;
 
     // constructor
     public User(String firstName, String username, String password, String email, String phoneNumber) {
@@ -27,7 +26,7 @@ public abstract class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public abstract Map<String, String> data();
+    public abstract Map<String, Object> data();
 
     // getters
     public String getFirstName() {
