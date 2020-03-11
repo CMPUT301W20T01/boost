@@ -105,8 +105,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             Toast.makeText(MainActivity.this, "Sign In Successful!", Toast.LENGTH_SHORT).show();
-                            FirebaseUser currentUser = auth.getCurrentUser();
-
+                            //FirebaseUser currentUser = auth.getCurrentUser();
                             //todo: ask how to get the userType and launch different main pages for either of them
                             launchHome();
                         }
