@@ -7,10 +7,18 @@
     tools:context=".RideRequestSummaryFragment">
 
     <TextView
-        android:id="@+id/fromText"
+        android:id="@+id/fareDesc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:text="Cost:"/>
+
+    <TextView
+        android:id="@+id/fareText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        />
 
     <View
         android:id="@+id/divider1"
@@ -19,34 +27,20 @@
         android:background="?android:attr/listDivider" />
 
     <TextView
-        android:id="@+id/toText"
+        android:id="@+id/tipDesc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:text="Add tip:"/>
 
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="?android:attr/listDivider" />
-
-    <TextView
-        android:id="@+id/costText"
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/tipText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"/>
-
-    <View
-        android:id="@+id/divider3"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="?android:attr/listDivider" />
-
-<!--    <TextView-->
-<!--        android:id="@+id/durationText"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:textSize="18sp"/>-->
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:paddingHorizontal="5dp"
+        android:text="0" />
 
 
 
