@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/riderUserName"
+            android:hint="Rider:"
+            android:textSize="30dp"
+            android:layout_marginTop="5dp">
+        </TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/amountOfferedRide"
+            android:hint="amount:"
+            android:textSize="30dp">
+        </TextView>
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rideStart"
+            android:hint="Start:"
+            android:textSize="30dp">
+        </TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rideEnd"
+            android:hint="end:"
+            android:textSize="30dp">
+        </TextView>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Accept"
+            android:id="@+id/acceptRideButton"
+            android:layout_marginBottom="5dp">
+        </Button>
+    
+
+</LinearLayout>

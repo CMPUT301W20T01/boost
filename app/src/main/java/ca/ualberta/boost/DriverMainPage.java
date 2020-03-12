@@ -6,10 +6,13 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -21,6 +24,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class DriverMainPage extends FragmentActivity implements OnMapReadyCallback {
 
@@ -31,12 +35,35 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
+    private Button viewRequestsButton;
+    private Button logoutButton;
+
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_main_page);
         getLocationPermission();
+
+        auth = FirebaseAuth.getInstance();
+        viewRequestsButton = findViewById(R.id.viewRequestsButton);
+        logoutButton = findViewById(R.id.logOutRequestsButton);
+        viewRequestsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayRequests();
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth.signOut();
+                launchHomeScreen();
+            }
+        });
+
     }
 
     @Override
@@ -139,4 +166,15 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
         }
     }
 
+    private void displayRequests(){
+        Intent intent = new Intent(this, ViewRideRequestsActivity.class);
+        startActivity(intent);
+    }
+
+    private void launchHomeScreen(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
 }
+

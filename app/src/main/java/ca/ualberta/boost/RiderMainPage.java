@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -33,6 +34,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 import java.io.IOException;
@@ -40,12 +42,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.User;
+import ca.ualberta.boost.stores.UserStore;
 
-/* This class is partly based off of code from the YouTube tutorial series
-    "Google Maps & Google Places Android Course"
-    (https://www.youtube.com/playlist?list=PLgCYzUzKIBE-vInwQhGSdnbyJ62nixHCt)
-    by CodingWithMitch (https://www.youtube.com/channel/UCoNZZLhPuuRteu02rh7bzsw) */
 
+/**
+ * RiderMainPage defines the Home Page activity for Riders
+ * This class presents the map and necessary views for Riders to
+ * view their profile and/or request a ride.
+ */
+
+/*
+ TODO: Increase cohesion and make this more MVC-like. /
+  Split this class into separate classes: /
+  One that is responsible for the map and one that is responsible for the rest
+ */
 public class RiderMainPage extends FragmentActivity implements OnMapReadyCallback, RideRequestSummaryFragment.OnFragmentInteractionListener {
 
     // constant values
@@ -57,41 +68,65 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private GoogleMap mMap;
-    private Marker pickupMarker;
-    private Marker destinationMarker;
+    public Marker pickupMarker;
+    public Marker destinationMarker;
+
+    //firebase
+    private FirebaseAuth auth;
 
     // views
+    private Button viewRequestButton;
     private Button requestRideButton;
     private Button viewProfileButton;
     private Button confirmRequestButton;
     private Button cancelRequestButton;
+    private Button logoutButton;
     private EditText searchPickupText;
     private EditText searchDestinationText;
     private LinearLayout searchesLayout;
     private LinearLayout confirmCancelLayout;
     private LinearLayout viewRequestLayout;
 
-    // ride to be requested
+    // attributes
     private Ride ride;
+
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_main_page);
 
+        auth = FirebaseAuth.getInstance();
         // get views
         searchPickupText = findViewById(R.id.searchPickupEditText);
         searchDestinationText = findViewById(R.id.searchDestinationEditText);
         searchesLayout = findViewById(R.id.searchesLayout);
         requestRideButton = findViewById(R.id.requestRideButton);
         viewProfileButton = findViewById(R.id.viewProfileButton);
+        logoutButton = findViewById(R.id.logoutButton);
         confirmCancelLayout = findViewById(R.id.confirmCancelLayout);
         viewRequestLayout = findViewById(R.id.viewRequestLayout);
         confirmRequestButton = findViewById(R.id.confirmRequestButton);
         cancelRequestButton = findViewById(R.id.cancelRequestButton);
+        viewRequestButton = findViewById(R.id.viewRideRequestButton);
 
         // get location permission
         getLocationPermission();
+
+        viewRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchCurrentRequestActivity();
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth.signOut();
+                launchHomeScreen();
+            }
+        });
     }
 
     /**
@@ -127,57 +162,9 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                     .visible(false)
             );
 
-            ride = new Ride();
-
-            init();
+//            init();
             
         }
-    }
-
-    /**
-     * Initialize listeners
-     */
-    private void init() {
-        requestRideButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleRequestRideClick();
-            }
-        });
-        cancelRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleCancelRideClick();
-            }
-        });
-
-        // listener for marker drag
-        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-            @Override
-            public void onMarkerDragStart(Marker marker) {
-
-            }
-
-            @Override
-            public void onMarkerDrag(Marker marker) {
-
-            }
-
-            @Override
-            public void onMarkerDragEnd(Marker marker) {
-                updateRideLocation(marker);
-                // TODO: update the text in the search bar to match the marker's new position
-
-            }
-        });
-
-        confirmRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new RideRequestSummaryFragment(ride).show(getSupportFragmentManager(), "RIDE_SUM");
-            }
-        });
-
     }
 
     /**
@@ -185,9 +172,65 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
      *  This method is run when "accept" is pressed from the RideRequestSummaryFragment
      */
     @Override
-    public void onAcceptPressed() {
+    public void onAcceptPressed(Ride newRide) {
+        ride = newRide;
+        ride.setPending();
 
+        Log.d("Fare", Double.toString(ride.getFare()));
+        setRiderMainPageVisibility();
+        /* TODO: Send ride to database */
     }
+
+    /**
+     * Initialize listeners
+     */
+//    private void init() {
+//
+//        requestRideButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                handleRequestRideClick();
+//            }
+//        });
+//        cancelRequestButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                handleCancelRideClick();
+//            }
+//        });
+//
+//        // listener for marker drag
+//        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+//            @Override
+//            public void onMarkerDragStart(Marker marker) {
+//
+//            }
+//
+//            @Override
+//            public void onMarkerDrag(Marker marker) {
+//
+//            }
+//
+//            @Override
+//            public void onMarkerDragEnd(Marker marker) {
+//                updateRideLocation(marker);
+//                // TODO: update the text in the search bar to match the marker's new position
+//
+//            }
+//        });
+//
+//        confirmRequestButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ride.setEndLocation(destinationMarker.getPosition());
+//                ride.setStartLocation(pickupMarker.getPosition());
+//                ride.calculateAndSetFare();
+//                new RideRequestSummaryFragment(ride).show(getSupportFragmentManager(), "RIDE_SUM");
+//            }
+//        });
+//
+//    }
+
 
     /**
      * Allows user to choose start and end location, price, and request a ride
@@ -195,6 +238,9 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
      */
     private void handleRequestRideClick() {
         setRequestLocationPageVisibility();
+        ride = new Ride();
+        /* TODO: set ride to current user, then send ride to database */
+        //ride.setRider();
         // pickup search bar
         searchPickupText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -265,7 +311,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     }
 
     /**
-     * update the ride with the marker's new position
+     * Update the ride with the marker's new position
      *
      * @param marker
      *      the marker to get the position with which we update ride
@@ -281,17 +327,17 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     }
 
     /**
-     * hides views associated with ride requesting
+     * Hides views associated with ride requesting
      */
     private void handleCancelRideClick() {
         setRiderMainPageVisibility();
         searchDestinationText.setText("");
         searchPickupText.setText("");
-        mMap.clear();
     }
 
     /**
-     * shows views associated with ride requesting
+     * Shows views associated with ride requesting
+     * and hides views associated with the main home page
      */
     private void setRequestLocationPageVisibility() {
         viewRequestLayout.setVisibility(View.GONE);
@@ -300,12 +346,15 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     }
 
     /**
-     * shows views associated with the main home page
+     * Shows views associated with the main home page
+     * and hides views associated with ride requesting
      */
     private void setRiderMainPageVisibility() {
         viewRequestLayout.setVisibility(View.VISIBLE);
         confirmCancelLayout.setVisibility(View.GONE);
         searchesLayout.setVisibility(View.GONE);
+        pickupMarker.setVisible(false);
+        destinationMarker.setVisible(false);
     }
 
 
@@ -317,6 +366,10 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(RiderMainPage.this);
     }
 
+    /* This following methods are based off of code from the YouTube tutorial series
+    "Google Maps & Google Places Android Course"
+    (https://www.youtube.com/playlist?list=PLgCYzUzKIBE-vInwQhGSdnbyJ62nixHCt)
+    by CodingWithMitch (https://www.youtube.com/channel/UCoNZZLhPuuRteu02rh7bzsw) */
 
     /**
      *  Gets the device's current location
@@ -418,6 +471,16 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                 }
             }
         }
+    }
+
+    private void launchCurrentRequestActivity(){
+        Intent intent = new Intent(this, RiderCurrentRideRequestActivity.class);
+        startActivity(intent);
+    }
+
+    private void launchHomeScreen(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
 }

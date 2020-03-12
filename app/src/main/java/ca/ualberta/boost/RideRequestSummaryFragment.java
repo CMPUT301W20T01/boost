@@ -17,21 +17,29 @@ import androidx.fragment.app.DialogFragment;
 
 import ca.ualberta.boost.models.Ride;
 
+/**
+ * RideRequestSummaryFragment defines a fragment that displays
+ * a preliminary summary for a Ride request, showing the Ride's start location,
+ * end location, and cost. The Rider requests a Ride using this fragment.
+ */
 public class RideRequestSummaryFragment extends DialogFragment{
     private OnFragmentInteractionListener listener;
     private Ride ride;
-    private TextView fromText;
-    private TextView toText;
-    private TextView costText;
-  //  private TextView durationText;
+    private TextView fareText;
+    private EditText tipText;
 
 
     RideRequestSummaryFragment(Ride ride){
         this.ride = ride;
     }
 
+    /**
+     * Interface that enforces the implementing class to handle
+     * what happens when the fragment's
+     * positive button (accept) is pressed
+     */
     public interface OnFragmentInteractionListener {
-        void onAcceptPressed();
+        void onAcceptPressed(Ride newRide);
     }
 
     @Override
@@ -50,26 +58,27 @@ public class RideRequestSummaryFragment extends DialogFragment{
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_ride_request_summary, null);
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_ride_summary, null);
-        fromText = view.findViewById(R.id.fromText);
-        toText = view.findViewById(R.id.toText);
-        costText = view.findViewById(R.id.costText);
-       // durationText = view.findViewById(R.id.durationText);
+        fareText = view.findViewById(R.id.fareText);
+        tipText = view.findViewById(R.id.tipText);
+
+        fareText.setText(Double.toString(ride.getFare()));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
         // building the dialog
         return builder
+
                 .setView(view)
                 .setCustomTitle(titleView)
                 .setNegativeButton("Cancel", null) // null -> does nothing
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //fromText.setText(ride.getStartLocation().toString());
-                        //toText.setText(ride.getEndLocation().toString());
-                        //costText.setText(Double.toString(ride.getFare()));
+                        double tip = Double.parseDouble(tipText.getText().toString());
+                        ride.setFare(ride.getFare() + tip);
 
                         // send ride request in parent activity
-                        listener.onAcceptPressed();
+                        listener.onAcceptPressed(ride);
 
 
                     }
