@@ -85,12 +85,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="bottom">
-
+]
         <LinearLayout
             android:id="@+id/viewRequestLayout"
             android:layout_width="match_parent"
@@ -104,7 +99,7 @@
                 android:id="@+id/viewProfileButton"
                 android:layout_width="5dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:text="View Profile" />
 
@@ -113,12 +108,29 @@
                 style="@style/Widget.AppCompat.Button"
                 android:layout_width="5dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:text="Request Ride" />
+
+            <Button
+                android:id="@+id/viewRideRequestButton"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="5dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="View Request" />
+
+            <Button
+                android:id="@+id/logoutButton"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="5dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="Log Out" />
         </LinearLayout>
 
-    </LinearLayout>
 
 
     <LinearLayout

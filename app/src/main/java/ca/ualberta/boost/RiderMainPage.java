@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -33,6 +34,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 import java.io.IOException;
@@ -69,11 +71,16 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     public Marker pickupMarker;
     public Marker destinationMarker;
 
+    //firebase
+    private FirebaseAuth auth;
+
     // views
     private Button requestRideButton;
     private Button viewProfileButton;
     private Button confirmRequestButton;
     private Button cancelRequestButton;
+    private Button logoutButton;
+    private Button viewRequestButton;
     private EditText searchPickupText;
     private EditText searchDestinationText;
     private LinearLayout searchesLayout;
@@ -99,6 +106,8 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         viewRequestLayout = findViewById(R.id.viewRequestLayout);
         confirmRequestButton = findViewById(R.id.confirmRequestButton);
         cancelRequestButton = findViewById(R.id.cancelRequestButton);
+        viewRequestButton = findViewById(R.id.viewRideRequestButton);
+        logoutButton = findViewById(R.id.logoutButton);
 
         // get location permission
         getLocationPermission();
@@ -148,18 +157,34 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
      */
     @Override
     public void onAcceptPressed(Ride newRide) {
+        setRiderMainPageVisibility();
         ride = newRide;
         ride.setPending();
+        /* TODO: set Rider as current user and send ride to database */
+        // ride.setRider();
 
-        Log.d("Fare", Double.toString(ride.getFare()));
-        setRiderMainPageVisibility();
-        /* TODO: Send ride to database */
+
     }
 
     /**
      * Initialize listeners
      */
     private void init() {
+
+        viewRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchCurrentRequestActivity();
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth.signOut();
+                launchHomeScreen();
+            }
+        });
 
         requestRideButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -446,6 +471,16 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                 }
             }
         }
+    }
+
+    private void launchCurrentRequestActivity(){
+        Intent intent = new Intent(this, RiderCurrentRideRequestActivity.class);
+        startActivity(intent);
+    }
+
+    private void launchHomeScreen(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
 }
