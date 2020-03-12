@@ -81,7 +81,6 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private Button confirmRequestButton;
     private Button cancelRequestButton;
     private Button logoutButton;
-    private Button viewRequestButton;
     private EditText searchPickupText;
     private EditText searchDestinationText;
     private LinearLayout searchesLayout;
@@ -243,7 +242,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                 new RideRequestSummaryFragment(ride).show(getSupportFragmentManager(), "RIDE_SUM");
             }
         });
-
+    }
 
 
 
