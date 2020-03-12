@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'de.mannodermaus.android-junit5'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
@@ -36,6 +37,9 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-params:5.3.2"
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    //QR repo
+    implementation 'com.github.blikoon:QRCodeScanner:0.1.2'
+
     //firebase dependencies
     implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
     implementation 'com.google.firebase:firebase-core:17.2.2'
