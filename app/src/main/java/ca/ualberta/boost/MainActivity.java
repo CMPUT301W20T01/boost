@@ -10,7 +10,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+
 import com.google.android.gms.tasks.OnCompleteListener;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -108,11 +110,15 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                         public void onSuccess(AuthResult authResult) {
                             Toast.makeText(MainActivity.this, "Sign In Successful!", Toast.LENGTH_SHORT).show();
                             currentUserId = auth.getCurrentUser().getEmail().toString();
+
                             //figure out if user is a rider or driver
                             currentUserId= auth.getUid();
                             //check if user is rider or a driver
                             //function to check if user that just signed in is a driver or rider respectively
                             checkRole(currentUserId);
+                            //function to check if user that just signed in is a driver or rider respectively
+                            launchHome();
+
 
                         }
                     })
@@ -136,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             Intent intent = new Intent(this, DriverMainPage.class);
             startActivity(intent);
         }
+
     }
 
 
@@ -167,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_DISPLAY);
         signInUser();
     }
-
+  
     private void checkRole(final String id){
         handler.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -190,4 +197,5 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                     }
                 });
     }
+
 }
