@@ -147,12 +147,11 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
      *  This method is run when "accept" is pressed from the RideRequestSummaryFragment
      */
     @Override
-    public void onAcceptPressed() {
-
-
+    public void onAcceptPressed(Ride newRide) {
+        ride = newRide;
         ride.setPending();
-        /* TODO: set ride to current user, then send ride to database */
-        //ride.setRider();
+        /* TODO: Send ride to database */
+
     }
 
     /**
@@ -198,6 +197,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 ride.setEndLocation(destinationMarker.getPosition());
                 ride.setStartLocation(pickupMarker.getPosition());
+                ride.calculateAndSetFare();
                 new RideRequestSummaryFragment(ride).show(getSupportFragmentManager(), "RIDE_SUM");
             }
         });
@@ -212,6 +212,8 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private void handleRequestRideClick() {
         setRequestLocationPageVisibility();
         ride = new Ride();
+        /* TODO: set ride to current user, then send ride to database */
+        //ride.setRider();
         // pickup search bar
         searchPickupText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
