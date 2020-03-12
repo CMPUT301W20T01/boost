@@ -25,10 +25,8 @@ import ca.ualberta.boost.models.Ride;
 public class RideRequestSummaryFragment extends DialogFragment{
     private OnFragmentInteractionListener listener;
     private Ride ride;
-    private TextView fromText;
-    private TextView toText;
-    private TextView costText;
-  //  private TextView durationText;
+    private TextView fareText;
+    private EditText tipText;
 
 
     RideRequestSummaryFragment(Ride ride){
@@ -60,9 +58,8 @@ public class RideRequestSummaryFragment extends DialogFragment{
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_ride_request_summary, null);
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_ride_summary, null);
-        fromText = view.findViewById(R.id.fromText);
-        toText = view.findViewById(R.id.toText);
-        costText = view.findViewById(R.id.costText);
+        fareText = view.findViewById(R.id.fareText);
+        tipText = view.findViewById(R.id.tipText);
 
        // durationText = view.findViewById(R.id.durationText);
 

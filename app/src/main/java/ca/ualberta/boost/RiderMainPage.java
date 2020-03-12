@@ -40,6 +40,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.User;
+import ca.ualberta.boost.stores.UserStore;
 
 
 /**
@@ -78,8 +80,9 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private LinearLayout confirmCancelLayout;
     private LinearLayout viewRequestLayout;
 
-    // ride to be requested
-    public Ride ride;
+    // attributes
+    private Ride ride;
+
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,8 +137,6 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                     .visible(false)
             );
 
-            ride = new Ride();
-
             init();
             
         }
@@ -147,16 +148,18 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
      */
     @Override
     public void onAcceptPressed() {
-        ride.setEndLocation(destinationMarker.getPosition());
-        ride.setStartLocation(pickupMarker.getPosition());
+
+
         ride.setPending();
-       // ride.setRider();
+        /* TODO: set ride to current user, then send ride to database */
+        //ride.setRider();
     }
 
     /**
      * Initialize listeners
      */
     private void init() {
+
         requestRideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,6 +196,8 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         confirmRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ride.setEndLocation(destinationMarker.getPosition());
+                ride.setStartLocation(pickupMarker.getPosition());
                 new RideRequestSummaryFragment(ride).show(getSupportFragmentManager(), "RIDE_SUM");
             }
         });
@@ -206,6 +211,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
      */
     private void handleRequestRideClick() {
         setRequestLocationPageVisibility();
+        ride = new Ride();
         // pickup search bar
         searchPickupText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
