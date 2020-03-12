@@ -75,6 +75,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private FirebaseAuth auth;
 
     // views
+    private Button viewRequestButton;
     private Button requestRideButton;
     private Button viewProfileButton;
     private Button confirmRequestButton;
@@ -96,12 +97,14 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_main_page);
 
+        auth = FirebaseAuth.getInstance();
         // get views
         searchPickupText = findViewById(R.id.searchPickupEditText);
         searchDestinationText = findViewById(R.id.searchDestinationEditText);
         searchesLayout = findViewById(R.id.searchesLayout);
         requestRideButton = findViewById(R.id.requestRideButton);
         viewProfileButton = findViewById(R.id.viewProfileButton);
+        logoutButton = findViewById(R.id.logoutButton);
         confirmCancelLayout = findViewById(R.id.confirmCancelLayout);
         viewRequestLayout = findViewById(R.id.viewRequestLayout);
         confirmRequestButton = findViewById(R.id.confirmRequestButton);
@@ -111,6 +114,21 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
 
         // get location permission
         getLocationPermission();
+
+        viewRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchCurrentRequestActivity();
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth.signOut();
+                launchHomeScreen();
+            }
+        });
     }
 
     /**
@@ -145,9 +163,8 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                     .draggable(true)
                     .visible(false)
             );
-
+          
             init();
-            
         }
     }
 
@@ -162,8 +179,6 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         ride.setPending();
         /* TODO: set Rider as current user and send ride to database */
         // ride.setRider();
-
-
     }
 
     /**
@@ -229,7 +244,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
             }
         });
 
-    }
+
 
 
     /**

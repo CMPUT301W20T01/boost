@@ -112,3 +112,4 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
         status.setText("");
     }
 }
+

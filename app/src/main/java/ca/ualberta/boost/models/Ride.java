@@ -25,6 +25,11 @@ public class Ride {
         this.status = RideStatus.PENDING;
     }
 
+    public Ride(double fare, Rider rider) {
+        this.fare = fare;
+        this.rider = rider;
+    }
+
     // empty constructor
     public Ride(){
 

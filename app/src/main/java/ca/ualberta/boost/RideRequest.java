@@ -47,3 +47,4 @@ public class RideRequest {
         this.fare = fare;
     }
 }
+

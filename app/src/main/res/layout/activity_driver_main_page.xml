@@ -28,6 +28,14 @@
             android:text="View Profile" />
 
         <Button
+            android:id="@+id/requestRideButton"
+            android:layout_width="5dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="Request Ride" />
+
+        <Button
             android:id="@+id/viewRequestsButton"
             style="@style/Widget.AppCompat.Button"
             android:layout_width="5dp"
