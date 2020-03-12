@@ -36,6 +36,15 @@
             android:layout_weight="1"
             android:text="View Requests" />
 
+        <Button
+            android:id="@+id/logOutRequestsButton"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="5dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="Log Out" />
+
     </LinearLayout>
 
 
