@@ -34,6 +34,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 import java.io.IOException;
@@ -61,12 +62,16 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private Marker pickupMarker;
     private Marker destinationMarker;
 
+    //firebase
+    private FirebaseAuth auth;
+
     // views
     private Button viewRequestButton;
     private Button requestRideButton;
     private Button viewProfileButton;
     private Button confirmRequestButton;
     private Button cancelRequestButton;
+    private Button logoutButton;
     private EditText searchPickupText;
     private EditText searchDestinationText;
     private LinearLayout searchesLayout;
@@ -81,12 +86,14 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_main_page);
 
+        auth = FirebaseAuth.getInstance();
         // get views
         searchPickupText = findViewById(R.id.searchPickupEditText);
         searchDestinationText = findViewById(R.id.searchDestinationEditText);
         searchesLayout = findViewById(R.id.searchesLayout);
         requestRideButton = findViewById(R.id.requestRideButton);
         viewProfileButton = findViewById(R.id.viewProfileButton);
+        logoutButton = findViewById(R.id.logoutButton);
         confirmCancelLayout = findViewById(R.id.confirmCancelLayout);
         viewRequestLayout = findViewById(R.id.viewRequestLayout);
         confirmRequestButton = findViewById(R.id.confirmRequestButton);
@@ -100,6 +107,14 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 launchCurrentRequestActivity();
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth.signOut();
+                launchHomeScreen();
             }
         });
     }
@@ -432,6 +447,11 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
 
     private void launchCurrentRequestActivity(){
         Intent intent = new Intent(this, RiderCurrentRideRequestActivity.class);
+        startActivity(intent);
+    }
+
+    private void launchHomeScreen(){
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 

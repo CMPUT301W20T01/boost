@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,9 +14,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RiderCurrentRideRequestActivity extends AppCompatActivity {
 
@@ -23,10 +29,12 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
     TextView fare;
     TextView status;
     TextView driverUserName;
+    Button cancelButton;
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
     private CollectionReference handler;
+    DocumentReference documentReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +45,21 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
         fare = findViewById(R.id.requestFare);
         status = findViewById(R.id.requestStatus);
         driverUserName = findViewById(R.id.driverUserName);
+        cancelButton = findViewById(R.id.cancelRideRequestButton);
 
         //firebase stuff
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         handler = db.collection("rides");
+        documentReference = db.collection("rides").document(auth.getUid());
         setRideRequest();
-//        noRideRequest();
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancelRideRequest();
+            }
+        });
 
     }
 
@@ -55,12 +71,12 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
                             for(QueryDocumentSnapshot document: task.getResult()){
-                                if(auth.getUid().matches(document.get("riderID").toString())){
-                                    startLocation.setText(document.get("start_location").toString());
-                                    endLocation.setText(document.get("end_location").toString());
-                                    fare.setText(document.get("fare").toString());
-                                    status.setText(document.get("status").toString());
-                                    driverUserName.setText(document.get("driver").toString());
+                                if((auth.getUid().matches(document.get("riderID").toString()))&& document.get("status").toString().matches("Pending")){
+                                    startLocation.setText("Start Location: "+ document.get("start_location").toString());
+                                    endLocation.setText("End Location: "+ document.get("end_location").toString());
+                                    fare.setText("Fare: "+ document.get("fare").toString());
+                                    status.setText("Status: "+ document.get("status").toString());
+//                                    driverUserName.setText(document.get("driver").toString());
                                 }
 
                             }
@@ -76,9 +92,23 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
                 });
     }
 
-    private void noRideRequest(){
-        if(fare.getText().toString().matches("")){
-            Toast.makeText(this, "No active ride bro", Toast.LENGTH_LONG).show();
-        }
+    private void cancelRideRequest(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("status","Cancelled");
+        documentReference.update(map)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(RiderCurrentRideRequestActivity.this, "Ride Request Cancelled", Toast.LENGTH_LONG).show();
+                    }
+                });
+        clear();
+    }
+
+    private void clear(){
+        startLocation.setText("");
+        endLocation.setText("");
+        fare.setText("");
+        status.setText("");
     }
 }
