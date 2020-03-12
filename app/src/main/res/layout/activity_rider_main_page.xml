@@ -107,7 +107,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:text="Request Ride" />
+            android:text="Request Ride"
+            android:orientation="horizontal"/>
 
         <Button
             android:id="@+id/viewRideRequestButton"
