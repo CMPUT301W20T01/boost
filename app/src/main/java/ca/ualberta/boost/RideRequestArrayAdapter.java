@@ -54,3 +54,4 @@ public class RideRequestArrayAdapter extends ArrayAdapter<RideRequest> {
         return convertView;
     }
 }
+
