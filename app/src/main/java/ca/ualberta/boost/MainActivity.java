@@ -110,15 +110,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                         public void onSuccess(AuthResult authResult) {
                             Toast.makeText(MainActivity.this, "Sign In Successful!", Toast.LENGTH_SHORT).show();
                             currentUserId = auth.getCurrentUser().getEmail().toString();
-
-                            //figure out if user is a rider or driver
-                            currentUserId= auth.getUid();
+                            currentUserId = auth.getUid();
                             //check if user is rider or a driver
-                            //function to check if user that just signed in is a driver or rider respectively
                             checkRole(currentUserId);
-                            //function to check if user that just signed in is a driver or rider respectively
-
-
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -173,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_DISPLAY);
         signInUser();
     }
-  
+
     private void checkRole(final String id){
         handler.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -198,3 +192,4 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     }
 
 }
+

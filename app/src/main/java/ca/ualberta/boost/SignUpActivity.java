@@ -110,6 +110,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                         }
                     });
         }
+
     }
 
     //launches the home activity

@@ -42,12 +42,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.User;
+import ca.ualberta.boost.stores.UserStore;
 
-/* This class is partly based off of code from the YouTube tutorial series
-    "Google Maps & Google Places Android Course"
-    (https://www.youtube.com/playlist?list=PLgCYzUzKIBE-vInwQhGSdnbyJ62nixHCt)
-    by CodingWithMitch (https://www.youtube.com/channel/UCoNZZLhPuuRteu02rh7bzsw) */
 
+/**
+ * RiderMainPage defines the Home Page activity for Riders
+ * This class presents the map and necessary views for Riders to
+ * view their profile and/or request a ride.
+ */
+
+/*
+ TODO: Increase cohesion and make this more MVC-like. /
+  Split this class into separate classes: /
+  One that is responsible for the map and one that is responsible for the rest
+ */
 public class RiderMainPage extends FragmentActivity implements OnMapReadyCallback, RideRequestSummaryFragment.OnFragmentInteractionListener {
 
     // constant values
@@ -59,8 +68,8 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private GoogleMap mMap;
-    private Marker pickupMarker;
-    private Marker destinationMarker;
+    public Marker pickupMarker;
+    public Marker destinationMarker;
 
     //firebase
     private FirebaseAuth auth;
@@ -78,8 +87,9 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private LinearLayout confirmCancelLayout;
     private LinearLayout viewRequestLayout;
 
-    // ride to be requested
+    // attributes
     private Ride ride;
+
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,17 +162,30 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                     .visible(false)
             );
 
-            ride = new Ride();
-
             init();
             
         }
     }
 
     /**
+     *  Creates a pending ride for the rider and adds it to the database.
+     *  This method is run when "accept" is pressed from the RideRequestSummaryFragment
+     */
+    @Override
+    public void onAcceptPressed(Ride newRide) {
+        ride = newRide;
+        ride.setPending();
+
+        Log.d("Fare", Double.toString(ride.getFare()));
+        setRiderMainPageVisibility();
+        /* TODO: Send ride to database */
+    }
+
+    /**
      * Initialize listeners
      */
     private void init() {
+
         requestRideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -199,20 +222,15 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         confirmRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ride.setEndLocation(destinationMarker.getPosition());
+                ride.setStartLocation(pickupMarker.getPosition());
+                ride.calculateAndSetFare();
                 new RideRequestSummaryFragment(ride).show(getSupportFragmentManager(), "RIDE_SUM");
             }
         });
 
     }
 
-    /**
-     *  Creates a pending ride for the rider and adds it to the database.
-     *  This method is run when "accept" is pressed from the RideRequestSummaryFragment
-     */
-    @Override
-    public void onAcceptPressed() {
-
-    }
 
     /**
      * Allows user to choose start and end location, price, and request a ride
@@ -220,6 +238,9 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
      */
     private void handleRequestRideClick() {
         setRequestLocationPageVisibility();
+        ride = new Ride();
+        /* TODO: set ride to current user, then send ride to database */
+        //ride.setRider();
         // pickup search bar
         searchPickupText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -290,7 +311,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     }
 
     /**
-     * update the ride with the marker's new position
+     * Update the ride with the marker's new position
      *
      * @param marker
      *      the marker to get the position with which we update ride
@@ -306,17 +327,17 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     }
 
     /**
-     * hides views associated with ride requesting
+     * Hides views associated with ride requesting
      */
     private void handleCancelRideClick() {
         setRiderMainPageVisibility();
         searchDestinationText.setText("");
         searchPickupText.setText("");
-        mMap.clear();
     }
 
     /**
-     * shows views associated with ride requesting
+     * Shows views associated with ride requesting
+     * and hides views associated with the main home page
      */
     private void setRequestLocationPageVisibility() {
         viewRequestLayout.setVisibility(View.GONE);
@@ -325,12 +346,15 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     }
 
     /**
-     * shows views associated with the main home page
+     * Shows views associated with the main home page
+     * and hides views associated with ride requesting
      */
     private void setRiderMainPageVisibility() {
         viewRequestLayout.setVisibility(View.VISIBLE);
         confirmCancelLayout.setVisibility(View.GONE);
         searchesLayout.setVisibility(View.GONE);
+        pickupMarker.setVisible(false);
+        destinationMarker.setVisible(false);
     }
 
 
@@ -342,6 +366,10 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(RiderMainPage.this);
     }
 
+    /* This following methods are based off of code from the YouTube tutorial series
+    "Google Maps & Google Places Android Course"
+    (https://www.youtube.com/playlist?list=PLgCYzUzKIBE-vInwQhGSdnbyJ62nixHCt)
+    by CodingWithMitch (https://www.youtube.com/channel/UCoNZZLhPuuRteu02rh7bzsw) */
 
     /**
      *  Gets the device's current location

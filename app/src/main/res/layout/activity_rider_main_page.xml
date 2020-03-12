@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -85,7 +86,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/viewRequestLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -100,10 +100,10 @@
             android:layout_weight="1"
             android:text="View Profile" />
 
-        <Button
-            android:id="@+id/requestRideButton"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_width="5dp"
+
+        <LinearLayout
+            android:id="@+id/viewRequestLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
@@ -128,6 +128,7 @@
             android:text="Log Out" />
 
     </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/confirmCancelLayout"
@@ -156,6 +157,8 @@
             android:text="Confirm" />
 
     </LinearLayout>
+
+
 
 
 </FrameLayout>

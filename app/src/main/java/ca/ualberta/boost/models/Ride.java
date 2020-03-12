@@ -3,6 +3,8 @@ package ca.ualberta.boost.models;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,7 +78,7 @@ public class Ride {
         this.endLocation = endLocation;
     }
 
-    public void updateFare(double fare) {
+    public void setFare(double fare) {
         this.fare = fare;
     }
 
@@ -106,5 +108,17 @@ public class Ride {
 
     public void cancel() {
         this.status = RideStatus.CANCELLED;
+    }
+
+    /* calculates and sets the fare according to the
+    ride's start and end locations
+     */
+    public void calculateAndSetFare(){
+        double latDiff = Math.abs(startLocation.latitude - endLocation.latitude);
+        double longDiff = Math.abs(startLocation.longitude - endLocation.longitude);
+        double fare = (latDiff + longDiff) * 150;
+        // round fare to 2 decimal places
+        BigDecimal bdFare = new BigDecimal(fare).setScale(2, RoundingMode.HALF_UP);
+        setFare(bdFare.doubleValue());
     }
 }

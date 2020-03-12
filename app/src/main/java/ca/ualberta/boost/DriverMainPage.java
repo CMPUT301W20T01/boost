@@ -55,6 +55,7 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
                 displayRequests();
             }
         });
+
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +63,7 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
                 launchHomeScreen();
             }
         });
+
     }
 
     @Override
@@ -175,3 +177,4 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
     }
 
 }
+
