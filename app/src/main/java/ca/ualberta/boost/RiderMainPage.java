@@ -6,7 +6,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -62,14 +61,10 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private Marker destinationMarker;
 
     // views
-    private Button viewRequestButton;
     private Button requestRideButton;
-    private Button decreaseCostButton;
-    private Button increaseCostButton;
     private Button viewProfileButton;
     private Button confirmRequestButton;
     private Button cancelRequestButton;
-    private TextView costView;
     private EditText searchPickupText;
     private EditText searchDestinationText;
     private LinearLayout searchesLayout;
@@ -94,40 +89,9 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         viewRequestLayout = findViewById(R.id.viewRequestLayout);
         confirmRequestButton = findViewById(R.id.confirmRequestButton);
         cancelRequestButton = findViewById(R.id.cancelRequestButton);
-        decreaseCostButton = findViewById(R.id.decrease_cost_button);
-        increaseCostButton = findViewById(R.id.increase_cost_button);
-        costView = findViewById(R.id.cost_text);
-        viewRequestButton = findViewById(R.id.viewRideRequestButton);
-
 
         // get location permission
         getLocationPermission();
-
-
-        // Cost selection
-        increaseCostButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int currentCost = Integer.parseInt(costView.getText().toString());
-                String newCost = String.valueOf(currentCost+1);
-                costView.setText(newCost);
-            }
-        });
-
-        decreaseCostButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int currentCost = Integer.parseInt(costView.getText().toString());
-                String newCost = String.valueOf(currentCost-1);
-                costView.setText(newCost);
-
-        viewRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchCurrentRequestActivity();
-
-            }
-        });
     }
 
     /**
@@ -455,11 +419,5 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
             }
         }
     }
-
-    private void launchCurrentRequestActivity(){
-        Intent intent = new Intent(this, RiderCurrentRideRequestActivity.class);
-        startActivity(intent);
-    }
-
 
 }

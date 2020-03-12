@@ -38,6 +38,7 @@ public class Rider extends User {
                 (String) data.get("username"),
                 (String) data.get("password"),
                 (String) data.get("email"),
-                (String) data.get("phoneNumber"));
+                (String) data.get("phoneNumber"),
+                (String) data.get("type"));
     }
 }

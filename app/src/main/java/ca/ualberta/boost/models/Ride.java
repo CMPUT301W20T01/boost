@@ -1,52 +1,42 @@
 package ca.ualberta.boost.models;
 
 
-import android.annotation.SuppressLint;
-//import android.location.Location;
-//import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-//import ca.ualberta.boost.models.LatLng;
 
-
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.annotation.Nullable;
 
 public class Ride {
     private LatLng startLocation;
     private LatLng endLocation;
     private double fare;
-    private @Nullable Driver driver = null;
+    private Driver driver;
     private Rider rider;
     private RideStatus status;
-    private Date requestTime;
 
-    public Ride(LatLng startLocation, LatLng endLocation, double fare, Rider rider) {
+    public Ride(LatLng startLocation, LatLng endLocation, double fare, Driver driver, Rider rider) {
         this.startLocation = startLocation;
         this.endLocation = endLocation;
         this.fare = fare;
+        this.driver = driver;
         this.rider = rider;
         this.status = RideStatus.PENDING;
-        this.requestTime = new Date(); // assigned when ride is requested
     }
 
+    // empty constructor
+    public Ride(){
 
-    public Map<String, Object> data() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("start_location", this.startLocation);
-        map.put("end_location", this.endLocation);
+    }
+
+    public Map<String, String> data() {
+        Map<String, String> map = new HashMap<>();
+//        map.put("start_location", this.startLocation);
+//        map.put("end_location", this.endLocation);
         map.put("fare", Double.toString(this.fare));
         map.put("driver", this.driver.getUsername());
         map.put("rider", this.rider.getUsername());
         map.put("status", this.status.toString());
         return map;
-    }
-
-    @SuppressLint("DefaultLocale")
-    public String id() {
-        return String.format("%s_%d", rider.getUsername(), requestTime.getTime());
     }
 
     public LatLng getStartLocation() {
@@ -92,6 +82,10 @@ public class Ride {
     public void setRider(Rider rider) {
         this.rider = rider;
     }
+
+//    public void setRideStatus(RideStatus rideStatus) {
+//        this.rideStatus = rideStatus;
+//    }
 
     public void setPending() {
         this.status = RideStatus.PENDING;
