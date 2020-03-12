@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         circleProgressBar.setAlpha(0);
 
         //get references to fireStore
+        FirebaseApp.initializeApp(this);
         auth = FirebaseAuth.getInstance();
 
         //initialize EditText views
