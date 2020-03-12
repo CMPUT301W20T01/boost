@@ -150,8 +150,10 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     public void onAcceptPressed(Ride newRide) {
         ride = newRide;
         ride.setPending();
-        /* TODO: Send ride to database */
 
+        Log.d("Fare", Double.toString(ride.getFare()));
+        setRiderMainPageVisibility();
+        /* TODO: Send ride to database */
     }
 
     /**
@@ -306,11 +308,11 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         setRiderMainPageVisibility();
         searchDestinationText.setText("");
         searchPickupText.setText("");
-        mMap.clear();
     }
 
     /**
      * Shows views associated with ride requesting
+     * and hides views associated with the main home page
      */
     private void setRequestLocationPageVisibility() {
         viewRequestLayout.setVisibility(View.GONE);
@@ -320,11 +322,14 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
 
     /**
      * Shows views associated with the main home page
+     * and hides views associated with ride requesting
      */
     private void setRiderMainPageVisibility() {
         viewRequestLayout.setVisibility(View.VISIBLE);
         confirmCancelLayout.setVisibility(View.GONE);
         searchesLayout.setVisibility(View.GONE);
+        pickupMarker.setVisible(false);
+        destinationMarker.setVisible(false);
     }
 
 
