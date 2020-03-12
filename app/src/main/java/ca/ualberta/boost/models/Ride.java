@@ -111,7 +111,7 @@ public class Ride {
     public void calculateAndSetFare(){
         double latDiff = Math.abs(startLocation.latitude - endLocation.latitude);
         double longDiff = Math.abs(startLocation.longitude - endLocation.longitude);
-        double fare = (latDiff + longDiff) * 125;
+        double fare = (latDiff + longDiff) * 150;
         // round fare to 2 decimal places
         BigDecimal bdFare = new BigDecimal(fare).setScale(2, RoundingMode.HALF_UP);
         setFare(bdFare.doubleValue());
