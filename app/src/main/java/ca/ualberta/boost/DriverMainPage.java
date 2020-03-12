@@ -48,7 +48,7 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
 
         auth = FirebaseAuth.getInstance();
         viewRequestsButton = findViewById(R.id.viewRequestsButton);
-        logoutButton = findViewById(R.id.logOutRequestsButton);
+        logoutButton = findViewById(R.id.logoutButton);
         viewRequestsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

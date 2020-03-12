@@ -80,6 +80,5 @@ public class ViewRideRequestsActivity extends AppCompatActivity {
                     }
                 });
     }
-
 }
 

@@ -46,6 +46,5 @@ public class RideRequest {
     public void setFare(String fare) {
         this.fare = fare;
     }
-
 }
 

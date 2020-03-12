@@ -81,6 +81,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private Button confirmRequestButton;
     private Button cancelRequestButton;
     private Button logoutButton;
+    private Button viewRequestButton;
     private EditText searchPickupText;
     private EditText searchDestinationText;
     private LinearLayout searchesLayout;
@@ -109,6 +110,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         confirmRequestButton = findViewById(R.id.confirmRequestButton);
         cancelRequestButton = findViewById(R.id.cancelRequestButton);
         viewRequestButton = findViewById(R.id.viewRideRequestButton);
+        logoutButton = findViewById(R.id.logoutButton);
 
         // get location permission
         getLocationPermission();
@@ -161,9 +163,8 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                     .draggable(true)
                     .visible(false)
             );
-
-//            init();
-            
+          
+            init();
         }
     }
 
@@ -173,63 +174,77 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
      */
     @Override
     public void onAcceptPressed(Ride newRide) {
+        setRiderMainPageVisibility();
         ride = newRide;
         ride.setPending();
-
-        Log.d("Fare", Double.toString(ride.getFare()));
-        setRiderMainPageVisibility();
-        /* TODO: Send ride to database */
+        /* TODO: set Rider as current user and send ride to database */
+        // ride.setRider();
     }
 
     /**
      * Initialize listeners
      */
-//    private void init() {
-//
-//        requestRideButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                handleRequestRideClick();
-//            }
-//        });
-//        cancelRequestButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                handleCancelRideClick();
-//            }
-//        });
-//
-//        // listener for marker drag
-//        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-//            @Override
-//            public void onMarkerDragStart(Marker marker) {
-//
-//            }
-//
-//            @Override
-//            public void onMarkerDrag(Marker marker) {
-//
-//            }
-//
-//            @Override
-//            public void onMarkerDragEnd(Marker marker) {
-//                updateRideLocation(marker);
-//                // TODO: update the text in the search bar to match the marker's new position
-//
-//            }
-//        });
-//
-//        confirmRequestButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ride.setEndLocation(destinationMarker.getPosition());
-//                ride.setStartLocation(pickupMarker.getPosition());
-//                ride.calculateAndSetFare();
-//                new RideRequestSummaryFragment(ride).show(getSupportFragmentManager(), "RIDE_SUM");
-//            }
-//        });
-//
-//    }
+    private void init() {
+
+        viewRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchCurrentRequestActivity();
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth.signOut();
+                launchHomeScreen();
+            }
+        });
+
+        requestRideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleRequestRideClick();
+            }
+        });
+        cancelRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleCancelRideClick();
+            }
+        });
+
+        // listener for marker drag
+        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {
+
+            }
+
+            @Override
+            public void onMarkerDrag(Marker marker) {
+
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                updateRideLocation(marker);
+                // TODO: update the text in the search bar to match the marker's new position
+
+            }
+        });
+
+        confirmRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ride.setEndLocation(destinationMarker.getPosition());
+                ride.setStartLocation(pickupMarker.getPosition());
+                ride.calculateAndSetFare();
+                new RideRequestSummaryFragment(ride).show(getSupportFragmentManager(), "RIDE_SUM");
+            }
+        });
+
+
 
 
     /**
