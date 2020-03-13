@@ -145,6 +145,14 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                 launchHomeScreen();
             }
         });
+
+        //CLICK VIEW PROFILE
+        viewProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchProfileScreen();
+            }
+        });
     }
 
     /**
@@ -274,7 +282,6 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                 new RideRequestSummaryFragment(ride).show(getSupportFragmentManager(), "RIDE_SUM");
             }
         });
-
 
     }
     /**
@@ -525,6 +532,11 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
 
     private void launchHomeScreen(){
         Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    private void launchProfileScreen() {
+        Intent intent = new Intent(this, PrivateUserProfileActivity.class);
         startActivity(intent);
     }
 
