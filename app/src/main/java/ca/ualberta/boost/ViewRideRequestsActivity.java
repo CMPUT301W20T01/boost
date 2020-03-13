@@ -24,6 +24,10 @@ import java.util.ArrayList;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.Rider;
 
+/**
+ * ViewRidesRequestsActivity is responsible for displaying current ride requests to drivers
+ */
+
 public class ViewRideRequestsActivity extends AppCompatActivity {
 
     private ListView rideRequestListView;
@@ -79,6 +83,15 @@ public class ViewRideRequestsActivity extends AppCompatActivity {
                         Toast.makeText(ViewRideRequestsActivity.this, "Please contact your database administrator", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+
+        //handle the listview being clicked
+        rideRequestListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
     }
 }
 

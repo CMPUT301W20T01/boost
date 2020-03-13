@@ -4,13 +4,13 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import com.google.android.gms.maps.model.LatLng;
 
-import ca.ualberta.boost.models.LatLng;
 import ca.ualberta.boost.models.Driver;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.Rider;
 
-public class TestDriver {
+public class TestUser {
     private Driver mockDriver() {
         Driver driver = new Driver("Billy",
                                    "pianoman",
@@ -29,8 +29,6 @@ public class TestDriver {
         double lon2 = 13.447266;
         LatLng startLocation = new LatLng(lat1, lon1);
         LatLng endLocation = new LatLng(lat2, lon2);
-        startLocation.setLatitude(lat1);
-        startLocation.setLongitude(lon1);
         Ride ride = new Ride(startLocation, endLocation, 23.67, new Rider("Elton",
                                                                                 "rocketman",
                                                                                 "tinyDancer",
@@ -48,8 +46,6 @@ public class TestDriver {
         double lon2 = 101.715100;
         LatLng startLocation = new LatLng(lat1, lon1);
         LatLng endLocation = new LatLng(lat2, lon2);
-        startLocation.setLatitude(lat1);
-        startLocation.setLongitude(lon1);
         Ride ride = new Ride(startLocation, endLocation, 23.67, new Rider("Elton",
                                                                                 "rocketman",
                                                                                 "tinyDancer",

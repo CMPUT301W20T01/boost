@@ -18,8 +18,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.blikoon.qrcodescanner.QrCodeActivity;
-
-
+/**
+ * QRActivity is responsible for
+ * by making sure the username and password correspond to user information in firestore
+ * the class also will launch the sign up page if that button is clicked
+ */
 public class QRActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_QR_SCAN = 101;
     private static final int PERMISSION_REQUEST_CODE = 1;
