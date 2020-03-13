@@ -18,7 +18,7 @@ public abstract class User {
     private @Nullable Ride activeRide;
 
     // constructor
-    public User(String firstName, String username, String password, String email, String phoneNumber) {
+    protected User(String firstName, String username, String password, String email, String phoneNumber) {
         this.username = username;
         this.firstName = firstName;
         this.password = password;

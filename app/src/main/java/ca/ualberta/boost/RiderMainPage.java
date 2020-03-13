@@ -47,7 +47,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.Rider;
 import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.stores.UserStore;
 
@@ -281,7 +283,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
      */
     private void handleRequestRideClick() {
         setRequestLocationPageVisibility();
-        ride = new Ride();
+        ride = new Ride(0.00, (Rider) ActiveUser.getUser());
         /* TODO: set ride to current user, then send ride to database */
         //ride.setRider();
         // pickup search bar
