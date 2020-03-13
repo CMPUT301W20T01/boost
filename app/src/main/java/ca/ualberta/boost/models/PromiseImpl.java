@@ -3,6 +3,11 @@ package ca.ualberta.boost.models;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+/**
+ * This class resolves or rejects a Promise.
+ * @param <TResult>
+ */
+
 public class PromiseImpl<TResult> implements Promise<TResult> {
     // Lambda functions to run on success or failure
     private OnSuccessListener<TResult> resolveCallback = null;
@@ -11,7 +16,8 @@ public class PromiseImpl<TResult> implements Promise<TResult> {
     public PromiseImpl() {}
 
     /**
-     * @param result promised data
+     * @param result
+     *      The promised data
      */
     public void resolve(TResult result) {
         if (resolveCallback != null) {
@@ -20,7 +26,8 @@ public class PromiseImpl<TResult> implements Promise<TResult> {
     }
 
     /**
-     * @param e exception, error occurred
+     * @param e
+     *      An exception, error occurred
      */
     public void reject(Exception e) {
         if (rejectCallback != null) {
@@ -29,14 +36,16 @@ public class PromiseImpl<TResult> implements Promise<TResult> {
     }
 
     /**
-     * @param func the function to be called when the promise is resolved (the result is realized)
+     * @param func
+     *      The function to be called when the promise is resolved (the result is realized)
      */
     public void addOnSuccessListener(OnSuccessListener<TResult> func) {
         resolveCallback = func;
     }
 
     /**
-     * @param func the function to be called when the promise is rejected (an error occurred)
+     * @param func
+     *      The function to be called when the promise is rejected (an error occurred)
      */
     public void addOnFailureListener(OnFailureListener func) {
         rejectCallback = func;

@@ -7,9 +7,12 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 /**
- * This class represent the User. It handles all aspects
- * of constructing a User object.
+ * This class represents an abstraction of a User. Stores the common fields between
+ * the Rider and Driver
+ * @see Rider
+ * @see Driver
  */
+
 public abstract class User {
 
     private String firstName;

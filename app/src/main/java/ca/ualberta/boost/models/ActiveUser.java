@@ -4,6 +4,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import ca.ualberta.boost.stores.UserStore;
 
+/**
+ * This class represents the user currently using the app. It is used to set and get the
+ * current user.
+ */
+
 public class ActiveUser {
     private static User user = null;
 
@@ -11,7 +16,8 @@ public class ActiveUser {
 
     /**
      * Get the user using the app
-     * @return current user
+     * @return
+     *      Returns the current user
      */
     public static User getUser() {
         return user;
@@ -19,8 +25,10 @@ public class ActiveUser {
 
     /**
      * Set the user using the app
-     * @param username current user's username
-     * @param password current user's password
+     * @param username
+     *      The current user's username
+     * @param password
+     *      The current user's password
      */
     public static void login(String username, final String password) {
         UserStore.getUser(username)
