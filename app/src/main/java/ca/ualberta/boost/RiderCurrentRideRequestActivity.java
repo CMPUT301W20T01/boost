@@ -24,6 +24,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * RiderCurrentRideRequestActivity is responsible for displaying the current request of a rider
+ * also allows the rider to cancel an active ride request
+ */
+
 public class RiderCurrentRideRequestActivity extends AppCompatActivity {
 
     TextView startLocation;
@@ -34,6 +39,7 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
     TextView riderUserName;
     Button cancelButton;
 
+    //firebase
     private FirebaseAuth auth;
     private FirebaseFirestore db;
     private CollectionReference handler;
@@ -52,15 +58,13 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
         riderUserName = findViewById(R.id.usernameRideRequest);
         cancelButton = findViewById(R.id.cancelRideRequestButton);
 
-        //firebase stuff
+        //firebase
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         handler = db.collection("rides");
         user = FirebaseAuth.getInstance().getCurrentUser();
         documentReference = db.collection("rides").document(user.getEmail());
-
         setRideRequest();
-
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,8 +74,8 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
 
     }
 
+    //function to retrieve the relevant information about a ride request for the current user
     private void setRideRequest(){
-
         handler.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -102,6 +106,8 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
                 });
     }
 
+
+    //function to cancel a ride request
     private void cancelRideRequest(){
         Map<String, Object> map = new HashMap<>();
         map.put("status","Cancelled");
@@ -115,6 +121,7 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
         clear();
     }
 
+    //function to clear all TextViews
     private void clear(){
         startLocation.setText("");
         endLocation.setText("");
