@@ -40,7 +40,7 @@ public class Ride {
         Map<String, Object> map = new HashMap<>();
         map.put("start_location", this.startLocation);
         map.put("end_location", this.endLocation);
-        map.put("fare", Double.toString(this.fare));
+        map.put("fare", this.fare);
         map.put("driver", this.driver.getUsername());
         map.put("rider", this.rider.getUsername());
         map.put("status", this.status.toString());
@@ -112,15 +112,12 @@ public class Ride {
         this.status = RideStatus.CANCELLED;
     }
 
-    /* calculates and sets the fare according to the
-    ride's start and end locations
-     */
-    public void calculateAndSetFare(){
+    public double baseFare() {
         double latDiff = Math.abs(startLocation.latitude - endLocation.latitude);
         double longDiff = Math.abs(startLocation.longitude - endLocation.longitude);
-        double fare = (latDiff + longDiff) * 150;
+        double fare = 5 + ((latDiff + longDiff) * 300); // base price of $5
         // round fare to 2 decimal places
         BigDecimal bdFare = new BigDecimal(fare).setScale(2, RoundingMode.HALF_UP);
-        setFare(bdFare.doubleValue());
+        return bdFare.doubleValue();
     }
 }
