@@ -7,6 +7,10 @@ import java.util.Map;
 
 import static ca.ualberta.boost.models.UserType.DRIVER;
 
+/**
+ * This class represents a Driver. It handles building a Map object that represents
+ * the Driver, which can be received by the UserStore class to send the Driver to firebase.
+ */
 public class Driver extends User {
 
     private ArrayList<Ride> allRides = new ArrayList<>();
