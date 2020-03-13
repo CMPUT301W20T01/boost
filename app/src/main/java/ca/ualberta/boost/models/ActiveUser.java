@@ -9,10 +9,19 @@ public class ActiveUser {
 
     private ActiveUser() {} // can't build Active User
 
+    /**
+     * Get the user using the app
+     * @return current user
+     */
     public static User getUser() {
         return user;
     }
 
+    /**
+     * Set the user using the app
+     * @param username current user's username
+     * @param password current user's password
+     */
     public static void login(String username, final String password) {
         UserStore.getUser(username)
             .addOnSuccessListener(new OnSuccessListener<User>() {
