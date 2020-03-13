@@ -270,7 +270,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 ride.setEndLocation(destinationMarker.getPosition());
                 ride.setStartLocation(pickupMarker.getPosition());
-                ride.calculateAndSetFare();
+                ride.setFare(ride.baseFare());
                 new RideRequestSummaryFragment(ride).show(getSupportFragmentManager(), "RIDE_SUM");
             }
         });
