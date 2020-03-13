@@ -64,7 +64,6 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
         handler = db.collection("rides");
         user = FirebaseAuth.getInstance().getCurrentUser();
         documentReference = db.collection("rides").document(user.getEmail());
-
         setRideRequest();
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override

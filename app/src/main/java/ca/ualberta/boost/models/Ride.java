@@ -1,28 +1,34 @@
 package ca.ualberta.boost.models;
 
 
+import android.annotation.SuppressLint;
 import com.google.android.gms.maps.model.LatLng;
 
+
+import java.util.Date;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 public class Ride {
     private LatLng startLocation;
     private LatLng endLocation;
     private double fare;
-    private Driver driver;
+    private @Nullable Driver driver = null;
     private Rider rider;
     private RideStatus status;
+    private Date requestTime;
 
-    public Ride(LatLng startLocation, LatLng endLocation, double fare, Driver driver, Rider rider) {
+    public Ride(LatLng startLocation, LatLng endLocation, double fare, Rider rider) {
         this.startLocation = startLocation;
         this.endLocation = endLocation;
         this.fare = fare;
-        this.driver = driver;
         this.rider = rider;
         this.status = RideStatus.PENDING;
+        this.requestTime = new Date(); // assigned when ride is requested
     }
 
     public Ride(double fare, Rider rider) {
@@ -30,20 +36,20 @@ public class Ride {
         this.rider = rider;
     }
 
-    // empty constructor
-    public Ride(){
-
-    }
-
-    public Map<String, String> data() {
-        Map<String, String> map = new HashMap<>();
-//        map.put("start_location", this.startLocation);
-//        map.put("end_location", this.endLocation);
-        map.put("fare", Double.toString(this.fare));
+    public Map<String, Object> data() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("start_location", this.startLocation);
+        map.put("end_location", this.endLocation);
+        map.put("fare", this.fare);
         map.put("driver", this.driver.getUsername());
         map.put("rider", this.rider.getUsername());
         map.put("status", this.status.toString());
         return map;
+    }
+
+    @SuppressLint("DefaultLocale")
+    public String id() {
+        return String.format("%s_%d", rider.getUsername(), requestTime.getTime());
     }
 
     public LatLng getStartLocation() {
@@ -90,10 +96,6 @@ public class Ride {
         this.rider = rider;
     }
 
-//    public void setRideStatus(RideStatus rideStatus) {
-//        this.rideStatus = rideStatus;
-//    }
-
     public void setPending() {
         this.status = RideStatus.PENDING;
     }
@@ -110,15 +112,12 @@ public class Ride {
         this.status = RideStatus.CANCELLED;
     }
 
-    /* calculates and sets the fare according to the
-    ride's start and end locations
-     */
-    public void calculateAndSetFare(){
+    public double baseFare() {
         double latDiff = Math.abs(startLocation.latitude - endLocation.latitude);
         double longDiff = Math.abs(startLocation.longitude - endLocation.longitude);
-        double fare = (latDiff + longDiff) * 150;
+        double fare = 5 + ((latDiff + longDiff) * 300); // base price of $5
         // round fare to 2 decimal places
         BigDecimal bdFare = new BigDecimal(fare).setScale(2, RoundingMode.HALF_UP);
-        setFare(bdFare.doubleValue());
+        return bdFare.doubleValue();
     }
 }

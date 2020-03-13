@@ -84,10 +84,12 @@ public class ViewRideRequestsActivity extends AppCompatActivity {
                     }
                 });
 
+
         //handle the listview being clicked
         rideRequestListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
             }
         });
     }
