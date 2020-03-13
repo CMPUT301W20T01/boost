@@ -504,7 +504,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     }
 
     private void launchProfileScreen() {
-        Intent intent = new Intent(this, UserProfileActivity.class);
+        Intent intent = new Intent(this, PrivateUserProfileActivity.class);
         startActivity(intent);
     }
 

@@ -26,7 +26,8 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".RiderCurrentRideRequestActivity"></activity>
-        <activity android:name=".UserProfileActivity"></activity>
+        <activity android:name=".PrivateUserProfileActivity"></activity>
+        <activity android:name=".EditUserProfileActivity"></activity>
         <activity android:name=".ViewRideRequestsActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".DriverMainPage" />

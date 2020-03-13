@@ -1,6 +1,8 @@
 package ca.ualberta.boost;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,7 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class UserProfileActivity extends AppCompatActivity {
+public class PrivateUserProfileActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseUser currentUser;
     private FirebaseFirestore db;
@@ -44,10 +46,10 @@ public class UserProfileActivity extends AppCompatActivity {
         editButton = findViewById(R.id.userProfilePrivateButton);
         userRating = findViewById(R.id.userProfilePrivateRating);
 
+
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         collection = db.collection("users");
-        documentReference = db.collection("rides").document(auth.getUid());
 
         //retrieve current User profile info
         collection.get()
@@ -75,7 +77,21 @@ public class UserProfileActivity extends AppCompatActivity {
                     }
                 });
 
-
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchEditProfile();
+            }
+        });
 
     }
+
+    /**
+     * Opens up new activity to allow user to change elements of their profile
+     */
+    private void launchEditProfile(){
+        Intent intent = new Intent(this, EditUserProfileActivity.class);
+        startActivity(intent);
+    }
+
 }
