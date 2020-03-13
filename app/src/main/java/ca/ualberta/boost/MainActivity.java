@@ -138,7 +138,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
     }
 
-
     //method to open SignUp activity
     public void openSignUpActivity(){
         Intent intent = new Intent(this, SignUpActivity.class );

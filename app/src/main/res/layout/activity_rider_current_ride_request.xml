@@ -7,12 +7,20 @@
     tools:context=".RiderCurrentRideRequestActivity"
     android:orientation="vertical">
 
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Current Request"
         android:id="@+id/title"
         android:textSize="30dp">
+    </TextView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/usernameRideRequest"
+        android:textSize="20dp">
     </TextView>
 
     <TextView

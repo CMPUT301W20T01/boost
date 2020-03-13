@@ -35,11 +35,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.User;
@@ -73,6 +79,10 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
 
     //firebase
     private FirebaseAuth auth;
+    private FirebaseFirestore db;
+    private CollectionReference handler;
+    DocumentReference documentReference;
+    FirebaseUser user;
 
     // views
     private Button viewRequestButton;
@@ -81,7 +91,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private Button confirmRequestButton;
     private Button cancelRequestButton;
     private Button logoutButton;
-    private Button viewRequestButton;
+//    private Button viewRequestButton;
     private EditText searchPickupText;
     private EditText searchDestinationText;
     private LinearLayout searchesLayout;
@@ -91,13 +101,17 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     // attributes
     private Ride ride;
 
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_main_page);
 
         auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        handler = db.collection("rides");
+        documentReference = db.collection("rides").document(auth.getUid());
+        user = FirebaseAuth.getInstance().getCurrentUser();
         // get views
         searchPickupText = findViewById(R.id.searchPickupEditText);
         searchDestinationText = findViewById(R.id.searchDestinationEditText);
@@ -163,7 +177,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                     .draggable(true)
                     .visible(false)
             );
-          
+
             init();
         }
     }
@@ -179,6 +193,21 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         ride.setPending();
         /* TODO: set Rider as current user and send ride to database */
         // ride.setRider();
+        Map<String, String> map = new HashMap<>();
+        map.put("Driver","");
+        map.put("end_location", ride.getEndLocation().toString());
+        map.put("fare", String.valueOf(ride.getFare()));
+        map.put("rider",user.getEmail());
+        map.put("riderId", auth.getUid());
+        map.put("start_location",ride.getStartLocation().toString());
+        map.put("status","Pending");
+        handler.document(user.getEmail()).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(RiderMainPage.this, "Request Sent", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     /**
@@ -245,8 +274,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         });
 
 
-
-
+    }
     /**
      * Allows user to choose start and end location, price, and request a ride
      * This function is run when the "Request Ride" button is clicked.
@@ -499,3 +527,4 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     }
 
 }
+

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,12 +31,14 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
     TextView fare;
     TextView status;
     TextView driverUserName;
+    TextView riderUserName;
     Button cancelButton;
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
     private CollectionReference handler;
     DocumentReference documentReference;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +49,16 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
         fare = findViewById(R.id.requestFare);
         status = findViewById(R.id.requestStatus);
         driverUserName = findViewById(R.id.driverUserName);
+        riderUserName = findViewById(R.id.usernameRideRequest);
         cancelButton = findViewById(R.id.cancelRideRequestButton);
 
         //firebase stuff
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         handler = db.collection("rides");
-        documentReference = db.collection("rides").document(auth.getUid());
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        documentReference = db.collection("rides").document(user.getEmail());
+
         setRideRequest();
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -71,12 +78,15 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
                             for(QueryDocumentSnapshot document: task.getResult()){
-                                if((auth.getUid().matches(document.get("riderID").toString()))&& document.get("status").toString().matches("Pending")){
+                                if((user.getEmail().matches(document.get("rider").toString()))&& document.get("status").toString().matches("Pending")){
                                     startLocation.setText("Start Location: "+ document.get("start_location").toString());
                                     endLocation.setText("End Location: "+ document.get("end_location").toString());
                                     fare.setText("Fare: "+ document.get("fare").toString());
                                     status.setText("Status: "+ document.get("status").toString());
 //                                    driverUserName.setText(document.get("driver").toString());
+                                    Log.i("testValue",document.get("rider").toString());
+                                    Log.i("testValue",user.getEmail());
+                                    riderUserName.setText("Username: "+document.get("rider").toString());
                                 }
 
                             }
@@ -110,6 +120,7 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
         endLocation.setText("");
         fare.setText("");
         status.setText("");
+        riderUserName.setText("");
     }
 }
 
