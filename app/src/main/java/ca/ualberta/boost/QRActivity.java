@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat;
 
 import com.blikoon.qrcodescanner.QrCodeActivity;
 
+
 public class QRActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_QR_SCAN = 101;
     private static final int PERMISSION_REQUEST_CODE = 1;
