@@ -20,8 +20,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firestore.v1.WriteResult;
 
-public class PrivateUserProfileActivity extends AppCompatActivity {
+/**RETRIEVE USER PROFILE AND DISPLAY IT
+ * EDIT PROFILE TO FIREBASE IF REQUIRED
+ */
+public class PrivateUserProfileActivity extends AppCompatActivity implements EditUserProfileFragment.OnFragmentInteractionListener {
     FirebaseAuth auth;
     FirebaseUser currentUser;
     private FirebaseFirestore db;
@@ -80,18 +84,35 @@ public class PrivateUserProfileActivity extends AppCompatActivity {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchEditProfile();
+                new EditUserProfileFragment().show(getSupportFragmentManager(),"Edit User Contact Info");
             }
         });
 
     }
 
-    /**
-     * Opens up new activity to allow user to change elements of their profile
-     */
-    private void launchEditProfile(){
-        Intent intent = new Intent(this, EditUserProfileActivity.class);
-        startActivity(intent);
+    @Override
+    public void onOkPressedEdit(String newEmail, String newPhone) {
+
+        userEmail = findViewById(R.id.userProfilePrivateEmail);
+        userPhoneNum = findViewById(R.id.userProfilePrivatePhone);
+
+        //UPDATE TEXTVIEW
+        userEmail.setText(newEmail);
+        userPhoneNum.setText(newPhone);
+
+        //UPDATE FIREBASE
+        auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        collection = db.collection("users");
+        // Update an existing document
+        //NOT COMPLETED
+        DocumentReference docRef = db.collection("users").document();
+
+        // (async) Update one field
+
+
+
+
     }
 
 }
