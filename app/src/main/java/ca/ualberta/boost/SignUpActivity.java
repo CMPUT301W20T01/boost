@@ -148,6 +148,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         passwordEntered = password.getText().toString();
         emailEntered = email.getText().toString();
         phoneNumberEntered =  phoneNumber.getText().toString();
+        userType = spinner.getSelectedItem().toString();
 
         if (userType.equals("Driver")){
             createDriver();
@@ -243,7 +244,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
      */
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-       userType = adapterView.getItemAtPosition(i).toString();
+       //userType = spinner.getSelectedItem().toString();
     }
 
 
