@@ -34,6 +34,10 @@ import java.util.Map;
 import ca.ualberta.boost.models.Driver;
 import ca.ualberta.boost.models.Ride;
 
+/**
+ * RideRequestArrayAdapter is responsible for displaying the information in the ArrayList<RideRequest>
+ * Also allows a driver to click accept (for now only a toast is displayed that says accepted)
+ */
 
 public class RideRequestArrayAdapter extends ArrayAdapter<RideRequest> {
 

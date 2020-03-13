@@ -26,6 +26,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+/**
+ * DriverMainPage is responsible for displaying all options that the driver has
+ * if any of the options (view requests, view profile, view logout) are selected
+ * the respective activity is launched
+ */
+
 public class DriverMainPage extends FragmentActivity implements OnMapReadyCallback {
 
     private static final String TAG = "DriverMainPage";
@@ -38,6 +44,7 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
     private Button viewRequestsButton;
     private Button logoutButton;
 
+    //firebase
     private FirebaseAuth auth;
 
     @Override
@@ -46,7 +53,6 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
         setContentView(R.layout.activity_driver_main_page);
         getLocationPermission();
 
-        auth = FirebaseAuth.getInstance();
         viewRequestsButton = findViewById(R.id.viewRequestsButton);
         logoutButton = findViewById(R.id.logoutButton);
         viewRequestsButton.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +61,8 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
                 displayRequests();
             }
         });
+        //firebase
+        auth = FirebaseAuth.getInstance();
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,11 +174,13 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
         }
     }
 
+    //function to launch the ViewRideRequests Activity
     private void displayRequests(){
         Intent intent = new Intent(this, ViewRideRequestsActivity.class);
         startActivity(intent);
     }
 
+    //function to launch the home screen
     private void launchHomeScreen(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

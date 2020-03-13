@@ -27,6 +27,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * MainActivity is responsible for signing in the user
+ * by making sure the username and password correspond to user information in firestore
+ * the class also will launch the sign up page if that button is clicked
+ */
+
 public class MainActivity extends AppCompatActivity implements Runnable {
 
     private EditText loginEmail;
@@ -167,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         signInUser();
     }
 
+    //method to check the role of a user
     private void checkRole(final String id){
         handler.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
