@@ -11,6 +11,11 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+/**
+ * This class represents a Ride. It handles building a Map object that represents the Ride,
+ * which can be put in a database, and building a Ride from a map object.
+ */
+
 public class Ride {
     private LatLng startLocation;
     private LatLng endLocation;
@@ -48,7 +53,8 @@ public class Ride {
 
     /**
      * creates map of ride data for database
-     * @return map of all ride data
+     * @return
+     *      A map of all ride data
      */
     public Map<String, Object> data() {
         Map<String, Object> map = new HashMap<>();
@@ -64,7 +70,8 @@ public class Ride {
     /**
      * generate the ride id based on the rider's username and timestamp of
      * when the ride request was created
-     * @return string id of ride
+     * @return
+     *      A string id of ride
      */
     @SuppressLint("DefaultLocale")
     public String id() {
@@ -134,7 +141,8 @@ public class Ride {
     /**
      * calculate the base fare based on the Manhattan distance of
      * the start and end locations of the ride
-     * @return base fare amount
+     * @return
+     *      The base fare amount
      */
     public double baseFare() {
         double latDiff = Math.abs(startLocation.latitude - endLocation.latitude);

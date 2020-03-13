@@ -8,9 +8,11 @@ import java.util.Map;
 import static ca.ualberta.boost.models.UserType.DRIVER;
 
 /**
- * This class represents a Driver. It handles building a Map object that represents
- * the Driver, which can be received by the UserStore class to send the Driver to firebase.
+ * This class represents a Driver. It handles building a Map object that represents the Driver,
+ * which can be put in a database, and building a Driver from a Map object.
+ * @see User
  */
+
 public class Driver extends User {
 
     private ArrayList<Ride> allRides = new ArrayList<>();
@@ -30,7 +32,8 @@ public class Driver extends User {
     }
 
     /**
-     * @return all rides that the driver has completed
+     * @return
+     *      Returns all rides that the driver has completed
      * @see Ride
      */
     public Collection<Ride> getAllRides() {
@@ -42,7 +45,8 @@ public class Driver extends User {
     }
 
     /**
-     * @return number of times the driver has been rated
+     * @return
+     *      Returns the number of times the driver has been rated
      */
     public int getNumRates() {
         return numRates;
@@ -50,7 +54,8 @@ public class Driver extends User {
 
     /**
      * adds a ride to the list of rides the driver has completed
-     * @param ride ride to add
+     * @param ride
+     *      New ride to add
      * @see Ride
      */
     public void addRide(Ride ride) {
@@ -70,7 +75,8 @@ public class Driver extends User {
 
     /**
      * creates map of the driver's data
-     * @return map of all driver data
+     * @return
+     *      Returns the map of all driver data
      */
     @Override
     public Map<String, Object> data() {
@@ -89,7 +95,8 @@ public class Driver extends User {
     /**
      * build a driver from a map of data
      * @param data map of all driver data
-     * @return new Driver
+     * @return
+     *      A new Driver
      */
     public static Driver build(Map<String, Object> data) {
         return new Driver(

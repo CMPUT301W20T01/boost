@@ -1,9 +1,9 @@
 package ca.ualberta.boost.models;
 
 /**
- * This enum represents User Types, which can be
- * Rider or Driver
+ * This enum represents User Types, which can be RIDER or DRIVER.
  */
+
 public enum UserType {
     RIDER,
     DRIVER;
