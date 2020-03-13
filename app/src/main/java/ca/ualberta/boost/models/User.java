@@ -6,6 +6,10 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+/**
+ * This class represent the User. It handles all aspects
+ * of constructing a User object.
+ */
 public abstract class User {
 
     private String firstName;
@@ -40,6 +44,7 @@ public abstract class User {
     public String getPassword() {
         return password;
     }
+
 
     public String getEmail() {
         return email;
