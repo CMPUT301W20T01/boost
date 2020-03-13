@@ -33,7 +33,6 @@ import ca.ualberta.boost.models.Driver;
 public class SignUpActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private FirebaseAuth auth;
-
     private EditText firstName;
     private EditText userName;
     private EditText email;
