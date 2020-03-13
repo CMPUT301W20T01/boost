@@ -1,9 +1,7 @@
 package ca.ualberta.boost.models;
 
-
 import android.annotation.SuppressLint;
 import com.google.android.gms.maps.model.LatLng;
-
 
 import java.util.Date;
 import java.math.BigDecimal;
@@ -22,6 +20,13 @@ public class Ride {
     private RideStatus status;
     private Date requestTime;
 
+    /**
+     * Ride constructor with known start and end locations
+     * @param startLocation
+     * @param endLocation
+     * @param fare
+     * @param rider
+     */
     public Ride(LatLng startLocation, LatLng endLocation, double fare, Rider rider) {
         this.startLocation = startLocation;
         this.endLocation = endLocation;
@@ -31,11 +36,20 @@ public class Ride {
         this.requestTime = new Date(); // assigned when ride is requested
     }
 
+    /**
+     * Ride constructor with unknown start and end locations
+     * @param fare
+     * @param rider
+     */
     public Ride(double fare, Rider rider) {
         this.fare = fare;
         this.rider = rider;
     }
 
+    /**
+     * creates map of ride data for database
+     * @return map of all ride data
+     */
     public Map<String, Object> data() {
         Map<String, Object> map = new HashMap<>();
         map.put("start_location", this.startLocation);
@@ -47,6 +61,11 @@ public class Ride {
         return map;
     }
 
+    /**
+     * generate the ride id based on the rider's username and timestamp of
+     * when the ride request was created
+     * @return string id of ride
+     */
     @SuppressLint("DefaultLocale")
     public String id() {
         return String.format("%s_%d", rider.getUsername(), requestTime.getTime());
@@ -112,6 +131,11 @@ public class Ride {
         this.status = RideStatus.CANCELLED;
     }
 
+    /**
+     * calculate the base fare based on the Manhattan distance of
+     * the start and end locations of the ride
+     * @return base fare amount
+     */
     public double baseFare() {
         double latDiff = Math.abs(startLocation.latitude - endLocation.latitude);
         double longDiff = Math.abs(startLocation.longitude - endLocation.longitude);

@@ -13,10 +13,22 @@ public class Driver extends User {
     private int rating = 0;
     private int numRates;
 
+    /**
+     * Driver constructor
+     * @param firstName
+     * @param username
+     * @param password
+     * @param email
+     * @param phoneNumber
+     */
     public Driver(String firstName, String username, String password, String email, String phoneNumber) {
         super(firstName, username, password, email, phoneNumber);
     }
 
+    /**
+     * @return all rides that the driver has completed
+     * @see Ride
+     */
     public Collection<Ride> getAllRides() {
         return allRides;
     }
@@ -25,20 +37,37 @@ public class Driver extends User {
         return rating;
     }
 
+    /**
+     * @return number of times the driver has been rated
+     */
     public int getNumRates() {
         return numRates;
     }
 
+    /**
+     * adds a ride to the list of rides the driver has completed
+     * @param ride ride to add
+     * @see Ride
+     */
     public void addRide(Ride ride) {
         allRides.add(ride);
     }
 
+    /**
+     * updates the driver's rating based on an additional rating and
+     * increments the number of ratings the driver has
+     * @param newRating
+     */
     public void updateRating(int newRating) {
         // rating = old + (1 / (num + 1)) * (new - old)
         numRates++;
         rating += ((1.0 / (double) numRates) * (newRating - rating));
     }
 
+    /**
+     * creates map of the driver's data
+     * @return map of all driver data
+     */
     @Override
     public Map<String, Object> data() {
         Map<String, Object> map = new HashMap<>();
@@ -53,6 +82,11 @@ public class Driver extends User {
         return map;
     }
 
+    /**
+     * build a driver from a map of data
+     * @param data map of all driver data
+     * @return new Driver
+     */
     public static Driver build(Map<String, Object> data) {
         return new Driver(
                 (String) data.get("firstName"),
