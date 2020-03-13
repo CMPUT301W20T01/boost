@@ -13,8 +13,8 @@ public class Driver extends User {
     private int rating = 0;
     private int numRates;
 
-    public Driver(String firstName, String username, String password, String email, String phoneNumber, String userType) {
-        super(firstName, username, password, email, phoneNumber, userType);
+    public Driver(String firstName, String username, String password, String email, String phoneNumber) {
+        super(firstName, username, password, email, phoneNumber);
     }
 
     public Collection<Ride> getAllRides() {
@@ -48,9 +48,8 @@ public class Driver extends User {
         map.put("password", this.getPassword());
         map.put("email", this.getEmail());
         map.put("phoneNumber", this.getPhoneNumber());
-        map.put("rating", Integer.toString(this.rating));
-        map.put("rates", Integer.toString(this.numRates));
-
+        map.put("rating", this.rating);
+        map.put("rates", this.numRates);
         return map;
     }
 
@@ -60,8 +59,7 @@ public class Driver extends User {
                 (String) data.get("username"),
                 (String) data.get("password"),
                 (String) data.get("email"),
-                (String) data.get("phoneNumber"),
-                (String) data.get("type"));
+                (String) data.get("phoneNumber"));
     }
 
 }

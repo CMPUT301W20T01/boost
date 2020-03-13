@@ -22,28 +22,31 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import ca.ualberta.boost.models.Driver;
 
-public class SignUpActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+/**
+ * SignUpActivity is responsible for signing up the user
+ * on a successful registration the user is taken to the correct page depending on their role
+ */
 
-    private FirebaseAuth auth;
+public class SignUpActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private EditText firstName;
     private EditText userName;
     private EditText email;
     private EditText phoneNumber;
     private EditText password;
-
-
-
     private Button signUpButton;
     private Spinner spinner;
 
-    //fireStore reference to users
+    //fireStore
+    private FirebaseAuth auth;
     CollectionReference ref;
 
     @Override
@@ -79,6 +82,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
             @Override
             public void onClick(View v) {
                 addUser();
+//                uniqueUserName(userName.getText().toString());
             }
         });
     }
@@ -103,13 +107,16 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                         }
                     });
         }
+
     }
 
-    //launches the home activity
+    //launches the home activity for a rider
     private void launchHomeRider(){
         Intent intent = new Intent(this, RiderMainPage.class);
         startActivity(intent);
     }
+
+    //launches the home activity for a driver
     private void launchHomeDriver(){
         Intent intent = new Intent(this, DriverMainPage.class);
         startActivity(intent);
@@ -136,6 +143,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
     //signs in user and launches the home activity
     private void signInUser () {
+        //uniqueUserName(userName.getText().toString());
         if(authenticate()) {
             auth.signInWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim())
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
@@ -179,5 +187,28 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    public boolean uniqueUserName(final String username){
+        final boolean[] flag = new boolean[1];
+        flag[0] = false;
+        ref.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot document: task.getResult()){
+                                if(username.matches(document.get("Username").toString())){
+                                    Toast.makeText(SignUpActivity.this, "Username is already in use lol", Toast.LENGTH_SHORT).show();
+                                    Log.i("value",username);
+                                    Log.i("value",document.get("Username").toString());
+                                    flag[0] = true;
+                                }
+                            }
+                        }
+                    }
+                });
+        Log.i("value",String.valueOf(flag[0]));
+        return flag[0];
     }
 }

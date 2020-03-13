@@ -85,41 +85,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="bottom">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/decrease_cost_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="-" />
-
-            <EditText
-                android:id="@+id/cost_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#ffffff"
-                android:textColor="#000000"
-                android:textSize="12dp"
-                android:paddingHorizontal="5dp"
-                android:text="0" />
-
-            <Button
-                android:id="@+id/increase_cost_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="+" />
-
-        </LinearLayout>
         <LinearLayout
             android:id="@+id/viewRequestLayout"
             android:layout_width="match_parent"
@@ -133,7 +98,7 @@
                 android:id="@+id/viewProfileButton"
                 android:layout_width="5dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:text="View Profile" />
 
@@ -142,13 +107,28 @@
                 style="@style/Widget.AppCompat.Button"
                 android:layout_width="5dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:text="Request Ride" />
+
+            <Button
+                android:id="@+id/viewRideRequestButton"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="5dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="View Request" />
+
+            <Button
+                android:id="@+id/logoutButton"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="5dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="Log Out" />
         </LinearLayout>
-
-    </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/confirmCancelLayout"
@@ -177,8 +157,6 @@
             android:text="Confirm" />
 
     </LinearLayout>
-
-
 
 
 </FrameLayout>
