@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             Toast.makeText(MainActivity.this, "Sign In Successful!", Toast.LENGTH_SHORT).show();
-                            currentUserId = auth.getCurrentUser().getEmail().toString();
+//                            currentUserId = auth.getCurrentUser().getEmail().toString();
                             currentUserId = auth.getUid();
                             //check if user is rider or a driver
                             checkRole(currentUserId);
@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         }
 
     }
-
 
     //method to open SignUp activity
     public void openSignUpActivity(){
