@@ -1,10 +1,11 @@
 package ca.ualberta.boost.models;
 
 /**
- * This enum represents Ride Statuses for a Ride, which can be
- * Pending (at the ride request stage), Accepted (once accepted by a Driver),
- * Finished (once confirmed as completed by the Rider) or Cancelled (cancelled by the Rider)
+ * This enum represents the Ride Status for a Ride, which can be
+ * PENDING (at the ride request stage), ACCEPTED (once accepted by a Driver),
+ * FINISHED (once confirmed as completed by the Rider) or CANCELLED (cancelled by the Rider).
  */
+
 public enum RideStatus {
     PENDING,
     ACCEPTED,

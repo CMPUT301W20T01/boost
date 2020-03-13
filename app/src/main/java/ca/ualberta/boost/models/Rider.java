@@ -9,9 +9,11 @@ import java.util.Map;
 import static ca.ualberta.boost.models.UserType.RIDER;
 
 /**
- * This class represents a Rider. It handles building a Map object that represents
- * the Rider, which can be received by the UserStore class to send the Rider to firebase.
+ * This class represents a Rider. It handles building a Map object that represents the Rider,
+ * which can be put in a database, and building a Rider from a map object.
+ * @see User
  */
+
 public class Rider extends User {
 
     /**
