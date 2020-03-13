@@ -37,6 +37,7 @@ import ca.ualberta.boost.models.Driver;
 
 public class SignUpActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    private FirebaseAuth auth;
     private EditText firstName;
     private EditText userName;
     private EditText email;
@@ -46,7 +47,6 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     private Spinner spinner;
 
     //fireStore
-    private FirebaseAuth auth;
     CollectionReference ref;
 
     @Override
