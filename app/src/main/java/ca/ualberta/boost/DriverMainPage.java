@@ -43,6 +43,7 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Button viewRequestsButton;
     private Button logoutButton;
+    private Button viewProfileButton;
 
     //firebase
     private FirebaseAuth auth;
@@ -53,6 +54,10 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
         setContentView(R.layout.activity_driver_main_page);
         getLocationPermission();
 
+        auth = FirebaseAuth.getInstance();
+
+        viewProfileButton = findViewById(R.id.viewProfileButton);
+
         viewRequestsButton = findViewById(R.id.viewRequestsButton);
         logoutButton = findViewById(R.id.logoutButton);
         viewRequestsButton.setOnClickListener(new View.OnClickListener() {
@@ -61,8 +66,12 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
                 displayRequests();
             }
         });
-        //firebase
-        auth = FirebaseAuth.getInstance();
+        viewProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchProfileScreen();
+            }
+        });
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,6 +192,11 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
     //function to launch the home screen
     private void launchHomeScreen(){
         Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    private void launchProfileScreen() {
+        Intent intent = new Intent(this, PrivateUserProfileActivity.class);
         startActivity(intent);
     }
 

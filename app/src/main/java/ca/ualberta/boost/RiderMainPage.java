@@ -145,6 +145,14 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                 launchHomeScreen();
             }
         });
+
+        //CLICK VIEW PROFILE
+        viewProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchProfileScreen();
+            }
+        });
     }
 
     /**
@@ -179,7 +187,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                     .draggable(true)
                     .visible(false)
             );
-
+          
             init();
         }
     }
@@ -528,5 +536,9 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         startActivity(intent);
     }
 
-}
+    private void launchProfileScreen() {
+        Intent intent = new Intent(this, PrivateUserProfileActivity.class);
+        startActivity(intent);
+    }
 
+}
