@@ -8,6 +8,10 @@ import java.util.Map;
 
 import static ca.ualberta.boost.models.UserType.RIDER;
 
+/**
+ * This class represents a Rider. It handles building a Map object that represents
+ * the Rider, which can be received by the UserStore class to send the Rider to firebase.
+ */
 public class Rider extends User {
 
     // both riders and drivers have active rides
@@ -15,6 +19,11 @@ public class Rider extends User {
         super(firstName, username, password, email, phoneNumber);
     }
 
+    /**
+     * Creates a Map of strings that represents the Rider
+     * @return
+     *      Returns a Map object of strings that represents the Rider
+     */
     @Override
     public Map<String, Object> data() {
         Map<String, Object> map = new HashMap<>();
@@ -29,6 +38,13 @@ public class Rider extends User {
         return map;
     }
 
+    /**
+     * Creates a Rider object from a Map of strings
+     * @param data
+     *      The Map of Strings that represents the Rider
+     * @return
+     *      A Rider object
+     */
     public static Rider build(Map<String, Object> data) {
         return new Rider(
                 (String) data.get("firstName"),
