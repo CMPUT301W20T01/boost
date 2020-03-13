@@ -11,6 +11,13 @@ public enum RideStatus {
     FINISHED,
     CANCELLED;
 
+    /**
+     * Returns a string of the status given an enum
+     * @param status
+     *      The enum of the status
+     * @return
+     *      Returns a string of the status
+     */
     static String toString(RideStatus status) {
         switch(status) {
             case PENDING:

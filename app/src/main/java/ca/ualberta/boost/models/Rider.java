@@ -14,7 +14,14 @@ import static ca.ualberta.boost.models.UserType.RIDER;
  */
 public class Rider extends User {
 
-    // both riders and drivers have active rides
+    /**
+     * Rider constructor
+     * @param firstName
+     * @param username
+     * @param password
+     * @param email
+     * @param phoneNumber
+     */
     public Rider(String firstName, String username, String password, String email, String phoneNumber) {
         super(firstName, username, password, email, phoneNumber);
     }
