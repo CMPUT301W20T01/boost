@@ -24,6 +24,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class DriverMainPage extends FragmentActivity implements OnMapReadyCallback {
 
@@ -35,6 +36,9 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Button viewRequestsButton;
+    private Button logoutButton;
+
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +46,24 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
         setContentView(R.layout.activity_driver_main_page);
         getLocationPermission();
 
+        auth = FirebaseAuth.getInstance();
         viewRequestsButton = findViewById(R.id.viewRequestsButton);
+        logoutButton = findViewById(R.id.logoutButton);
         viewRequestsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 displayRequests();
             }
         });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth.signOut();
+                launchHomeScreen();
+            }
+        });
+
     }
 
     @Override
@@ -156,4 +171,10 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
         startActivity(intent);
     }
 
+    private void launchHomeScreen(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
 }
+

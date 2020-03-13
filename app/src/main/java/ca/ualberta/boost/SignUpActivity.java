@@ -110,6 +110,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                         }
                     });
         }
+
     }
 
     //launches the home activity
@@ -161,10 +162,10 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
     //Return true if fields have values and password is longer than 6 characters
     private boolean authenticate(){
-        if(!uniqueUserName(userName.getText().toString())){
-            Toast.makeText(this, "Username taken", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+//        if(!uniqueUserName(userName.getText().toString())){
+//            Toast.makeText(this, "Username taken", Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
         if(email.getText().toString().matches("")){
             Toast.makeText(this, "Enter a Email", Toast.LENGTH_SHORT).show();
             return false;
