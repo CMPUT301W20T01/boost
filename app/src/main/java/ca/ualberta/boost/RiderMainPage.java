@@ -42,8 +42,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.ualberta.boost.models.Ride;
-import ca.ualberta.boost.models.User;
-import ca.ualberta.boost.stores.UserStore;
 
 
 /**
@@ -81,7 +79,6 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private Button confirmRequestButton;
     private Button cancelRequestButton;
     private Button logoutButton;
-    private Button viewRequestButton;
     private EditText searchPickupText;
     private EditText searchDestinationText;
     private LinearLayout searchesLayout;
@@ -127,6 +124,14 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 auth.signOut();
                 launchHomeScreen();
+            }
+        });
+
+        //CLICK VIEW PROFILE
+        viewProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchProfileScreen();
             }
         });
     }
@@ -244,7 +249,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
             }
         });
 
-
+    }
 
 
     /**
@@ -495,6 +500,11 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
 
     private void launchHomeScreen(){
         Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    private void launchProfileScreen() {
+        Intent intent = new Intent(this, UserProfileActivity.class);
         startActivity(intent);
     }
 
