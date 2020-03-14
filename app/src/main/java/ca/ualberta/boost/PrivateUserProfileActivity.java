@@ -105,7 +105,10 @@ public class PrivateUserProfileActivity extends AppCompatActivity implements Edi
         collection = db.collection("users");
         // Update an existing document
         //NOT COMPLETED
-        DocumentReference docRef = db.collection("users").document();
+        DocumentReference docRef = collection.document(auth.getUid());
+        docRef.update("Email", newEmail, "Phone", newPhone);
+        auth.getCurrentUser().updateEmail(newEmail);
+
 
         // (async) Update one field
 

@@ -128,7 +128,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         map.put("Name", firstName.getText().toString());
         map.put("Username", userName.getText().toString());
         map.put("Email", email.getText().toString());
-        map.put("Phone", firstName.getText().toString());
+        map.put("Phone", phoneNumber.getText().toString());
         map.put("Password", password.getText().toString());
         map.put("id", auth.getUid());
         map.put("role",spinner.getSelectedItem().toString());
