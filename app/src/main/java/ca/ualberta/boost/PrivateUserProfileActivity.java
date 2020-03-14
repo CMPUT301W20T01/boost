@@ -81,19 +81,19 @@ public class PrivateUserProfileActivity extends AppCompatActivity implements Edi
                     }
                 });
 
-//        editButton.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View v) {
-////                new EditUserProfileFragment().show(getSupportFragmentManager(),"Edit User Contact Info");
-////            }
-////        });
-
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchEditProfile();
+                new EditUserProfileFragment().show(getSupportFragmentManager(),"Edit User Contact Info");
             }
         });
+
+//        editButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                launchEditProfile();
+//            }
+//        });
 
     }
 
