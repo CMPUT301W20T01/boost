@@ -36,6 +36,8 @@ public class PrivateUserProfileActivity extends AppCompatActivity implements Edi
     TextView userEmail;
     TextView userPhoneNum;
     Button editButton;
+    Button updatePassword;
+    Button updateUserInformation;
     TextView userRating;
 
     @Override
@@ -48,6 +50,8 @@ public class PrivateUserProfileActivity extends AppCompatActivity implements Edi
         userEmail = findViewById(R.id.userProfilePrivateEmail);
         userPhoneNum = findViewById(R.id.userProfilePrivatePhone);
         editButton = findViewById(R.id.userProfilePrivateButton);
+        updatePassword = findViewById(R.id.button);
+        updateUserInformation = findViewById(R.id.button2);
         userRating = findViewById(R.id.userProfilePrivateRating);
 
 
@@ -95,6 +99,20 @@ public class PrivateUserProfileActivity extends AppCompatActivity implements Edi
             }
         });
 
+        updatePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchUpdatePassword();
+            }
+        });
+
+        updateUserInformation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchUpdateInformation();
+            }
+        });
+
     }
 
     @Override
@@ -123,5 +141,16 @@ public class PrivateUserProfileActivity extends AppCompatActivity implements Edi
         Intent intent = new Intent(this, EditProfileActivity.class);
         startActivity(intent);
     }
+
+    private void launchUpdatePassword(){
+        Intent intent = new Intent(this, UpdatePasswordActivity.class);
+        startActivity(intent);
+    }
+
+    private void launchUpdateInformation(){
+        Intent intent = new Intent(this, UpdateProfileInfo.class);
+        startActivity(intent);
+    }
+
 
 }

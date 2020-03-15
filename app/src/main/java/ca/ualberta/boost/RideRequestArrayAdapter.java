@@ -50,6 +50,8 @@ public class RideRequestArrayAdapter extends ArrayAdapter<RideRequest> {
     DocumentReference documentReference;
     public int i = 0;
 
+    TextView riderUserName;
+
     private Context adapterContext;
     private int adapterResource;
     public RideRequestArrayAdapter(@NonNull Context context, int resource, @NonNull List<RideRequest> objects) {
@@ -63,6 +65,7 @@ public class RideRequestArrayAdapter extends ArrayAdapter<RideRequest> {
         handler = db.collection("rides");
         user = FirebaseAuth.getInstance().getCurrentUser();
 //        documentReference = db.collection("rides");
+
     }
 
     //gets view and attaches it to layout
@@ -78,7 +81,7 @@ public class RideRequestArrayAdapter extends ArrayAdapter<RideRequest> {
         LayoutInflater inflater = LayoutInflater.from(adapterContext);
         convertView = inflater.inflate(adapterResource, parent, false);
 
-        final TextView riderUserName = convertView.findViewById(R.id.riderUserName);
+        riderUserName = convertView.findViewById(R.id.riderUserName);
         TextView rideFare = convertView.findViewById(R.id.amountOfferedRide);
         TextView rideStart = convertView.findViewById(R.id.rideStart);
         TextView rideEnd = convertView.findViewById(R.id.rideEnd);
@@ -94,26 +97,34 @@ public class RideRequestArrayAdapter extends ArrayAdapter<RideRequest> {
         acceptRideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = riderUserName.getText().toString();
-                Log.i("testValue",username);
-                Toast.makeText(adapterContext, "Accepted", Toast.LENGTH_SHORT).show();
-                documentReference = db.collection("rides").document(username);
+                Toast.makeText(adapterContext, "Accepted Ride", Toast.LENGTH_SHORT).show();
+                Log.i("value",riderUserName.getText().toString());
+                DocumentReference documentReferencee = db.collection("rides").document(riderUserName.getText().toString().trim());
                 Map<String, Object> map = new HashMap<>();
-                map.put("driver",user.getEmail().toString());
+                map.put("status","Accepted");
+                documentReferencee.update(map);
+//                FirebaseAuth auth1 = FirebaseAuth.getInstance();
+//                FirebaseFirestore db1 = FirebaseFirestore.getInstance();
+//                FirebaseUser user1 = FirebaseAuth.getInstance().getCurrentUser();
+//                DocumentReference documentReference1 = db1.collection("rides").document("random");
+//                Map<String, Object> map = new HashMap<>();
 //                map.put("status","Accepted");
-                documentReference.update(map);
+//                documentReference1.update(map);
             }
         });
 
         return convertView;
     }
 
-//    public void setDriver(String riderEmail){
-//        documentReference = db.collection("rides").document(riderEmail);
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("Driver",user.getEmail());
-//        map.put("status","Accepted");
-//        documentReference.update(map);
-//    }
+    private void setDriver(String riderEmail){
+        FirebaseAuth auth1 = FirebaseAuth.getInstance();
+        FirebaseFirestore db1 = FirebaseFirestore.getInstance();
+        FirebaseUser user1 = FirebaseAuth.getInstance().getCurrentUser();
+        DocumentReference documentReference1 = db1.collection("rides").document(riderEmail);
+        Map<String, Object> map = new HashMap<>();
+//        map.put("Driver",user1.getEmail());
+        map.put("status","Accepted");
+        documentReference1.update(map);
+    }
 }
 
