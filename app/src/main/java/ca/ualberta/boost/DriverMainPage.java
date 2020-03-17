@@ -101,6 +101,7 @@ public class DriverMainPage extends MapActivity {
     private void launchHomeScreen(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void launchProfileScreen() {
