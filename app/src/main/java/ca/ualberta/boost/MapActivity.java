@@ -4,9 +4,12 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,8 +25,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class MapActivity extends FragmentActivity implements OnMapReadyCallback {
     // constants
@@ -41,10 +49,9 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResourceId());
         getLocationPermission();
-
     }
 
-    // abstract methods for subclass to define
+    /* abstract methods for subclass to define */
     // get layout resource id of subclass
     protected abstract int getLayoutResourceId();
     // get map fragment in subclass
@@ -77,15 +84,60 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
         return mMap;
     }
 
-    public Boolean getmLocationPermissionsGranted(){
-        return mLocationPermissionsGranted;
+    /**
+     * Moves an existing marker
+     * @param marker
+     *      The marker to move
+     * @param latLng
+     *      the new LatLng position for the marker
+     */
+    public void moveMarker(Marker marker, LatLng latLng){
+        marker.setPosition(latLng);
+        marker.setVisible(true);
+        moveCamera(latLng, DEFAULT_ZOOM);
     }
 
-    private void moveCamera(LatLng latLng, float zoom){
-        /* moves the camera to latitude and longitude at zoom level */
+    /**
+     * Returns a location given a string
+     * @param name
+     *      The string of the name/address of the location
+     * @return
+     *      Returns a LatLng for the location
+     */
+    public LatLng geoLocate(String name) {
+        Geocoder geocoder = new Geocoder(MapActivity.this);
+        List<Address> results = new ArrayList<>();
+        // get a list of results from the search location string
+        try{
+            results = geocoder.getFromLocationName(name, 20);
+        }catch (IOException e){
+            Toast.makeText(MapActivity.this,
+                    "unable to find location", Toast.LENGTH_SHORT).show();
+        }
+        // successful results
+        if (results.size() > 0){
+            Address address = results.get(0);
+            //searchEditText.setText(address.getFeatureName());
+            return new LatLng(address.getLatitude(), address.getLongitude());
+        }
+        return null;
+    }
+
+    /**
+     * Moves the map camera to latitude and longitude at zoom level
+     * @param latLng
+     *      The LatLng to move to
+     * @param zoom
+     *      The zoom level of the camera
+     */
+    public void moveCamera(LatLng latLng, float zoom){
+
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
+    /**
+     * Links the map object to the map fragment
+     */
     private void initMap(){
         MapFragment mapFragment = getMapFragment();
         mapFragment.getMapAsync(MapActivity.this);

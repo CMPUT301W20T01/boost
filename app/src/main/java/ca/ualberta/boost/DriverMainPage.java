@@ -37,7 +37,6 @@ public class DriverMainPage extends MapActivity {
 
     private static final String TAG = "DriverMainPage";
 
-    private GoogleMap mMap;
 
     private Button viewRequestsButton;
     private Button logoutButton;
@@ -60,7 +59,6 @@ public class DriverMainPage extends MapActivity {
     @Override
     protected MapFragment getMapFragment() {
         return (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
-
     }
 
     @Override
@@ -70,9 +68,6 @@ public class DriverMainPage extends MapActivity {
 
     @Override
     protected void init() {
-        // get map from superclass
-        mMap = getMap();
-
         viewRequestsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
