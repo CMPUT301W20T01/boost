@@ -1,8 +1,5 @@
 package ca.ualberta.boost.models;
 
-import android.location.Location;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,11 +45,11 @@ public class Rider extends User {
     }
 
     /**
-     * Creates a Rider object from a Map of strings
+     * Creates a Rider object from a Map of string, object pairs
      * @param data
-     *      The Map of Strings that represents the Rider
+     *      The Map of data that represents the Rider
      * @return
-     *      A Rider object
+     *      A new Rider object
      */
     public static Rider build(Map<String, Object> data) {
         return new Rider(
