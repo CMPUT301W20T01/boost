@@ -142,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             startActivity(intent);
         }
         finish();
-
     }
 
     //method to open SignUp activity

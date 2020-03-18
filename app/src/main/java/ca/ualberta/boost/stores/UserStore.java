@@ -52,7 +52,7 @@ public class UserStore {
 
     /**
      * Saves a user in the user table of the database
-     * @param user
+     * @param user user to save
      * @see User
      */
     public static void saveUser(User user) {
@@ -91,7 +91,8 @@ public class UserStore {
         UserStore store = getInstance();
 
         final PromiseImpl<User> userPromise = new PromiseImpl<>();
-        store.userCollection.document(username)
+        store.userCollection
+                .document(username)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
