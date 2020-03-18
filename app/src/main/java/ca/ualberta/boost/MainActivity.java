@@ -27,6 +27,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import ca.ualberta.boost.models.ActiveUser;
+
 /**
  * MainActivity is responsible for signing in the user
  * by making sure the username and password correspond to user information in firestore
@@ -183,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                             for(QueryDocumentSnapshot document: task.getResult()){
                                 if(id.matches(document.get("id").toString())){
                                     Log.i("value",document.get("id").toString());
+                            //        ActiveUser.login(document.get("Username").toString(), document.get("Password").toString());
                                     launchHome(document.get("role").toString());
                                 }
                             }

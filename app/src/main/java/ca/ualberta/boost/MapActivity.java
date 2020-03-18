@@ -117,7 +117,6 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
         // successful results
         if (results.size() > 0){
             Address address = results.get(0);
-            //searchEditText.setText(address.getFeatureName());
             return new LatLng(address.getLatitude(), address.getLongitude());
         }
         return null;

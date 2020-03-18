@@ -132,6 +132,7 @@ public class ViewRideRequestsActivity extends MapActivity {
         Log.d("TestingViewRide", "in handleSearch");
         String searchString = searchEditText.getText().toString();
         startLocation = geoLocate(searchString);
+        moveCamera(startLocation, 20);
         displayRequests();
     }
 
