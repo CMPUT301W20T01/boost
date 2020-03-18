@@ -109,12 +109,12 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
         ride = newRide;
         ride.setPending();
         Map<String, String> map = new HashMap<>();
-        map.put("Driver","");
-        map.put("end_location", ride.getEndLocation().toString());
+        map.put("driverEmail",null);
+        map.put("endLocation", ride.getEndLocation().toString());
         map.put("fare", String.valueOf(ride.getFare()));
         map.put("rider",user.getEmail());
         map.put("riderId", auth.getUid());
-        map.put("start_location",ride.getStartLocation().toString());
+        map.put("startLocation",ride.getStartLocation().toString());
         map.put("status","Pending");
         handler.document(user.getEmail()).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
