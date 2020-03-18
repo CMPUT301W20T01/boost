@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             Intent intent = new Intent(this, DriverMainPage.class);
             startActivity(intent);
         }
+        finish();
 
     }
 

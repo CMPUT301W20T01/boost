@@ -85,20 +85,12 @@ public class PrivateUserProfileActivity extends AppCompatActivity implements Edi
                     }
                 });
 
-//        editButton.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View v) {
-////                new EditUserProfileFragment().show(getSupportFragmentManager(),"Edit User Contact Info");
-////            }
-////        });
-
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchEditProfile();
+                new EditUserProfileFragment().show(getSupportFragmentManager(),"Edit User Contact Info");
             }
         });
-
         updatePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,7 +104,6 @@ public class PrivateUserProfileActivity extends AppCompatActivity implements Edi
                 launchUpdateInformation();
             }
         });
-
     }
 
     @Override
@@ -131,7 +122,10 @@ public class PrivateUserProfileActivity extends AppCompatActivity implements Edi
         collection = db.collection("users");
         // Update an existing document
         //NOT COMPLETED
-        DocumentReference docRef = db.collection("users").document();
+        DocumentReference docRef = collection.document(auth.getUid());
+        docRef.update("Email", newEmail, "Phone", newPhone);
+        auth.getCurrentUser().updateEmail(newEmail);
+
 
         // (async) Update one field
 
