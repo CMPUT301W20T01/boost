@@ -1,6 +1,5 @@
 package ca.ualberta.boost.stores;
 
-
 import androidx.annotation.NonNull;
 
 import android.util.Log;
@@ -12,9 +11,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import ca.ualberta.boost.models.Driver;
@@ -24,16 +21,28 @@ import ca.ualberta.boost.models.Rider;
 import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.models.UserType;
 
+/**
+ * This class stores and retrieves a User to and from the FireStore database.
+ */
+
 public class UserStore {
     private static final String TAG = "UserStore";
     private static UserStore instance = null;
 
     private CollectionReference userCollection;
 
+    /**
+     * Constructor
+     */
     private UserStore() {
         userCollection = FirebaseFirestore.getInstance().collection("users");
     }
 
+    /**
+     * Singleton, creates an instance of a UserStore once
+     * @return
+     *      The instance of the UserStore
+     */
     private static UserStore getInstance() {
         if (instance == null) {
             instance = new UserStore();
@@ -41,6 +50,11 @@ public class UserStore {
         return instance;
     }
 
+    /**
+     * Saves a user in the user table of the database
+     * @param user user to save
+     * @see User
+     */
     public static void saveUser(User user) {
         UserStore store = getInstance();
 
@@ -63,11 +77,22 @@ public class UserStore {
                 });
     }
 
+    /**
+     * Tries to retrieve the data of a specified User
+     * @param username
+     *      username of the User wanted from database
+     * @return
+     *      Promise of the data for the requested User
+     * @see User
+     * @see Promise
+     * @see PromiseImpl
+     */
     public static Promise<User> getUser(final String username) {
         UserStore store = getInstance();
 
         final PromiseImpl<User> userPromise = new PromiseImpl<>();
-        store.userCollection.document(username)
+        store.userCollection
+                .document(username)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override

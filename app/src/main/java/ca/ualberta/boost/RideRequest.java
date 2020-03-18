@@ -1,13 +1,16 @@
 package ca.ualberta.boost;
 
+/**
+ * RideRequest is responsible displaying relevant information about a ride request
+ */
 
-//class made for displaying ride requests
 public class RideRequest {
     String riderUserName;
     String startLocation;
     String endLocation;
     String fare;
 
+    //constructor that takes a rider username, start location, end location, and fare
     public RideRequest(String riderUserName, String startLocation, String endLocation, String fare) {
         this.riderUserName = riderUserName;
         this.startLocation = startLocation;
@@ -15,6 +18,7 @@ public class RideRequest {
         this.fare = fare;
     }
 
+    //getters
     public String getRiderUserName() {
         return riderUserName;
     }
@@ -46,6 +50,5 @@ public class RideRequest {
     public void setFare(String fare) {
         this.fare = fare;
     }
-
 }
 

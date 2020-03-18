@@ -63,7 +63,7 @@ public class MainActivityTest {
         solo.enterText((EditText) solo.getView(R.id.sign_in_password),"stilltestingdriver");
         solo.clickOnButton("sign in");
         solo.sleep(4000);
-        solo.assertCurrentActivity("Correct Activity",RiderMainPage.class);
+        solo.assertCurrentActivity("Correct Activity",DriverMainPage.class);
     }
 
 

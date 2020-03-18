@@ -44,8 +44,8 @@ public class SignUpActivityTest {
     public void checkUniqueUsername() {
         Activity activity = rule.getActivity();
         solo.enterText((EditText) solo.getView(R.id.sign_up_first_name), "Test Name");
-        // "michelle11" username is already taken
         solo.enterText((EditText) solo.getView(R.id.sign_up_username), "michelle11");
+        // "test111@gmail.com is already taken
         solo.enterText((EditText) solo.getView(R.id.sign_up_email), "test111@gmail.com");
         solo.enterText((EditText) solo.getView(R.id.sign_up_phone_number), "1111111111");
         solo.enterText((EditText) solo.getView(R.id.sign_up_password), "password1");

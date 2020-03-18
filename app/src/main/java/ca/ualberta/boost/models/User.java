@@ -6,6 +6,13 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+/**
+ * This class represents an abstraction of a User. Stores the common fields between
+ * the Rider and Driver
+ * @see Rider
+ * @see Driver
+ */
+
 public abstract class User {
 
     private String firstName;
@@ -13,19 +20,17 @@ public abstract class User {
     private String password;
     private String email;
     private String phoneNumber;
-    private String userType;
     private Location currentLocation;
     private double qrBalance;
     private @Nullable Ride activeRide;
 
     // constructor
-    public User(String firstName, String username, String password, String email, String phoneNumber, String userType) {
+    protected User(String firstName, String username, String password, String email, String phoneNumber) {
         this.username = username;
         this.firstName = firstName;
         this.password = password;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.username = userType;
     }
 
     public abstract Map<String, Object> data();
@@ -43,16 +48,13 @@ public abstract class User {
         return password;
     }
 
+
     public String getEmail() {
         return email;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
-    }
-
-    public String getUserType() {
-        return userType;
     }
 
     public Location getCurrentLocation() {
@@ -91,10 +93,6 @@ public abstract class User {
 
     public void setCurrentLocation(Location currentLocation) {
         this.currentLocation = currentLocation;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType;
     }
 
     public void setQrBalance(double qrBalance) {

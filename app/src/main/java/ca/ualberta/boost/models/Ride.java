@@ -1,49 +1,88 @@
 package ca.ualberta.boost.models;
 
-
+import android.annotation.SuppressLint;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.GeoPoint;
 
+import java.util.Date;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
+/**
+ * This class represents a Ride. It handles building a Map object that represents the Ride,
+ * which can be put in a database, and building a Ride from a map object.
+ */
+
 public class Ride {
     private LatLng startLocation;
     private LatLng endLocation;
     private double fare;
-    private Driver driver;
-    private Rider rider;
+    private @Nullable String driver_username = null;
+    private String rider_username;
     private RideStatus status;
+    private Date requestTime;
 
-    public Ride(LatLng startLocation, LatLng endLocation, double fare, Driver driver, Rider rider) {
+    private Ride(LatLng startLocation, LatLng endLocation, double fare, String driver, String rider,
+                 RideStatus status, Date requestTime) {
         this.startLocation = startLocation;
         this.endLocation = endLocation;
         this.fare = fare;
-        this.driver = driver;
-        this.rider = rider;
-        this.status = RideStatus.PENDING;
+        this.driver_username = driver;
+        this.rider_username = rider;
+        this.status = status;
+        this.requestTime = requestTime;
     }
 
-    public Ride(double fare, Rider rider) {
+    public Ride(LatLng startLocation, LatLng endLocation, double fare, String rider) {
+        this.startLocation = startLocation;
+        this.endLocation = endLocation;
         this.fare = fare;
-        this.rider = rider;
+        this.rider_username = rider;
+        this.status = RideStatus.PENDING;
+        this.requestTime = new Date(); // assigned when ride is requested
     }
 
-    // empty constructor
-    public Ride(){
-
+    /**
+     * Ride constructor with unknown start and end locations
+     * @param fare
+     * @param rider
+     */
+    public Ride(double fare, String rider) {
+        this.fare = fare;
+        this.rider_username = rider;
     }
 
-    public Map<String, String> data() {
-        Map<String, String> map = new HashMap<>();
-//        map.put("start_location", this.startLocation);
-//        map.put("end_location", this.endLocation);
-        map.put("fare", Double.toString(this.fare));
-        map.put("driver", this.driver.getUsername());
-        map.put("rider", this.rider.getUsername());
+    /**
+     * Creates map of ride data for database
+     * @return
+     *      A map of all ride data
+     */
+    public Map<String, Object> data() {
+        Map<String, Object> map = new HashMap<>();
+        // Firestore take GeoPoints for location
+        map.put("start_location", toGeoPoint(this.startLocation));
+        map.put("end_location", toGeoPoint(this.endLocation));
+        map.put("fare", this.fare);
+        map.put("driver", this.driver_username);
+        map.put("rider", this.rider_username);
         map.put("status", this.status.toString());
+        map.put("request_time", this.requestTime);
         return map;
+    }
+
+    /**
+     * Generate the ride id based on the rider's username and timestamp of
+     * when the ride request was created
+     * @return
+     *      A string id of ride
+     */
+    @SuppressLint("DefaultLocale")
+    public String id() {
+        return String.format("%s_%d", rider_username, requestTime.getTime());
     }
 
     public LatLng getStartLocation() {
@@ -58,12 +97,12 @@ public class Ride {
         return fare;
     }
 
-    public Driver getDriver() {
-        return driver;
+    public String getDriver_username() {
+        return driver_username;
     }
 
-    public Rider getRider() {
-        return rider;
+    public String getRider_username() {
+        return rider_username;
     }
 
     public RideStatus getRideStatus() {
@@ -82,17 +121,13 @@ public class Ride {
         this.fare = fare;
     }
 
-    public void setDriver(Driver driver) {
-        this.driver = driver;
+    public void setDriver_username(String driver) {
+        this.driver_username = driver;
     }
 
-    public void setRider(Rider rider) {
-        this.rider = rider;
+    public void setRider_username(String rider) {
+        this.rider_username = rider;
     }
-
-//    public void setRideStatus(RideStatus rideStatus) {
-//        this.rideStatus = rideStatus;
-//    }
 
     public void setPending() {
         this.status = RideStatus.PENDING;
@@ -110,15 +145,56 @@ public class Ride {
         this.status = RideStatus.CANCELLED;
     }
 
-    /* calculates and sets the fare according to the
-    ride's start and end locations
+    /**
+     * Calculates the base fare based on the Manhattan distance of
+     * the start and end locations of the ride
+     * @return
+     *      The base fare amount
      */
-    public void calculateAndSetFare(){
+    public double baseFare() {
         double latDiff = Math.abs(startLocation.latitude - endLocation.latitude);
         double longDiff = Math.abs(startLocation.longitude - endLocation.longitude);
-        double fare = (latDiff + longDiff) * 150;
+        double fare = 5 + ((latDiff + longDiff) * 300); // base price of $5
         // round fare to 2 decimal places
         BigDecimal bdFare = new BigDecimal(fare).setScale(2, RoundingMode.HALF_UP);
-        setFare(bdFare.doubleValue());
+        return bdFare.doubleValue();
+    }
+
+    /**
+     * Converts LatLng to GeoPoint
+     * @param location
+     * @return GeoPoint of location
+     */
+    private static GeoPoint toGeoPoint(LatLng location) {
+        return new GeoPoint(location.latitude, location.longitude);
+    }
+
+    /**
+     * Converts GeoPoint to LatLng
+     * @param point
+     * @return LatLng of point
+     */
+    private static LatLng toLatLng(GeoPoint point) {
+        return new LatLng(point.getLatitude(), point.getLongitude());
+    }
+
+    /**
+     * Creates a Ride object from a Map of string, object pairs
+     * @param data
+     *      The Map of data that represents the Ride
+     * @return
+     *      A new Ride object
+     */
+    public static Ride build(Map<String, Object> data) {
+        return new Ride(
+                // convert GeoPoints to LatLng
+                toLatLng((GeoPoint) data.get("start_location")),
+                toLatLng((GeoPoint) data.get("end_location")),
+                (double) data.get("fare"),
+                (String) data.get("driver"),
+                (String) data.get("rider"),
+                (RideStatus) data.get("status"),
+                (Date) data.get("request_time"));
     }
 }
+

@@ -30,26 +30,23 @@ import java.util.Map;
 
 import ca.ualberta.boost.models.Driver;
 
+/**
+ * SignUpActivity is responsible for signing up the user
+ * on a successful registration the user is taken to the correct page depending on their role
+ */
+
 public class SignUpActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private FirebaseAuth auth;
-
     private EditText firstName;
     private EditText userName;
     private EditText email;
     private EditText phoneNumber;
     private EditText password;
-
-
-
     private Button signUpButton;
     private Spinner spinner;
 
-   // private boolean flag = false;
-    //flag = new boolean that is final
-    //Boolean testBool = new Boolean(false);
-
-    //fireStore reference to users
+    //fireStore
     CollectionReference ref;
 
     @Override
@@ -113,11 +110,13 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
     }
 
-    //launches the home activity
+    //launches the home activity for a rider
     private void launchHomeRider(){
         Intent intent = new Intent(this, RiderMainPage.class);
         startActivity(intent);
     }
+
+    //launches the home activity for a driver
     private void launchHomeDriver(){
         Intent intent = new Intent(this, DriverMainPage.class);
         startActivity(intent);
@@ -129,7 +128,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         map.put("Name", firstName.getText().toString());
         map.put("Username", userName.getText().toString());
         map.put("Email", email.getText().toString());
-        map.put("Phone", firstName.getText().toString());
+        map.put("Phone", phoneNumber.getText().toString());
         map.put("Password", password.getText().toString());
         map.put("id", auth.getUid());
         map.put("role",spinner.getSelectedItem().toString());
@@ -162,10 +161,6 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
     //Return true if fields have values and password is longer than 6 characters
     private boolean authenticate(){
-        if(!uniqueUserName(userName.getText().toString())){
-            Toast.makeText(this, "Username taken", Toast.LENGTH_SHORT).show();
-            return false;
-        }
         if(email.getText().toString().matches("")){
             Toast.makeText(this, "Enter a Email", Toast.LENGTH_SHORT).show();
             return false;
@@ -194,15 +189,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
     }
 
-   // public void setFlag(boolean bool){
-   //    flag = bool;
-   // }
-
     public boolean uniqueUserName(final String username){
-        //boolean object
-      //  flag = true;
-//        boolean test = true;
-        //final SignUpActivity self = this;
         final boolean[] flag = new boolean[1];
         flag[0] = false;
         ref.get()
@@ -215,9 +202,6 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                                     Toast.makeText(SignUpActivity.this, "Username is already in use lol", Toast.LENGTH_SHORT).show();
                                     Log.i("value",username);
                                     Log.i("value",document.get("Username").toString());
-                                  //  flag = false;
-                                    //outer.setflag
-                                   // SignUpActivity.this.setFlag(true);
                                     flag[0] = true;
                                 }
                             }
