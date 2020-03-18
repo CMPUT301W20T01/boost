@@ -238,7 +238,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
      */
     private void handleRequestRideClick() {
         setRequestLocationPageVisibility();
-        ride = new Ride();
+        //ride = new Ride();
         /* TODO: set ride to current user, then send ride to database */
         //ride.setRider();
         // pickup search bar

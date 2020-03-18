@@ -2,6 +2,8 @@ package ca.ualberta.boost;
 
 import android.location.Location;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import ca.ualberta.boost.models.RideStatus;
 import ca.ualberta.boost.models.User;
 
@@ -26,16 +28,19 @@ public class Ride {
         this.distance = calculateDistance(startLocation, endLocation);
     }
 
-    public Location getStartLocation() {
-        return startLocation;
+    public LatLng getStartLocation() {
+        LatLng startLatLng = new LatLng(startLocation.getLatitude(),startLocation.getLongitude());
+        return startLatLng;
     }
 
     public void setStartLocation(Location startLocation) {
         this.startLocation = startLocation;
     }
 
-    public Location getEndLocation() {
-        return endLocation;
+    public LatLng getEndLocation() {
+        LatLng endLatLng = new LatLng(endLocation.getLatitude(),endLocation.getLongitude());
+        return endLatLng;
+
     }
 
     public void setEndLocation(Location endLocation) {
