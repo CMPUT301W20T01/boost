@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -34,9 +35,13 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
+import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.Rider;
+import ca.ualberta.boost.stores.RideStore;
 
 /**
  * ViewRidesRequestsActivity is responsible for allowing drivers to search for
@@ -57,8 +62,9 @@ public class ViewRideRequestsActivity extends MapActivity {
 
     // attributes
     private LatLng startLocation;
-    private ArrayList<Ride> rideList;
+    private Collection<Ride> rideList;
     private GoogleMap mMap;
+    private RideStore rideStore;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,6 +79,9 @@ public class ViewRideRequestsActivity extends MapActivity {
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         handler = db.collection("rides");
+
+        rideStore = rideStore.getInstance();
+        rideList = new ArrayList<>();
     }
 
     @Override
@@ -87,7 +96,6 @@ public class ViewRideRequestsActivity extends MapActivity {
 
     @Override
     protected void init() {
-        rideList = new ArrayList<>();
         mMap = getMap();
 
         // cancel button
@@ -121,6 +129,7 @@ public class ViewRideRequestsActivity extends MapActivity {
      *      The EditText of the search bar
      */
     private void handleSearch(EditText searchEditText){
+        Log.d("TestingViewRide", "in handleSearch");
         String searchString = searchEditText.getText().toString();
         startLocation = geoLocate(searchString);
         displayRequests();
@@ -131,21 +140,15 @@ public class ViewRideRequestsActivity extends MapActivity {
      * of the Driver's specified start location
      */
     private void displayRequests(){
+        Log.d("TestingViewRide", "in displayRequests");
         fillRideList();
-        // place markers for rides
-        for (int i = 0; i < rideList.size(); i++){
-            float[] results = new float[1];
-            Ride ride = rideList.get(i);
-            LatLng rideStartLocation = ride.getStartLocation();
-            Location.distanceBetween(startLocation.latitude, startLocation.latitude,
-                    rideStartLocation.latitude, rideStartLocation.longitude, results);
-            // if distance is smaller than 5km
-            if (results[0] < 5000){
-                mMap.addMarker(new MarkerOptions()
-                .title(ride.getRider().getEmail())
-                .position(rideStartLocation));
-            }
+        // place marker for each ride
+        for (Ride ride : rideList){
+            mMap.addMarker(new MarkerOptions()
+                    .title(ride.getRider_username())
+                    .position(ride.getStartLocation()));
         }
+
     }
 
 
@@ -154,31 +157,37 @@ public class ViewRideRequestsActivity extends MapActivity {
      * Fills the rideList with pending ride requests from the database
      */
     private void fillRideList(){
-        handler.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (document.get("status").toString().matches("Pending")) {
-                                    // TODO: get pending rides from firebase
-//                                    LatLng startLocation = (document.get("start_location"));
-//                                    LatLng endLocation = (document.get("end_location").toString());
-//                                    double fare = (document.get("fare"));
-//                                    String status = (document.get("status").toString());
-//                                    String riderUserName = (document.get("rider").toString());
-//                                    rideList.add(new Ride(riderUserName, startLocation, endLocation, fare));
-                                }
-                            }
+        Promise<Collection<Ride>> ridePromise = rideStore.getRequests();
+        ridePromise.addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
+
+            @Override
+            public void onSuccess(Collection<Ride> rides) {
+                Log.d("TestingViewRide", "success");
+                if (!rides.isEmpty()) {
+                    for (Ride ride : rides) {
+                        LatLng rideStartLocation = ride.getStartLocation();
+                        float[] results = new float[1];
+                        Location.distanceBetween(startLocation.latitude, startLocation.latitude,
+                                rideStartLocation.latitude, rideStartLocation.longitude, results);
+                        // if distance is smaller than 5km add to rideList
+                        Log.d("TestingViewRide", Float.toString(results[0]));
+                        if (results[0] < 5000) {
+                            rideList.add(ride);
+                            Log.d("TestingViewRide", "ride added");
                         }
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(ViewRideRequestsActivity.this, "Please contact your database administrator", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                } else{
+                    Log.d("TestingViewRide", "rides is empty");
+                }
+            }
+        });
+        ridePromise.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("TestingViewRide", "failure");
+            }
+        });
+
     }
 
     /**
