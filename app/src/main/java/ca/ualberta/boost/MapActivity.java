@@ -2,7 +2,9 @@ package ca.ualberta.boost;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -79,6 +81,7 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
             init();
         }
     }
+
 
     public GoogleMap getMap(){
         return mMap;

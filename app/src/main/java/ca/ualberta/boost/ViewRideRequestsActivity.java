@@ -63,7 +63,6 @@ public class ViewRideRequestsActivity extends MapActivity {
     // attributes
     private LatLng startLocation;
     private Collection<Ride> rideList;
-    private GoogleMap mMap;
     private RideStore rideStore;
 
     @Override
@@ -96,7 +95,6 @@ public class ViewRideRequestsActivity extends MapActivity {
 
     @Override
     protected void init() {
-        mMap = getMap();
 
         // cancel button
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -132,7 +130,7 @@ public class ViewRideRequestsActivity extends MapActivity {
         Log.d("TestingViewRide", "in handleSearch");
         String searchString = searchEditText.getText().toString();
         startLocation = geoLocate(searchString);
-        moveCamera(startLocation, 20);
+        moveCamera(startLocation, 15);
         displayRequests();
     }
 
@@ -141,13 +139,16 @@ public class ViewRideRequestsActivity extends MapActivity {
      * of the Driver's specified start location
      */
     private void displayRequests(){
+        GoogleMap mMap = getMap();
         Log.d("TestingViewRide", "in displayRequests");
-        fillRideList();
+        //fillRideList();
+        rideList.add(new Ride(new LatLng(53.522515, -113.624191), new LatLng(0, 0), 13.5, "username"));
         // place marker for each ride
         for (Ride ride : rideList){
             mMap.addMarker(new MarkerOptions()
                     .title(ride.getRider_username())
-                    .position(ride.getStartLocation()));
+                    .position(ride.getStartLocation())
+            );
         }
 
     }
