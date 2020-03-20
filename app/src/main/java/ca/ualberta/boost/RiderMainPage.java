@@ -105,12 +105,11 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     @Override
     public void onAcceptPressed(Ride newRide) {
         setRiderMainPageVisibility();
-        // TODO: Change so that firebase or ride controller handles this
         ride = newRide;
         ride.setPending();
         Map<String, String> map = new HashMap<>();
-        map.put("driverEmail",null);
-        map.put("endLocation", ride.getEndLocation().toString());
+        map.put("driver",null);
+        map.put("end_location", ride.getEndLocation().toString());
         map.put("fare", String.valueOf(ride.getFare()));
         map.put("rider",user.getEmail());
         map.put("riderId", auth.getUid());

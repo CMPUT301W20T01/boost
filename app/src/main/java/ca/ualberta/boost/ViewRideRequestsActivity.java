@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -49,7 +50,7 @@ import ca.ualberta.boost.stores.RideStore;
  * open ride requests, and displays these ride requests
  */
 
-public class ViewRideRequestsActivity extends MapActivity {
+public class ViewRideRequestsActivity extends MapActivity implements RideRequestFragment.OnFragmentInteractionListener{
 
     // views
     private LinearLayout searchesLayout;
@@ -59,7 +60,7 @@ public class ViewRideRequestsActivity extends MapActivity {
     // firebase
     private FirebaseAuth auth;
     private FirebaseFirestore db;
-    private CollectionReference handler;
+    private CollectionReference collection;
 
     // attributes
     private LatLng startLocation;
@@ -79,7 +80,7 @@ public class ViewRideRequestsActivity extends MapActivity {
         // firebase
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        handler = db.collection("rides");
+        collection = db.collection("rides");
 
         rideStore = rideStore.getInstance();
         rideList = new ArrayList<>();
@@ -125,8 +126,13 @@ public class ViewRideRequestsActivity extends MapActivity {
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                String address = reverseGeoLocate(marker.getPosition());
-                Toast.makeText(ViewRideRequestsActivity.this, address, Toast.LENGTH_SHORT).show();
+                for (Ride ride : rideList){
+                    if (marker.getTitle().equals(ride.getRider_username())){
+                        String pickupAddress = reverseGeoLocate(ride.getStartLocation());
+                        String destinationAddress = reverseGeoLocate(ride.getEndLocation());
+                        new RideRequestFragment(ride, pickupAddress, destinationAddress).show(getSupportFragmentManager(), "REQ_SUM");
+                    }
+                }
                 return false;
             }
         });
@@ -154,7 +160,7 @@ public class ViewRideRequestsActivity extends MapActivity {
     private void displayRequests(){
         Log.d("TestingViewRide", "in displayRequests");
         //fillRideList();
-        rideList.add(new Ride(new LatLng(53.522515, -113.624191), new LatLng(0, 0), 13.5, "username"));
+        rideList.add(new Ride(new LatLng(53.522515, -113.624191), new LatLng(53.5232, -113.5263), 13.5, "username"));
         // place marker for each ride
         for (Ride ride : rideList){
             mMap.addMarker(new MarkerOptions()
@@ -213,4 +219,16 @@ public class ViewRideRequestsActivity extends MapActivity {
         finish();
     }
 
+    /**
+     * Driver accepted ride, send new ride to database
+     * @param newRide
+     */
+    @Override
+    public void onAcceptPressed(Ride newRide) {
+        /*
+         TODO: set newRide.driver_username to current user's username
+         set newRide's status to accepted
+         send ride to database
+         */
+    }
 }
