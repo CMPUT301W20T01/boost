@@ -170,6 +170,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
             public void onMarkerDragEnd(Marker marker) {
                 updateRideLocation(marker);
                 // TODO: update the text in the search bar to match the marker's new position
+                updateSearchBar(marker);
 
             }
         });
@@ -291,6 +292,22 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
         } else{
             ride.setEndLocation(marker.getPosition());
             Toast.makeText(RiderMainPage.this, "updated end location", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Updates the search bar corresponding to the marker
+     * with the new address
+     * @param marker
+     *      Marker that has the new location
+     */
+    private void updateSearchBar(Marker marker){
+        if (marker.getTitle().equals(pickupMarker.getTitle())){
+            String address = reverseGeoLocate(marker.getPosition());
+            searchPickupText.setText(address);
+        } else {
+            String address = reverseGeoLocate(marker.getPosition());
+            searchDestinationText.setText(address);
         }
     }
 

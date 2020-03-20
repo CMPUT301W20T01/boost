@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -64,6 +65,7 @@ public class ViewRideRequestsActivity extends MapActivity {
     private LatLng startLocation;
     private Collection<Ride> rideList;
     private RideStore rideStore;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,6 +97,7 @@ public class ViewRideRequestsActivity extends MapActivity {
 
     @Override
     protected void init() {
+        mMap = getMap();
 
         // cancel button
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +117,16 @@ public class ViewRideRequestsActivity extends MapActivity {
                         || event.getAction() == KeyEvent.KEYCODE_ENTER){
                     handleSearch(searchStartText);
                 }
+                return false;
+            }
+        });
+
+        // on marker click
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                String address = reverseGeoLocate(marker.getPosition());
+                Toast.makeText(ViewRideRequestsActivity.this, address, Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
@@ -139,7 +152,6 @@ public class ViewRideRequestsActivity extends MapActivity {
      * of the Driver's specified start location
      */
     private void displayRequests(){
-        GoogleMap mMap = getMap();
         Log.d("TestingViewRide", "in displayRequests");
         //fillRideList();
         rideList.add(new Ride(new LatLng(53.522515, -113.624191), new LatLng(0, 0), 13.5, "username"));

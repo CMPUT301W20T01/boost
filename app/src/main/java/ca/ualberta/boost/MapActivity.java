@@ -126,6 +126,31 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
     }
 
     /**
+     * Returns an address given a LatLng
+     * @param latLng
+     *      The LatLng of the address
+     * @return
+     *      Returns a String of the address
+     */
+    public String reverseGeoLocate(LatLng latLng){
+        Geocoder geocoder = new Geocoder(MapActivity.this);
+        List<Address> results = new ArrayList<>();
+        // get a list of results from the search location string
+        try{
+            results = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 20);
+        }catch (IOException e){
+            Toast.makeText(MapActivity.this,
+                    "unable to find location", Toast.LENGTH_SHORT).show();
+        }
+        // successful results
+        if (results.size() > 0){
+            Address address = results.get(0);
+            return address.getAddressLine(0);
+        }
+        return null;
+    }
+
+    /**
      * Moves the map camera to latitude and longitude at zoom level
      * @param latLng
      *      The LatLng to move to
