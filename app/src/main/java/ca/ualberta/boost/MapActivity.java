@@ -22,11 +22,13 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -45,6 +47,7 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
+    private ArrayList<Marker> markers;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,6 +73,7 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        markers = new ArrayList<>();
         if(mLocationPermissionsGranted){
             getDeviceLocation();
             // makes a blue dot on the map showing current location
@@ -85,6 +89,18 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
 
     public GoogleMap getMap(){
         return mMap;
+    }
+
+    public void addMarker(Marker marker){
+        markers.add(marker);
+    }
+
+    public void removeMarker(Marker marker){
+        markers.remove(marker);
+    }
+
+    public ArrayList<Marker> getMarkers(){
+        return markers;
     }
 
     /**
@@ -148,6 +164,24 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
             return address.getAddressLine(0);
         }
         return null;
+    }
+
+    /**
+     * Moves the map camera so that it shows all markers that are on the map
+     *
+     * This method uses code by andr https://stackoverflow.com/users/1820695/andr
+     * from an answer to the stack overflow post
+     * https://stackoverflow.com/questions/14828217/android-map-v2-zoom-to-show-all-the-markers
+     */
+    public void zoomToAllMarkers(){
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (Marker marker : markers){
+            builder.include(marker.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+        int padding = 0; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        mMap.moveCamera(cu);
     }
 
     /**

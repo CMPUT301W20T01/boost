@@ -128,9 +128,10 @@ public class ViewRideRequestsActivity extends MapActivity implements RideRequest
             public boolean onMarkerClick(Marker marker) {
                 for (Ride ride : rideList){
                     if (marker.getTitle().equals(ride.getRider_username())){
-                        String pickupAddress = reverseGeoLocate(ride.getStartLocation());
-                        String destinationAddress = reverseGeoLocate(ride.getEndLocation());
-                        new RideRequestFragment(ride, pickupAddress, destinationAddress).show(getSupportFragmentManager(), "REQ_SUM");
+                        launchDriverRideActivity(ride);
+                      //  String pickupAddress = reverseGeoLocate(ride.getStartLocation());
+                     //   String destinationAddress = reverseGeoLocate(ride.getEndLocation());
+                     //   new RideRequestFragment(ride, pickupAddress, destinationAddress).show(getSupportFragmentManager(), "REQ_SUM");
                     }
                 }
                 return false;
@@ -138,6 +139,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RideRequest
         });
 
     }
+
 
     /**
      * Handles search bar for searching a start location
@@ -218,6 +220,13 @@ public class ViewRideRequestsActivity extends MapActivity implements RideRequest
         startActivity(intent);
         finish();
     }
+
+    private void launchDriverRideActivity(Ride ride){
+        Intent intent = new Intent(this, DriverRideActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
 
     /**
      * Driver accepted ride, send new ride to database
