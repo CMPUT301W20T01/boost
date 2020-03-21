@@ -49,7 +49,7 @@ import ca.ualberta.boost.stores.UserStore;
  * open ride requests, and displays these ride requests
  */
 
-public class ViewRideRequestsActivity extends MapActivity {
+public class ViewRideRequestsActivity extends MapActivity implements RideRequestFragment.OnFragmentInteractionListener {
 
     // constants
     BitmapDescriptor SPECIAL = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
@@ -58,6 +58,7 @@ public class ViewRideRequestsActivity extends MapActivity {
     private LinearLayout searchesLayout;
     private EditText searchStartText;
     private Button cancelButton;
+    private Button detailsButton;
 
     // firebase
     private FirebaseAuth auth;
@@ -70,6 +71,7 @@ public class ViewRideRequestsActivity extends MapActivity {
     private GoogleMap mMap;
     private ArrayList<Marker> startMarkers;
     private Marker endMarker;
+    private Ride chosenRide;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,6 +81,7 @@ public class ViewRideRequestsActivity extends MapActivity {
         searchesLayout = findViewById(R.id.searchesLayout);
         searchStartText = findViewById(R.id.searchStartEditText);
         cancelButton = findViewById(R.id.cancelButton);
+        detailsButton = findViewById(R.id.detailsButton);
 
         // firebase
         auth = FirebaseAuth.getInstance();
@@ -112,6 +115,18 @@ public class ViewRideRequestsActivity extends MapActivity {
             }
         });
 
+        // view ride details button
+        detailsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (chosenRide != null){
+                    String pickupAddress = reverseGeoLocate(chosenRide.getStartLocation());
+                    String destinationAddress = reverseGeoLocate(chosenRide.getEndLocation());
+                    new RideRequestFragment(chosenRide, pickupAddress, destinationAddress).show(getSupportFragmentManager(), "REQ_SUM");
+                }
+            }
+        });
+
         // start search bar
         searchStartText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -137,15 +152,16 @@ public class ViewRideRequestsActivity extends MapActivity {
                        m.setAlpha(0.5f);
                    }
                    int index = startMarkers.indexOf(marker);
-                   Ride ride = rideList.get(index);
+                   chosenRide = rideList.get(index);
                    // highlight start marker
                    marker.setAlpha(1.0f);
                    // place end location marker
-                    endMarker.setPosition(ride.getEndLocation());
+                    endMarker.setPosition(chosenRide.getEndLocation());
                     endMarker.setVisible(true);
                    // zoom camera to both markers
                    zoomToMarkers(marker, endMarker);
                    // show button that says VIEW DETAILS
+                   detailsButton.setVisibility(View.VISIBLE);
                }
                 return true;
             }
@@ -163,6 +179,9 @@ public class ViewRideRequestsActivity extends MapActivity {
      */
     private void handleSearch(EditText searchEditText){
         // hide VIEW DETAILS button
+        detailsButton.setVisibility(View.GONE);
+        // set end marker as invisible
+        endMarker.setVisible(false);
         String searchString = searchEditText.getText().toString();
         startLocation = geoLocate(searchString);
         moveCamera(startLocation, 15);
@@ -175,8 +194,6 @@ public class ViewRideRequestsActivity extends MapActivity {
      */
     private void displayRequests(){
         rideList = new ArrayList<>(); // comment this out later, its in fillridelist
-        // set end marker as invisible
-        endMarker.setVisible(false);
         // clear map of previously searched requests
         for (int i = 0; i < startMarkers.size(); i++){
             Marker m = startMarkers.get(i);
@@ -230,6 +247,20 @@ public class ViewRideRequestsActivity extends MapActivity {
                         Toast.makeText(ViewRideRequestsActivity.this, "Please contact your database administrator", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    /**
+     * Driver accepted ride, send new ride to database
+     * @param newRide
+     */
+    @Override
+    public void onAcceptPressed(Ride newRide) {
+        /*
+         TODO: set newRide.driver_username to current user's username
+         set newRide's status to accepted
+         send ride to database
+         goto driver ride page activity
+         */
     }
 
     /**
