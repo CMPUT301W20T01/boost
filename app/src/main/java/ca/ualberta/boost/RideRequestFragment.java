@@ -71,7 +71,7 @@ public class RideRequestFragment extends DialogFragment {
         endText = view.findViewById(R.id.endText);
 
         fareText.setText(Double.toString(ride.getFare()));
-        riderText.setText(ride.getRider_username());
+        riderText.setText(ride.getRiderUsername());
         startText.setText(startAddress);
         endText.setText(endAddress);
 

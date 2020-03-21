@@ -47,7 +47,6 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-    private ArrayList<Marker> markers;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,7 +72,6 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        markers = new ArrayList<>();
         if(mLocationPermissionsGranted){
             getDeviceLocation();
             // makes a blue dot on the map showing current location
@@ -89,18 +87,6 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
 
     public GoogleMap getMap(){
         return mMap;
-    }
-
-    public void addMarker(Marker marker){
-        markers.add(marker);
-    }
-
-    public void removeMarker(Marker marker){
-        markers.remove(marker);
-    }
-
-    public ArrayList<Marker> getMarkers(){
-        return markers;
     }
 
     /**
@@ -167,21 +153,37 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
     }
 
     /**
+     * Builds a url that is used to get the directions between two locations
+     * @param startLocation
+     *      LatLng of the start location
+     * @param endLocation
+     *      LatLng of the end location
+     * @return
+     *      A string of the url
+     */
+    public String buildUrl(LatLng startLocation, LatLng endLocation){
+        String start_str = "origin=" + startLocation.latitude + "," + startLocation.longitude;
+        String end_str = "destination=" + endLocation.latitude + "," + endLocation.longitude;
+        String url = "https://maps.googleapis.com/maps/api/directions/json?" + start_str + "&"
+                + end_str + "&key=" + getString(R.string.google_api_key);
+        return url;
+    }
+
+    /**
      * Moves the map camera so that it shows all markers that are on the map
      *
      * This method uses code by andr https://stackoverflow.com/users/1820695/andr
      * from an answer to the stack overflow post
      * https://stackoverflow.com/questions/14828217/android-map-v2-zoom-to-show-all-the-markers
      */
-    public void zoomToAllMarkers(){
+    public void zoomToMarkers(Marker marker1, Marker marker2){
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (Marker marker : markers){
-            builder.include(marker.getPosition());
-        }
+        builder.include(marker1.getPosition());
+        builder.include(marker2.getPosition());
         LatLngBounds bounds = builder.build();
-        int padding = 0; // offset from edges of the map in pixels
+        int padding = 100; // offset from edges of the map in pixels
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-        mMap.moveCamera(cu);
+        mMap.animateCamera(cu);
     }
 
     /**
@@ -192,7 +194,6 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
      *      The zoom level of the camera
      */
     public void moveCamera(LatLng latLng, float zoom){
-
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 

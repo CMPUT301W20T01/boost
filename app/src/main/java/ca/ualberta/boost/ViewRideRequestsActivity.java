@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -49,6 +51,9 @@ import ca.ualberta.boost.stores.UserStore;
 
 public class ViewRideRequestsActivity extends MapActivity {
 
+    // constants
+    BitmapDescriptor SPECIAL = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+
     // views
     private LinearLayout searchesLayout;
     private EditText searchStartText;
@@ -63,6 +68,8 @@ public class ViewRideRequestsActivity extends MapActivity {
     private LatLng startLocation;
     private ArrayList<Ride> rideList;
     private GoogleMap mMap;
+    private ArrayList<Marker> startMarkers;
+    private Marker endMarker;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,6 +99,10 @@ public class ViewRideRequestsActivity extends MapActivity {
     @Override
     protected void init() {
         mMap = getMap();
+        startMarkers = new ArrayList<>();
+        endMarker = mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(0,0))
+                                .visible(false));
 
         // cancel button
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +126,32 @@ public class ViewRideRequestsActivity extends MapActivity {
             }
         });
 
+        // on marker click
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+               // if the marker is a start location marker
+               if (startMarkers.contains(marker)){
+                   // make markers less opaque
+                   for (Marker m : startMarkers){
+                       m.setAlpha(0.5f);
+                   }
+                   int index = startMarkers.indexOf(marker);
+                   Ride ride = rideList.get(index);
+                   // highlight start marker
+                   marker.setAlpha(1.0f);
+                   // place end location marker
+                    endMarker.setPosition(ride.getEndLocation());
+                    endMarker.setVisible(true);
+                   // zoom camera to both markers
+                   zoomToMarkers(marker, endMarker);
+                   // show button that says VIEW DETAILS
+               }
+                return true;
+            }
+
+        });
+
     }
 
 
@@ -125,7 +162,7 @@ public class ViewRideRequestsActivity extends MapActivity {
      *      The EditText of the search bar
      */
     private void handleSearch(EditText searchEditText){
-        Log.d("TestingViewRide", "in handleSearch");
+        // hide VIEW DETAILS button
         String searchString = searchEditText.getText().toString();
         startLocation = geoLocate(searchString);
         moveCamera(startLocation, 15);
@@ -137,27 +174,26 @@ public class ViewRideRequestsActivity extends MapActivity {
      * of the Driver's specified start location
      */
     private void displayRequests(){
-        fillRideList();
+        rideList = new ArrayList<>(); // comment this out later, its in fillridelist
+        // set end marker as invisible
+        endMarker.setVisible(false);
+        // clear map of previously searched requests
+        for (int i = 0; i < startMarkers.size(); i++){
+            Marker m = startMarkers.get(i);
+            m.remove();
+        }
+        startMarkers.clear();
+       // fillRideList();
+        // test ride from wem to misericordia
+        rideList.add(new Ride(new LatLng(53.522515, -113.624191), new LatLng(53.5209, -113.6120), 13.5, "username"));
+        // test ride from thorncliffe school to aldergrove school
+        rideList.add(new Ride(new LatLng(53.517, -113.624), new LatLng(53.517497, -113.631613), 13.5, "username2"));
         // place markers for rides
         for (int i = 0; i < rideList.size(); i++){
-            float[] results = new float[1];
             Ride ride = rideList.get(i);
-            final LatLng rideStartLocation = ride.getStartLocation();
-            Location.distanceBetween(startLocation.latitude, startLocation.latitude,
-                    rideStartLocation.latitude, rideStartLocation.longitude, results);
-            // if distance is smaller than 5km
-            if (results[0] < 5000){
-                UserStore.getUser(ride.getRiderUsername()).addOnSuccessListener(new OnSuccessListener<User>() {
-                    @Override
-                    public void onSuccess(User user) {
-                        Rider rider = (Rider) user;
-                        mMap.addMarker(new MarkerOptions()
-                                .title(rider.getEmail())
-                                .position(rideStartLocation));
-                    }
-                });
+            startMarkers.add(mMap.addMarker(new MarkerOptions()
+                    .position(ride.getStartLocation())));
             }
-        }
     }
 
 
@@ -166,6 +202,7 @@ public class ViewRideRequestsActivity extends MapActivity {
      * Fills the rideList with pending ride requests from the database
      */
     private void fillRideList(){
+        rideList = new ArrayList<>();
         handler.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -173,13 +210,15 @@ public class ViewRideRequestsActivity extends MapActivity {
                         if(task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (document.get("status").toString().matches("Pending")) {
-                                    // TODO: get pending rides from firebase
-//                                    LatLng startLocation = (document.get("start_location"));
-//                                    LatLng endLocation = (document.get("end_location").toString());
-//                                    double fare = (document.get("fare"));
-//                                    String status = (document.get("status").toString());
-//                                    String riderUserName = (document.get("rider").toString());
-//                                    rideList.add(new Ride(riderUserName, startLocation, endLocation, fare));
+                                    Ride ride = Ride.build(document.getData());
+                                    float[] results = new float[1];
+                                    final LatLng rideStartLocation = ride.getStartLocation();
+                                    Location.distanceBetween(startLocation.latitude, startLocation.latitude,
+                                            rideStartLocation.latitude, rideStartLocation.longitude, results);
+                                    // if distance is smaller than 5km add to ride list
+                                    if (results[0] < 5000){
+                                        rideList.add(ride);
+                                    }
                                 }
                             }
                         }
