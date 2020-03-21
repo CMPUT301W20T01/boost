@@ -112,14 +112,19 @@ public class UserStore {
                         }
 
                         Map<String, Object> data = result.getData();
-
                         if (data == null) {
                             userPromise.reject(new Exception("Something went wrong"));
                             return;
                         }
 
+                        Number type = (Number) data.get("type");
+                        if (type == null) {
+                            userPromise.reject(new Exception("User has no type!"));
+                            return;
+                        }
+
                         User user;
-                        if (data.get("type") == UserType.RIDER) {
+                        if (UserType.valueOf(type.intValue()) == UserType.RIDER) {
                             user = Rider.build(data);
                         } else {
                             user = Driver.build(data);
@@ -142,7 +147,6 @@ public class UserStore {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (!task.isSuccessful()) {
-                            Log.d("UserStore", task.getException().toString());
                             userPromise.reject(new Exception("User does not exist"));
                             return;
                         }
@@ -165,12 +169,9 @@ public class UserStore {
                             return;
                         }
 
-                        Log.d("UserStore", type.toString());
-
                         User user;
                         if (UserType.valueOf(type.intValue()) == UserType.RIDER) {
                             user = Rider.build(data);
-                            Log.d("UserStore", "AAAHHHHHHHHH");
                         } else {
                             user = Driver.build(data);
                         }

@@ -147,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
 
     //method to open Rider or Driver HomePage
     private void launchHome(UserType type) {
-        Log.d("MainActivity", type.toString());
         Intent intent;
         if (type == UserType.RIDER) {
             intent = new Intent(this, RiderMainPage.class);
