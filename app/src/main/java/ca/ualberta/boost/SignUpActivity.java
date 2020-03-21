@@ -124,7 +124,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     //stores user into database users
     private void storeUser() {
         User user;
-        if (spinner.getSelectedItem().toString() == "Rider") {
+        if (spinner.getSelectedItem().toString().equals("Rider")) {
             user = new Rider(firstName.getText().toString(), userName.getText().toString(),
                                    password.getText().toString(), email.getText().toString(),
                                    phoneNumber.getText().toString());
