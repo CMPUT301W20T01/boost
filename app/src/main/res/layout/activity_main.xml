@@ -5,90 +5,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="@color/colorPrimary"
     tools:context=".MainActivity">
 
 
     <EditText
         android:id="@+id/sign_in_password"
-        android:layout_width="222dp"
-        android:layout_height="48dp"
-        android:hint="Password"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/yellow_background_home_screen"
-        app:layout_constraintVertical_bias="0.499" />
-
-    <View
-        android:id="@+id/yellow_background_home_screen"
         android:layout_width="0dp"
-        android:layout_height="218dp"
-        android:background="#FFAA1D"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <TextView
-        android:id="@+id/boost_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/boost"
-        android:textColor="#FFFFFF"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        android:elevation="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.147" />
+        android:layout_height="48dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="64dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:backgroundTint="@android:color/black"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sign_in_email" />
 
     <EditText
         android:id="@+id/sign_in_email"
-        android:layout_width="222dp"
+        android:layout_width="0dp"
         android:layout_height="48dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="64dp"
         android:hint="Email"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:inputType="textEmailAddress"
+        android:backgroundTint="@android:color/black"
+        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/yellow_background_home_screen"
-        app:layout_constraintVertical_bias="0.395" />
+        app:layout_constraintStart_toStartOf="@+id/boost_logo"
+        app:layout_constraintTop_toBottomOf="@+id/boost_logo" />
 
     <Button
         android:id="@+id/sign_in_button"
-        android:layout_width="100dp"
-        android:layout_height="35dp"
-        android:layout_marginBottom="228dp"
-        android:background="@drawable/button"
+        android:layout_width="wrap_content"
+        android:paddingHorizontal="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:background="@drawable/rounded_button_dark"
+        android:fontFamily="@font/lato"
         android:text="@string/sign_in"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/yellow_background_home_screen"
-        app:layout_constraintVertical_bias="0.997" />
+        app:layout_constraintTop_toBottomOf="@+id/sign_in_password" />
 
-    <Button
+    <TextView
         android:id="@+id/sign_up_button"
-        android:layout_width="100dp"
-        android:layout_height="35dp"
-        android:background="@drawable/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/lato"
         android:text="@string/sign_up"
+        android:textAlignment="center"
+        android:textAllCaps="false"
         android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="18sp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/yellow_background_home_screen"
-        app:layout_constraintVertical_bias="0.644" />
+        app:layout_constraintTop_toBottomOf="@+id/sign_in_button" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -96,17 +78,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="181dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="45dp"
         android:layout_marginEnd="182dp"
-        android:layout_marginBottom="54dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:indeterminate="true"
+        android:indeterminateTint="@android:color/white"
+        android:indeterminateTintMode="src_atop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_up_button"
-        android:indeterminate="true"
-        android:indeterminateTintMode="src_atop"
-        android:indeterminateTint="#FFAA1D"/>
+        app:layout_constraintTop_toBottomOf="@+id/sign_up_button" />
 
+    <ImageView
+        android:id="@+id/boost_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_marginTop="152dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/boost_logo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

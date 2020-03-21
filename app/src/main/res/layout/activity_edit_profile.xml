@@ -1,55 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditProfileActivity"
-    android:orientation="vertical">
+    tools:context=".EditProfileActivity">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Update Profile Data"
         android:id="@+id/title"
-        android:textSize="30dp">
-    </TextView>
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Edit Profile"
+        android:textAlignment="center"
+        android:textSize="35dp"
+        android:fontFamily="@font/lato_black"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/epEmail"
-        android:textSize="20dp"
-        android:hint="current email">
-    </EditText>
-    <EditText
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/epPassword"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/lato"
+        android:hint="current email"
+        android:inputType="textEmailAddress"
         android:textSize="20dp"
-        android:hint="current password">
-    </EditText>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/epNewEmail"
-        android:textSize="20dp"
-        android:layout_marginBottom="50dp"
-        android:hint="new email">
-    </EditText>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <EditText
-        android:layout_width="match_parent"
+        android:id="@+id/epPassword"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/epNewPassword"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/lato"
+        android:hint="current password"
+        android:inputType="textPassword"
         android:textSize="20dp"
-        android:hint="new password">
-    </EditText>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/epEmail"/>
+
+    <EditText
+        android:id="@+id/epNewEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/lato"
+        android:hint="new email"
+        android:inputType="textEmailAddress"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/epPassword"/>
+
+    <EditText
+        android:id="@+id/epNewPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/lato"
+        android:hint="new password"
+        android:inputType="textPassword"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/epNewEmail"/>
 
     <Button
-        android:layout_width="match_parent"
+        android:id="@+id/editButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editButton">
-    </Button>
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="80dp"
+        android:background="@drawable/rounded_button_dark"
+        android:paddingHorizontal="50dp"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:text="Confirm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/epNewPassword"/>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private EditText loginEmail;
     private EditText loginPassword;
 
-    private Button signUpButton;
+    private TextView signUpButton;
     private Button signInButton;
 
     private ProgressBar circleProgressBar;

@@ -2,7 +2,7 @@
     <string name="app_name">Boost</string>
     <string name="cancel">Cancel</string>
     <string name="sign_in">sign in</string>
-    <string name="sign_up">sign up</string>
+    <string name="sign_up"><u>Sign up?</u></string>
     <string name="boost">Boost</string>
     <string-array name="userType">
         <item>Rider</item>
