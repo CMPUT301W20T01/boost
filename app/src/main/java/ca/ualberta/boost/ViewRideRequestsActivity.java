@@ -188,7 +188,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RideRequest
         String searchString = searchEditText.getText().toString();
         startLocation = geoLocate(searchString);
         moveCamera(startLocation, 15);
-        displayRequests();
+        fillRideList();
     }
 
     /**
@@ -202,14 +202,11 @@ public class ViewRideRequestsActivity extends MapActivity implements RideRequest
             m.remove();
         }
         startMarkers.clear();
-        fillRideList();
-        // test ride from wem to misericordia
-   //     rideList.add(new Ride(new LatLng(53.522515, -113.624191), new LatLng(53.5209, -113.6120), 13.5, "username"));
-        // test ride from thorncliffe school to aldergrove school
-     //   rideList.add(new Ride(new LatLng(53.517, -113.624), new LatLng(53.517497, -113.631613), 13.5, "username2"));
         // place markers for rides
         for (int i = 0; i < rideList.size(); i++){
+            Log.d("TestingViewRide", "hi");
             Ride ride = rideList.get(i);
+            Log.d("TestingViewRide", ride.getRiderUsername());
             startMarkers.add(mMap.addMarker(new MarkerOptions()
                     .position(ride.getStartLocation())));
             }
@@ -228,18 +225,8 @@ public class ViewRideRequestsActivity extends MapActivity implements RideRequest
             public void onSuccess(Collection<Ride> rides) {
                 Log.d("TestingViewRide", "success");
                 if (!rides.isEmpty()) {
-                    for (Ride ride : rides) {
-                        LatLng rideStartLocation = ride.getStartLocation();
-                        float[] results = new float[1];
-                        Location.distanceBetween(startLocation.latitude, startLocation.latitude,
-                                rideStartLocation.latitude, rideStartLocation.longitude, results);
-                        // if distance is smaller than 5km add to rideList
-                        Log.d("TestingViewRide", Float.toString(results[0]));
-                        if (results[0] < 5000) {
-                            rideList.add(ride);
-                            Log.d("TestingViewRide", "ride added");
-                        }
-                    }
+                    rideList.addAll(rides);
+                    displayRequests();
                 } else{
                     Log.d("TestingViewRide", "rides is empty");
                 }
