@@ -26,7 +26,7 @@ public class Driver extends User {
      * @param phoneNumber
      */
     public Driver(String firstName, String username, String password, String email, String phoneNumber) {
-        super(firstName, username, password, email, phoneNumber);
+        super(UserType.DRIVER, firstName, username, password, email, phoneNumber);
     }
 
     public double getRating() {
@@ -60,7 +60,7 @@ public class Driver extends User {
     @Override
     public Map<String, Object> data() {
         Map<String, Object> map = new HashMap<>();
-        map.put("type", DRIVER);
+        map.put("type", DRIVER.getValue());
         map.put("username", this.getUsername());
         map.put("firstName", this.getFirstName());
         map.put("password", this.getPassword());

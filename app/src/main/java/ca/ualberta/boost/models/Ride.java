@@ -97,11 +97,11 @@ public class Ride {
         return fare;
     }
 
-    public String getDriver_username() {
+    public String getDriverUsername() {
         return driver_username;
     }
 
-    public String getRider_username() {
+    public String getRiderUsername() {
         return rider_username;
     }
 
@@ -121,11 +121,11 @@ public class Ride {
         this.fare = fare;
     }
 
-    public void setDriver_username(String driver) {
+    public void setDriverUsername(String driver) {
         this.driver_username = driver;
     }
 
-    public void setRider_username(String rider) {
+    public void setRiderUsername(String rider) {
         this.rider_username = rider;
     }
 
