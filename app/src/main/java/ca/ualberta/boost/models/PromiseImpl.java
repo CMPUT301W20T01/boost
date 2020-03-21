@@ -39,8 +39,9 @@ public class PromiseImpl<TResult> implements Promise<TResult> {
      * @param func
      *      The function to be called when the promise is resolved (the result is realized)
      */
-    public void addOnSuccessListener(OnSuccessListener<TResult> func) {
+    public Promise<TResult> addOnSuccessListener(OnSuccessListener<TResult> func) {
         resolveCallback = func;
+        return this; // return the same object, add ability to add on failure listener
     }
 
     /**

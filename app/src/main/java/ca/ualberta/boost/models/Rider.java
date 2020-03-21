@@ -22,7 +22,7 @@ public class Rider extends User {
      * @param phoneNumber
      */
     public Rider(String firstName, String username, String password, String email, String phoneNumber) {
-        super(firstName, username, password, email, phoneNumber);
+        super(UserType.RIDER, firstName, username, password, email, phoneNumber);
     }
 
     /**
@@ -33,14 +33,14 @@ public class Rider extends User {
     @Override
     public Map<String, Object> data() {
         Map<String, Object> map = new HashMap<>();
-        map.put("type", RIDER);
+        map.put("type", RIDER.getValue());
         map.put("username", this.getUsername());
         map.put("firstName", this.getFirstName());
         map.put("password", this.getPassword());
         map.put("email", this.getEmail());
         map.put("phoneNumber", this.getPhoneNumber());
-        map.put("rating", null);
-        map.put("rates", null);
+        map.put("rating", 0);
+        map.put("rates", 0);
         return map;
     }
 

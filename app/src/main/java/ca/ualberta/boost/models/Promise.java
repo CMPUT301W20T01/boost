@@ -14,7 +14,7 @@ public interface Promise<TResult> {
      *      The function to be called when the promise is resolved (the result is realized)
      * @see PromiseImpl
      */
-    void addOnSuccessListener(OnSuccessListener<TResult> func);
+    Promise<TResult> addOnSuccessListener(OnSuccessListener<TResult> func);
 
     /**
      * @param func

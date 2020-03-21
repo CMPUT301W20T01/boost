@@ -95,7 +95,6 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
         confirmRequestButton = findViewById(R.id.confirmRequestButton);
         cancelRequestButton = findViewById(R.id.cancelRequestButton);
         viewRequestButton = findViewById(R.id.viewRideRequestButton);
-        logoutButton = findViewById(R.id.logoutButton);
     }
 
     /**
@@ -192,6 +191,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
             @Override
             public void onClick(View v) {
                 auth.signOut();
+                ActiveUser.logout();
                 launchHomeScreen();
             }
         });
