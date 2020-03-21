@@ -24,19 +24,14 @@ public class ActiveUser {
     }
 
     /**
-     * Set the user using the app
-     * @param username
-     *      The current user's username
-     * @param password
-     *      The current user's password
+     *
+     * @param user
      */
-    public static void login(String username, final String password) {
-        UserStore.getUser(username)
-            .addOnSuccessListener(new OnSuccessListener<User>() {
-                @Override
-                public void onSuccess(User user) {
-                    ActiveUser.user = user;
-                }
-            });
+    public static void login(User user) {
+        ActiveUser.user = user;
+    }
+
+    public static void logout() {
+        ActiveUser.user = null;
     }
 }

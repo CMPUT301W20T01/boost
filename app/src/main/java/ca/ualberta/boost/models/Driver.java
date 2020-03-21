@@ -1,6 +1,5 @@
 package ca.ualberta.boost.models;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,8 +14,7 @@ import static ca.ualberta.boost.models.UserType.DRIVER;
 
 public class Driver extends User {
 
-    private ArrayList<Ride> allRides = new ArrayList<>();
-    private int rating = 0;
+    private double rating = 0.00;
     private int numRates;
 
     /**
@@ -28,19 +26,10 @@ public class Driver extends User {
      * @param phoneNumber
      */
     public Driver(String firstName, String username, String password, String email, String phoneNumber) {
-        super(firstName, username, password, email, phoneNumber);
+        super(UserType.DRIVER, firstName, username, password, email, phoneNumber);
     }
 
-    /**
-     * @return
-     *      Returns all rides that the driver has completed
-     * @see Ride
-     */
-    public Collection<Ride> getAllRides() {
-        return allRides;
-    }
-
-    public int getRating() {
+    public double getRating() {
         return rating;
     }
 
@@ -53,17 +42,7 @@ public class Driver extends User {
     }
 
     /**
-     * adds a ride to the list of rides the driver has completed
-     * @param ride
-     *      New ride to add
-     * @see Ride
-     */
-    public void addRide(Ride ride) {
-        allRides.add(ride);
-    }
-
-    /**
-     * updates the driver's rating based on an additional rating and
+     * Updates the driver's rating based on an additional rating and
      * increments the number of ratings the driver has
      * @param newRating
      */
@@ -74,14 +53,14 @@ public class Driver extends User {
     }
 
     /**
-     * creates map of the driver's data
+     * Creates map of the driver's data
      * @return
      *      Returns the map of all driver data
      */
     @Override
     public Map<String, Object> data() {
         Map<String, Object> map = new HashMap<>();
-        map.put("type", DRIVER);
+        map.put("type", DRIVER.getValue());
         map.put("username", this.getUsername());
         map.put("firstName", this.getFirstName());
         map.put("password", this.getPassword());
@@ -93,10 +72,11 @@ public class Driver extends User {
     }
 
     /**
-     * build a driver from a map of data
-     * @param data map of all driver data
+     * Build a driver from a map of string, object pairs
+     * @param data
+     *      The Map of data that represents the Driver
      * @return
-     *      A new Driver
+     *      A new Driver object
      */
     public static Driver build(Map<String, Object> data) {
         return new Driver(
