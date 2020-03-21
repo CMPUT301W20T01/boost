@@ -1,27 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ViewRideRequestsActivity"
     android:orientation="vertical">
 
-    <TextView
+    <fragment class="com.google.android.gms.maps.MapFragment"
+        android:id="@+id/mapFragment"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"/>
+
+    <LinearLayout
+        android:id="@+id/searchesLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/searchPickupLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/white_rounded_bg"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/pickupMagnify"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_magnify"/>
+
+        <EditText
+            android:id="@+id/searchStartEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/pickupMagnify"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:maxLines="1"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
+            android:hint="Search a start location" />
+    </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Current Requests"
-        android:textSize="50dp">
-    </TextView>
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/activeRequestsListView"
-        android:layout_marginTop="35dp"
-        android:layout_marginBottom="65dp"
-        android:listSelector="@android:color/holo_green_light"
-        android:choiceMode="singleChoice">
-    </ListView>
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="Return" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/detailsButton"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="2"
+            android:text="View Ride Details"
+            android:visibility="gone"/>
+
+
+    </LinearLayout>
+
+</FrameLayout>

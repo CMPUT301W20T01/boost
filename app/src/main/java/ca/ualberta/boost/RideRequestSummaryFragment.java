@@ -76,7 +76,6 @@ public class RideRequestSummaryFragment extends DialogFragment{
                     public void onClick(DialogInterface dialog, int which) {
                         double tip = Double.parseDouble(tipText.getText().toString());
                         ride.setFare(ride.getFare() + tip);
-
                         // send ride request in parent activity
                         listener.onAcceptPressed(ride);
 

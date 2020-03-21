@@ -1,16 +1,7 @@
 package ca.ualberta.boost;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
-
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -22,57 +13,48 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.Rider;
 import ca.ualberta.boost.models.User;
+import ca.ualberta.boost.stores.RideStore;
 import ca.ualberta.boost.stores.UserStore;
 
 
 /**
  * RiderMainPage defines the Home Page activity for Riders
  * This class presents the map and necessary views for Riders to
- * view their profile and/or request a ride.
+ * view their profile, request a ride, view current ride, and
+ * complete a ride.
  */
 
-/*
- TODO: Increase cohesion and make this more MVC-like. /
-  Split this class into separate classes: /
-  One that is responsible for the map and one that is responsible for the rest
- */
-public class RiderMainPage extends FragmentActivity implements OnMapReadyCallback, RideRequestSummaryFragment.OnFragmentInteractionListener {
+public class RiderMainPage extends MapActivity implements RideRequestSummaryFragment.OnFragmentInteractionListener {
 
     // constant values
     private static final String TAG = "RiderMainPage";
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    private static final int DEFAULT_ZOOM = 16;
-
-    // map specific attributes
-    private Boolean mLocationPermissionsGranted = false;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
-    private GoogleMap mMap;
-    public Marker pickupMarker;
-    public Marker destinationMarker;
 
     //firebase
     private FirebaseAuth auth;
+    private FirebaseFirestore db;
+    private CollectionReference handler;
+    DocumentReference documentReference;
+    FirebaseUser user;
 
     // views
     private Button viewRequestButton;
@@ -81,7 +63,6 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private Button confirmRequestButton;
     private Button cancelRequestButton;
     private Button logoutButton;
-    private Button viewRequestButton;
     private EditText searchPickupText;
     private EditText searchDestinationText;
     private LinearLayout searchesLayout;
@@ -90,14 +71,19 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
 
     // attributes
     private Ride ride;
+    public Marker pickupMarker;
+    public Marker destinationMarker;
 
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rider_main_page);
 
         auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        handler = db.collection("rides");
+        documentReference = db.collection("rides").document(auth.getUid());
+        user = FirebaseAuth.getInstance().getCurrentUser();
         // get views
         searchPickupText = findViewById(R.id.searchPickupEditText);
         searchDestinationText = findViewById(R.id.searchDestinationEditText);
@@ -110,109 +96,49 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         confirmRequestButton = findViewById(R.id.confirmRequestButton);
         cancelRequestButton = findViewById(R.id.cancelRequestButton);
         viewRequestButton = findViewById(R.id.viewRideRequestButton);
-        logoutButton = findViewById(R.id.logoutButton);
-
-        // get location permission
-        getLocationPermission();
-
-        viewRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchCurrentRequestActivity();
-            }
-        });
-
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                auth.signOut();
-                launchHomeScreen();
-            }
-        });
     }
 
     /**
-     * Initializes the map object, markers and ride
-     *
-     * @param googleMap
-     *      the map object
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        if(mLocationPermissionsGranted){
-            getDeviceLocation();
-            // makes a blue dot on the map showing current location
-            mMap.setMyLocationEnabled(true);
-            // get rid of top right corner button that centers location
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
-            // enable all zoom, rotate, tilt, etc gesture
-            // mMap.getUiSettings().setAllGesturesEnabled(true);
-
-            // init markers and make them invisible
-            pickupMarker = mMap.addMarker(new  MarkerOptions()
-                    .title("Pickup")
-                    .position(new LatLng(0,0))
-                    .draggable(true)
-                    .visible(false)
-            );
-
-            destinationMarker = mMap.addMarker(new  MarkerOptions()
-                    .title("Destination")
-                    .position(new LatLng(0,0))
-                    .draggable(true)
-                    .visible(false)
-            );
-          
-            init();
-        }
-    }
-
-    /**
-     *  Creates a pending ride for the rider and adds it to the database.
+     *  Creates a pending ride for the rider and sends it to the database.
      *  This method is run when "accept" is pressed from the RideRequestSummaryFragment
      */
     @Override
     public void onAcceptPressed(Ride newRide) {
         setRiderMainPageVisibility();
-        ride = newRide;
-        ride.setPending();
-        /* TODO: set Rider as current user and send ride to database */
-        // ride.setRider();
+        ride = new Ride(newRide.getStartLocation(), newRide.getEndLocation(),
+                newRide.getFare(), newRide.getRiderUsername());
+
+        RideStore.saveRide(ride);
     }
 
-    /**
-     * Initialize listeners
-     */
-    private void init() {
+    @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_rider_main_page;
+    }
 
-        viewRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchCurrentRequestActivity();
-            }
-        });
+    @Override
+    protected MapFragment getMapFragment() {
+        return (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
+    }
 
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                auth.signOut();
-                launchHomeScreen();
-            }
-        });
+    @Override
+    protected void init() {
+        GoogleMap mMap = getMap();
 
-        requestRideButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleRequestRideClick();
-            }
-        });
-        cancelRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleCancelRideClick();
-            }
-        });
+        // init markers and make them invisible
+        pickupMarker = mMap.addMarker(new  MarkerOptions()
+                .title("Pickup")
+                .position(new LatLng(0,0))
+                .draggable(true)
+                .visible(false)
+        );
+
+        destinationMarker = mMap.addMarker(new  MarkerOptions()
+                .title("Destination")
+                .position(new LatLng(0,0))
+                .draggable(true)
+                .visible(false)
+        );
 
         // listener for marker drag
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
@@ -230,7 +156,44 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
             public void onMarkerDragEnd(Marker marker) {
                 updateRideLocation(marker);
                 // TODO: update the text in the search bar to match the marker's new position
+                updateSearchBar(marker);
 
+            }
+        });
+
+        viewProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchProfileScreen();
+            }
+        });
+
+        viewRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchCurrentRequestActivity();
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth.signOut();
+                ActiveUser.logout();
+                launchHomeScreen();
+            }
+        });
+
+        requestRideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleRequestRideClick();
+            }
+        });
+        cancelRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleCancelRideClick();
             }
         });
 
@@ -239,12 +202,11 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 ride.setEndLocation(destinationMarker.getPosition());
                 ride.setStartLocation(pickupMarker.getPosition());
-                ride.calculateAndSetFare();
+                ride.setFare(ride.baseFare());
                 new RideRequestSummaryFragment(ride).show(getSupportFragmentManager(), "RIDE_SUM");
             }
         });
-
-
+    }
 
 
     /**
@@ -252,10 +214,8 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
      * This function is run when the "Request Ride" button is clicked.
      */
     private void handleRequestRideClick() {
+        ride = new Ride(0.00, ActiveUser.getUser().getUsername());
         setRequestLocationPageVisibility();
-        ride = new Ride();
-        /* TODO: set ride to current user, then send ride to database */
-        //ride.setRider();
         // pickup search bar
         searchPickupText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -265,7 +225,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                         || event.getAction() == KeyEvent.ACTION_DOWN
                         || event.getAction() == KeyEvent.KEYCODE_ENTER){
                     Log.d("RIDER", "Got input");
-                    geoLocate(searchPickupText, "Pickup");
+                    handleSearch(searchPickupText, "Pickup");
                 }
                 return false;
             }
@@ -278,56 +238,39 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                         || actionId == EditorInfo.IME_ACTION_DONE
                         || event.getAction() == KeyEvent.ACTION_DOWN
                         || event.getAction() == KeyEvent.KEYCODE_ENTER){
-                    geoLocate(searchDestinationText, "Destination");
+                    handleSearch(searchDestinationText, "Destination");
                 }
                 return false;
             }
         });
     }
 
-
-    private void geoLocate(EditText searchEditText, String markerTitle) {
-        String searchString = searchEditText.getText().toString();
-        Geocoder geocoder = new Geocoder(RiderMainPage.this);
-        List<Address> results = new ArrayList<>();
-        // get a list of results from the search location string
-        try{
-            results = geocoder.getFromLocationName(searchString, 20);
-        }catch (IOException e){
-            Toast.makeText(RiderMainPage.this,
-                    "unable to find location", Toast.LENGTH_SHORT).show();
-        }
-        // successful results
-        if (results.size() > 0){
-            Address address = results.get(0);
-            //searchEditText.setText(address.getFeatureName());
-            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-            if (markerTitle.equals("Pickup")){
-                placeMarker(pickupMarker, latLng);
-            } else {
-                placeMarker(destinationMarker, latLng);
-            }
-        }
-    }
-
     /**
-     * Places a marker or moves an existing one
-     *
-     * @param marker
-     *      The marker to move/place from a searched location
-     * @param latLng
-     *      the new Latlng position for the marker
+     * Handles the search bars for requesting a ride
+     * Moves camera and places/moves a marker on the map if search is successful
+     * @param searchEditText
+     *      The EditText of the search bar
+     * @param markerTitle
+     *      The marker to place/move
      */
-    private void placeMarker(Marker marker, LatLng latLng){
-        marker.setPosition(latLng);
-        marker.setVisible(true);
-        moveCamera(latLng, DEFAULT_ZOOM);
-        updateRideLocation(marker);
+    private void handleSearch(EditText searchEditText, String markerTitle) {
+        String searchString = searchEditText.getText().toString();
+        LatLng latLng = geoLocate(searchString);
+            if (markerTitle.equals("Pickup")){
+                moveMarker(pickupMarker, latLng);
+                updateRideLocation(pickupMarker);
+            } else {
+                moveMarker(destinationMarker, latLng);
+                updateRideLocation(destinationMarker);
+            }
+            // if both markers are visible
+            if (pickupMarker.isVisible() && destinationMarker.isVisible()){
+                zoomToMarkers(pickupMarker, destinationMarker);
+            }
     }
 
     /**
      * Update the ride with the marker's new position
-     *
      * @param marker
      *      the marker to get the position with which we update ride
      */
@@ -338,6 +281,22 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         } else{
             ride.setEndLocation(marker.getPosition());
             Toast.makeText(RiderMainPage.this, "updated end location", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Updates the search bar corresponding to the marker
+     * with the new address
+     * @param marker
+     *      Marker that has the new location
+     */
+    private void updateSearchBar(Marker marker){
+        if (marker.getTitle().equals(pickupMarker.getTitle())){
+            String address = reverseGeoLocate(marker.getPosition());
+            searchPickupText.setText(address);
+        } else {
+            String address = reverseGeoLocate(marker.getPosition());
+            searchDestinationText.setText(address);
         }
     }
 
@@ -372,122 +331,6 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         destinationMarker.setVisible(false);
     }
 
-
-    /**
-     * Initializes the map fragment
-     */
-    private void initMap() {
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
-        mapFragment.getMapAsync(RiderMainPage.this);
-    }
-
-    /* This following methods are based off of code from the YouTube tutorial series
-    "Google Maps & Google Places Android Course"
-    (https://www.youtube.com/playlist?list=PLgCYzUzKIBE-vInwQhGSdnbyJ62nixHCt)
-    by CodingWithMitch (https://www.youtube.com/channel/UCoNZZLhPuuRteu02rh7bzsw) */
-
-    /**
-     *  Gets the device's current location
-     */
-    private void getDeviceLocation(){
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        try{
-            if(mLocationPermissionsGranted){
-                Task location = mFusedLocationProviderClient.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()){
-                            Location currentLocation = (Location) task.getResult();
-                            moveCamera(new LatLng(currentLocation.getLatitude(),
-                                    currentLocation.getLongitude()), DEFAULT_ZOOM);
-                        }else{
-                            Toast.makeText(RiderMainPage.this, "unable to get current location", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        }catch (SecurityException e){
-            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Moves the camera to latitude and longitude at zoom level
-     * @param latLng
-     *      the latitude and longitude to move the camera to
-     * @param zoom
-     *      the zoom level that the camera will have
-     */
-    private void moveCamera(LatLng latLng, float zoom){
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-    }
-
-    /**
-     * Request location permission, so that we can get the location of the
-     * device. The result of the permission request is handled by a callback,
-     * onRequestPermissionsResult.
-     */
-    private void getLocationPermission() {
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION};
-        // check if we have fine location permission
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-               Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            // check if we have coarse location permission
-            if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                    Manifest.permission.ACCESS_COARSE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED){
-                /* if we have both permissions then set
-                 mLocationPermissionsGranted to true and initialize map
-                */
-                mLocationPermissionsGranted = true;
-                initMap();
-            // request coarse location permission
-            }else{
-                ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
-            }
-        // request fine location permission
-        }else{
-            ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
-        }
-    }
-
-
-    /**
-     *  Handles the result of the permission request.
-     *
-     * @param requestCode
-     *      the integer request code for the permission we are requesting
-     * @param permissions
-     *      list of strings of the permissions we are requesting
-     * @param grantResults
-     *      list of ints of the request results
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        mLocationPermissionsGranted = false;
-        // look for request permission result
-        switch(requestCode){
-            case LOCATION_PERMISSION_REQUEST_CODE:{
-                if(grantResults.length > 0 ){
-                    for (int grantResult : grantResults) {
-                        // permission is not granted
-                        if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                            mLocationPermissionsGranted = false;
-                            return;
-                        }
-                    }
-                    // permission is granted
-                    mLocationPermissionsGranted = true;
-                    // now we can initialize the map
-                    initMap();
-                }
-            }
-        }
-    }
-
     private void launchCurrentRequestActivity(){
         Intent intent = new Intent(this, RiderCurrentRideRequestActivity.class);
         startActivity(intent);
@@ -495,6 +338,12 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
 
     private void launchHomeScreen(){
         Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void launchProfileScreen() {
+        Intent intent = new Intent(this, PrivateUserProfileActivity.class);
         startActivity(intent);
     }
 
