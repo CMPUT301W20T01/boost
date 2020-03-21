@@ -147,7 +147,6 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                         @Override
                         public void onSuccess(AuthResult authResult) {
 
-                          //  ActiveUser.login(auth.getUid().get("username").toString(), ref.document(authResult.getUser().getUid()).get("password").toString());
                             if(spinner.getSelectedItem().toString().matches("Rider")) {
                                 launchHomeRider();
                             } else {
