@@ -179,6 +179,24 @@ public class Ride {
     }
 
     /**
+     * Converts String to RideStatus
+     */
+    private static RideStatus toEnum(String string){
+        switch(string){
+            case "PENDING":
+                return RideStatus.PENDING;
+            case "ACCEPTED":
+                return RideStatus.ACCEPTED;
+            case "FINISHED":
+                return RideStatus.FINISHED;
+            case "CANCELLED":
+                return RideStatus.CANCELLED;
+            default:
+                throw new IllegalArgumentException("Bad status");
+        }
+    }
+
+    /**
      * Creates a Ride object from a Map of string, object pairs
      * @param data
      *      The Map of data that represents the Ride
@@ -193,7 +211,7 @@ public class Ride {
                 (double) data.get("fare"),
                 (String) data.get("driver"),
                 (String) data.get("rider"),
-                (RideStatus) data.get("status"),
+                toEnum(data.get("status").toString()),
                 (Date) data.get("request_time"));
     }
 }

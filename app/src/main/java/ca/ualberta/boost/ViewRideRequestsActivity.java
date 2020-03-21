@@ -38,10 +38,13 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
+import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.Rider;
 import ca.ualberta.boost.models.User;
+import ca.ualberta.boost.stores.RideStore;
 import ca.ualberta.boost.stores.UserStore;
 
 /**
@@ -193,18 +196,17 @@ public class ViewRideRequestsActivity extends MapActivity implements RideRequest
      * of the Driver's specified start location
      */
     private void displayRequests(){
-        rideList = new ArrayList<>(); // comment this out later, its in fillridelist
         // clear map of previously searched requests
         for (int i = 0; i < startMarkers.size(); i++){
             Marker m = startMarkers.get(i);
             m.remove();
         }
         startMarkers.clear();
-       // fillRideList();
+        fillRideList();
         // test ride from wem to misericordia
-        rideList.add(new Ride(new LatLng(53.522515, -113.624191), new LatLng(53.5209, -113.6120), 13.5, "username"));
+   //     rideList.add(new Ride(new LatLng(53.522515, -113.624191), new LatLng(53.5209, -113.6120), 13.5, "username"));
         // test ride from thorncliffe school to aldergrove school
-        rideList.add(new Ride(new LatLng(53.517, -113.624), new LatLng(53.517497, -113.631613), 13.5, "username2"));
+     //   rideList.add(new Ride(new LatLng(53.517, -113.624), new LatLng(53.517497, -113.631613), 13.5, "username2"));
         // place markers for rides
         for (int i = 0; i < rideList.size(); i++){
             Ride ride = rideList.get(i);
@@ -220,33 +222,35 @@ public class ViewRideRequestsActivity extends MapActivity implements RideRequest
      */
     private void fillRideList(){
         rideList = new ArrayList<>();
-        handler.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (document.get("status").toString().matches("Pending")) {
-                                    Ride ride = Ride.build(document.getData());
-                                    float[] results = new float[1];
-                                    final LatLng rideStartLocation = ride.getStartLocation();
-                                    Location.distanceBetween(startLocation.latitude, startLocation.latitude,
-                                            rideStartLocation.latitude, rideStartLocation.longitude, results);
-                                    // if distance is smaller than 5km add to ride list
-                                    if (results[0] < 5000){
-                                        rideList.add(ride);
-                                    }
-                                }
-                            }
+        Promise<Collection<Ride>> ridePromise = RideStore.getRequests();
+        ridePromise.addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
+            @Override
+            public void onSuccess(Collection<Ride> rides) {
+                Log.d("TestingViewRide", "success");
+                if (!rides.isEmpty()) {
+                    for (Ride ride : rides) {
+                        LatLng rideStartLocation = ride.getStartLocation();
+                        float[] results = new float[1];
+                        Location.distanceBetween(startLocation.latitude, startLocation.latitude,
+                                rideStartLocation.latitude, rideStartLocation.longitude, results);
+                        // if distance is smaller than 5km add to rideList
+                        Log.d("TestingViewRide", Float.toString(results[0]));
+                        if (results[0] < 5000) {
+                            rideList.add(ride);
+                            Log.d("TestingViewRide", "ride added");
                         }
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(ViewRideRequestsActivity.this, "Please contact your database administrator", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                } else{
+                    Log.d("TestingViewRide", "rides is empty");
+                }
+            }
+        });
+        ridePromise.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("TestingViewRide", "failure");
+            }
+        });
     }
 
     /**
