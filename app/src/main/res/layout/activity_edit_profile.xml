@@ -11,15 +11,16 @@
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/lato_black"
         android:text="Edit Profile"
         android:textAlignment="center"
-        android:textSize="35dp"
-        android:fontFamily="@font/lato_black"
         android:textColor="@color/colorPrimaryDark"
+        android:textSize="35dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/epEmail"
