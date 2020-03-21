@@ -29,6 +29,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.ualberta.boost.models.Driver;
+import ca.ualberta.boost.models.Rider;
+import ca.ualberta.boost.models.User;
+import ca.ualberta.boost.stores.UserStore;
 
 /**
  * SignUpActivity is responsible for signing up the user
@@ -124,21 +127,35 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
     //stores user into database users
     private void storeUser() {
-        Map<String, String> map = new HashMap<>();
-        map.put("Name", firstName.getText().toString());
-        map.put("Username", userName.getText().toString());
-        map.put("Email", email.getText().toString());
-        map.put("Phone", phoneNumber.getText().toString());
-        map.put("Password", password.getText().toString());
-        map.put("id", auth.getUid());
-        map.put("role",spinner.getSelectedItem().toString());
-        Log.i("value",spinner.getSelectedItem().toString());
-        ref.document(auth.getUid()).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(SignUpActivity.this, "into the db", Toast.LENGTH_SHORT).show();
-            }
-        });
+        User user;
+        if (spinner.getSelectedItem().toString() == "Rider") {
+            user = new Rider(firstName.getText().toString(), userName.getText().toString(),
+                                   password.getText().toString(), email.getText().toString(),
+                                   phoneNumber.getText().toString());
+        } else {
+            user = new Driver(firstName.getText().toString(), userName.getText().toString(),
+                                     password.getText().toString(), email.getText().toString(),
+                                     phoneNumber.getText().toString());
+        }
+
+        UserStore.saveUser(user);
+
+//        Map<String, String> map = new HashMap<>();
+//        map.put("Name", firstName.getText().toString());
+//        map.put("Username", userName.getText().toString());
+//        map.put("Email", email.getText().toString());
+//        map.put("Phone", phoneNumber.getText().toString());
+//        map.put("Password", password.getText().toString());
+//        map.put("id", auth.getUid());
+//        map.put("role",spinner.getSelectedItem().toString());
+//        Log.i("value",spinner.getSelectedItem().toString());
+//
+//        ref.document(auth.getUid()).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+//            @Override
+//            public void onComplete(@NonNull Task<Void> task) {
+//                Toast.makeText(SignUpActivity.this, "into the db", Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
     //signs in user and launches the home activity

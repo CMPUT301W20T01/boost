@@ -39,8 +39,8 @@ public class Rider extends User {
         map.put("password", this.getPassword());
         map.put("email", this.getEmail());
         map.put("phoneNumber", this.getPhoneNumber());
-        map.put("rating", null);
-        map.put("rates", null);
+        map.put("rating", 0);
+        map.put("rates", 0);
         return map;
     }
 
