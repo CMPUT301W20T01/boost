@@ -2,6 +2,7 @@ package ca.ualberta.boost.models;
 
 import android.annotation.SuppressLint;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Date;
@@ -204,6 +205,7 @@ public class Ride {
      *      A new Ride object
      */
     public static Ride build(Map<String, Object> data) {
+        Timestamp timestamp = (Timestamp) data.get("request_time");
         return new Ride(
                 // convert GeoPoints to LatLng
                 toLatLng((GeoPoint) data.get("start_location")),
@@ -212,7 +214,7 @@ public class Ride {
                 (String) data.get("driver"),
                 (String) data.get("rider"),
                 toEnum(data.get("status").toString()),
-                (Date) data.get("request_time"));
+                timestamp.toDate());
     }
 }
 
