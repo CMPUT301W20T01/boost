@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -37,6 +38,8 @@ import java.util.ArrayList;
 
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.Rider;
+import ca.ualberta.boost.models.User;
+import ca.ualberta.boost.stores.UserStore;
 
 /**
  * ViewRidesRequestsActivity is responsible for allowing drivers to search for
@@ -136,14 +139,20 @@ public class ViewRideRequestsActivity extends MapActivity {
         for (int i = 0; i < rideList.size(); i++){
             float[] results = new float[1];
             Ride ride = rideList.get(i);
-            LatLng rideStartLocation = ride.getStartLocation();
+            final LatLng rideStartLocation = ride.getStartLocation();
             Location.distanceBetween(startLocation.latitude, startLocation.latitude,
                     rideStartLocation.latitude, rideStartLocation.longitude, results);
             // if distance is smaller than 5km
             if (results[0] < 5000){
-                mMap.addMarker(new MarkerOptions()
-                .title(ride.getRider().getEmail())
-                .position(rideStartLocation));
+                UserStore.getUser(ride.getRiderUsername()).addOnSuccessListener(new OnSuccessListener<User>() {
+                    @Override
+                    public void onSuccess(User user) {
+                        Rider rider = (Rider) user;
+                        mMap.addMarker(new MarkerOptions()
+                                .title(rider.getEmail())
+                                .position(rideStartLocation));
+                    }
+                });
             }
         }
     }

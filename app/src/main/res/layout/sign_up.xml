@@ -57,13 +57,16 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:hint="Username"
+                android:inputType="text"
                 android:textSize="12sp" />
+
             <EditText
                 android:id="@+id/sign_up_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:hint="Email"
+                android:inputType="textEmailAddress"
                 android:textSize="12sp" />
 
             <EditText
@@ -72,6 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:hint="Phone Number"
+                android:inputType="phone"
                 android:textSize="12sp" />
 
 
@@ -81,6 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:hint="Password"
+                android:inputType="textPassword"
                 android:textSize="12sp" />
 
             <Button
