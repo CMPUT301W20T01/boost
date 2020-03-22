@@ -249,7 +249,8 @@ public class ViewRideRequestsActivity extends MapActivity implements RideRequest
         /*
          TODO: set newRide.driver_username to current user's username
          set newRide's status to accepted
-         send ride to database
+         update ride in database
+         set driver's current ride to this ride
          goto driver ride page activity
          */
     }
