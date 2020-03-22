@@ -253,6 +253,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RideRequest
          set driver's current ride to this ride
          goto driver ride page activity
          */
+
     }
 
     /**
