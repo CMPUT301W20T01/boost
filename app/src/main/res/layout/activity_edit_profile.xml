@@ -8,22 +8,21 @@
     tools:context=".EditProfileActivity">
 
     <TextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
+        android:id="@+id/edit_profile_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/lato_black"
         android:text="Edit Profile"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="35dp"
+        android:textColor="@color/colourPrimaryDark"
+        android:textSize="35sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/epEmail"
+        android:id="@+id/old_edit_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -35,10 +34,10 @@
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_profile_title" />
 
     <EditText
-        android:id="@+id/epPassword"
+        android:id="@+id/old_edit_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -50,10 +49,10 @@
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/epEmail"/>
+        app:layout_constraintTop_toBottomOf="@+id/old_edit_email"/>
 
     <EditText
-        android:id="@+id/epNewEmail"
+        android:id="@+id/new_edit_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -65,10 +64,10 @@
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/epPassword"/>
+        app:layout_constraintTop_toBottomOf="@+id/old_edit_password"/>
 
     <EditText
-        android:id="@+id/epNewPassword"
+        android:id="@+id/new_edit_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -80,10 +79,10 @@
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/epNewEmail"/>
+        app:layout_constraintTop_toBottomOf="@+id/new_edit_email"/>
 
     <Button
-        android:id="@+id/editButton"
+        android:id="@+id/edit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
@@ -96,6 +95,6 @@
         android:text="Confirm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/epNewPassword"/>
+        app:layout_constraintTop_toBottomOf="@+id/new_edit_password"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

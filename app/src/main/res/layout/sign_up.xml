@@ -8,34 +8,54 @@
     tools:context=".SignUpActivity">
 
     <TextView
-        android:id="@+id/sing_up_as_txt"
+        android:id="@+id/sign_up_title"
         android:layout_width="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="50dp"
-        android:text="Sign Up as:"
-        android:textSize="18sp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/lato_black"
+        android:text="Sign Up"
+        android:textAlignment="center"
+        android:textColor="@color/colourPrimaryDark"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/spinner"
+    <TextView
+        android:id="@+id/switch_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        app:layout_constraintStart_toEndOf="@+id/sing_up_as_txt"
-        app:layout_constraintTop_toTopOf="@+id/sing_up_as_txt">
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/lato_black"
+        android:text="Rider"
+        android:textColor="@color/colourPrimaryDark"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/type_switch"
+        app:layout_constraintTop_toBottomOf="@+id/sign_up_title" />
 
-    </Spinner>
+    <Switch
+        android:id="@+id/type_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:switchMinWidth="50dp"
+        android:thumb="@drawable/switch_thumb"
+        android:track="@drawable/switch_states"
+        app:layout_constraintBottom_toBottomOf="@+id/switch_text"
+        app:layout_constraintEnd_toEndOf="@+id/sign_up_first_name"
+        app:layout_constraintTop_toTopOf="@+id/switch_text" />
 
     <Button
         android:id="@+id/confirm_sign_up_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
+        android:background="@drawable/rounded_button_light"
         android:paddingHorizontal="40dp"
         android:text="Sign Up"
+        android:textColor="@color/colourPrimaryDark"
         android:textSize="18sp"
-        android:background="@drawable/rounded_button_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sign_up_password" />
@@ -45,15 +65,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="64dp"
-        android:hint="First Name"
+        android:hint="First Name*"
         android:inputType="text"
-        
-        android:textSize="12sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sing_up_as_txt" />
+        app:layout_constraintTop_toBottomOf="@+id/switch_text" />
 
     <EditText
         android:id="@+id/sign_up_email"
@@ -62,9 +81,9 @@
         android:layout_marginStart="64dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="64dp"
-        android:hint="Email"
+        android:hint="Email*"
         android:inputType="textEmailAddress"
-        android:textSize="12sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sign_up_username" />
@@ -76,9 +95,9 @@
         android:layout_marginStart="64dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="64dp"
-        android:hint="Phone Number"
+        android:hint="Phone Number*"
         android:inputType="phone"
-        android:textSize="12sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sign_up_email" />
@@ -90,9 +109,9 @@
         android:layout_marginStart="64dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="64dp"
-        android:hint="Password"
+        android:hint="Password*"
         android:inputType="textPassword"
-        android:textSize="12sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sign_up_phone_number" />
@@ -104,9 +123,9 @@
         android:layout_marginStart="64dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="64dp"
-        android:hint="Username"
+        android:hint="Username*"
         android:inputType="text"
-        android:textSize="12sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sign_up_first_name" />
