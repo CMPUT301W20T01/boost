@@ -4,13 +4,13 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -73,6 +73,20 @@ public class RideRequestFragment extends DialogFragment {
 
         fareText.setText(Double.toString(ride.getFare()));
         riderText.setText(ride.getRiderUsername());
+
+        riderText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Bundle bundle = new Bundle();
+                //send username to contact information fragment
+                bundle.putString("username",riderText.getText().toString());
+                UserContactInformationFragment userContactInformationFragment = new UserContactInformationFragment();
+                userContactInformationFragment.setArguments(bundle);
+                userContactInformationFragment.show(getFragmentManager(), "my fragment");
+                return true;
+            }
+        });
+
         startText.setText(startAddress);
         endText.setText(endAddress);
 
