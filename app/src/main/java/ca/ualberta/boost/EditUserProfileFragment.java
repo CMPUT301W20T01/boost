@@ -25,21 +25,25 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.models.User;
+
 /**TAKE NEW UPDATE ON USER CONTACT (EMAIL, PHONE NUMBER)
  * UPDATE TEXTVIEW AND SEND DATA TO PREVIOUS ACTIVITY TO UPDATE ON FIREBASE
  */
 public class EditUserProfileFragment extends DialogFragment {
     private FirebaseAuth auth;
     private FirebaseFirestore db;
-    //private DatabaseReference firebaseData;
-    private CollectionReference collection;
+    private CollectionReference handler;
     DocumentReference documentReference;
+    FirebaseUser currentUser;
+    User user;
 
-    private String userID;
-    private FirebaseUser currentUser;
 
     private EditText email;
     private EditText phone;
+    private EditText username;
+    private EditText password;
     private OnFragmentInteractionListener listener;
 
     EditUserProfileFragment(){}
@@ -48,7 +52,7 @@ public class EditUserProfileFragment extends DialogFragment {
     }
 
     public interface OnFragmentInteractionListener {
-        void onOkPressedEdit(String newEmail, String newPhone);
+        void onOkPressedEdit(String newEmail, String newPhone,String newUsername, String newPassword);
     }
 
     @Override
@@ -71,30 +75,23 @@ public class EditUserProfileFragment extends DialogFragment {
         //Initialize
         email = view.findViewById(R.id.email_input);
         phone = view.findViewById(R.id.phone_input);
+        username = view.findViewById(R.id.username_input);
+        password = view.findViewById(R.id.password_input);
 
-//        userID = auth.getUid();
-//        documentReference = db.collection("users").document(userID);
-
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        collection = db.collection("users");
 
         //retrieve current User profile info
-        collection.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for(QueryDocumentSnapshot document: task.getResult()){
-                                if((auth.getUid().matches(document.get("id").toString()))){
-                                    email.setText(document.get("Email").toString());
-                                    phone.setText(document.get("Phone").toString());
-                                }
-                            }
-                        }
+        auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        handler = db.collection("rides");
+        documentReference = db.collection("rides").document(auth.getUid());
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        user = ActiveUser.getUser();
 
-                    }
-                });
+        //retrieve current User profile info
+        username.setText(user.getUsername());
+        email.setText(user.getEmail());
+        phone.setText(user.getPhoneNumber());
+        password.setText(user.getPassword());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
@@ -106,7 +103,9 @@ public class EditUserProfileFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         String email_input = email.getText().toString();
                         String phone_input  = phone.getText().toString();
-                        listener.onOkPressedEdit(email_input, phone_input);
+                        String username_input = username.getText().toString();
+                        String password_input  = password.getText().toString();
+                        listener.onOkPressedEdit(email_input, phone_input,username_input,password_input);
                     }
                 }).create();
 
