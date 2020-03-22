@@ -28,6 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
+import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Driver;
 import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.PromiseImpl;
@@ -145,6 +146,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
+
                             if(spinner.getSelectedItem().toString().matches("Rider")) {
                                 launchHomeRider();
                             } else {

@@ -33,6 +33,7 @@ import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.Rider;
 import ca.ualberta.boost.models.User;
+import ca.ualberta.boost.stores.RideStore;
 import ca.ualberta.boost.stores.UserStore;
 
 
@@ -104,24 +105,10 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     @Override
     public void onAcceptPressed(Ride newRide) {
         setRiderMainPageVisibility();
-        // TODO: Change so that firebase or ride controller handles this
-        ride = newRide;
-        ride.setPending();
-        Map<String, String> map = new HashMap<>();
-        map.put("driverEmail",null);
-        map.put("endLocation", ride.getEndLocation().toString());
-        map.put("fare", String.valueOf(ride.getFare()));
-        map.put("rider",user.getEmail());
-        map.put("riderId", auth.getUid());
-        map.put("startLocation",ride.getStartLocation().toString());
-        map.put("status","Pending");
-        handler.document(user.getEmail()).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(RiderMainPage.this, "Request Sent", Toast.LENGTH_SHORT).show();
-            }
-        });
+        ride = new Ride(newRide.getStartLocation(), newRide.getEndLocation(),
+                newRide.getFare(), newRide.getRiderUsername());
 
+        RideStore.saveRide(ride);
     }
 
     @Override
@@ -169,6 +156,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
             public void onMarkerDragEnd(Marker marker) {
                 updateRideLocation(marker);
                 // TODO: update the text in the search bar to match the marker's new position
+                updateSearchBar(marker);
 
             }
         });
@@ -226,10 +214,8 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
      * This function is run when the "Request Ride" button is clicked.
      */
     private void handleRequestRideClick() {
-        setRequestLocationPageVisibility();
         ride = new Ride(0.00, ActiveUser.getUser().getUsername());
-        /* TODO: set ride to current user, then send ride to database */
-        //ride.setRider();
+        setRequestLocationPageVisibility();
         // pickup search bar
         searchPickupText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -277,6 +263,10 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
                 moveMarker(destinationMarker, latLng);
                 updateRideLocation(destinationMarker);
             }
+            // if both markers are visible
+            if (pickupMarker.isVisible() && destinationMarker.isVisible()){
+                zoomToMarkers(pickupMarker, destinationMarker);
+            }
     }
 
     /**
@@ -291,6 +281,22 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
         } else{
             ride.setEndLocation(marker.getPosition());
             Toast.makeText(RiderMainPage.this, "updated end location", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Updates the search bar corresponding to the marker
+     * with the new address
+     * @param marker
+     *      Marker that has the new location
+     */
+    private void updateSearchBar(Marker marker){
+        if (marker.getTitle().equals(pickupMarker.getTitle())){
+            String address = reverseGeoLocate(marker.getPosition());
+            searchPickupText.setText(address);
+        } else {
+            String address = reverseGeoLocate(marker.getPosition());
+            searchDestinationText.setText(address);
         }
     }
 

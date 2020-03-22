@@ -76,7 +76,7 @@ public class DriverMainPage extends MapActivity {
     private void displayRequests(){
         Intent intent = new Intent(this, ViewRideRequestsActivity.class);
         startActivity(intent);
-        finish();
+        //finish();
     }
 
     //function to launch the home screen
