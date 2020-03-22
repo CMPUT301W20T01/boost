@@ -8,82 +8,93 @@
     tools:context=".EditProfileActivity">
 
     <TextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
+        android:id="@+id/edit_profile_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/lato_black"
         android:text="Edit Profile"
         android:textAlignment="center"
-        android:textSize="30dp"
+        android:textColor="@color/colourPrimaryDark"
+        android:textSize="35sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></TextView>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/epEmail"
+        android:id="@+id/old_edit_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="24dp"
+        android:fontFamily="@font/lato"
         android:hint="current email"
         android:inputType="textEmailAddress"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/edit_profile_title" />
 
     <EditText
-        android:id="@+id/epPassword"
+        android:id="@+id/old_edit_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="24dp"
+        android:fontFamily="@font/lato"
         android:hint="current password"
         android:inputType="textPassword"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/epEmail"></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/old_edit_email"/>
 
     <EditText
-        android:id="@+id/epNewEmail"
+        android:id="@+id/new_edit_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
+        android:fontFamily="@font/lato"
         android:hint="new email"
         android:inputType="textEmailAddress"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/epPassword"></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/old_edit_password"/>
 
     <EditText
-        android:id="@+id/epNewPassword"
+        android:id="@+id/new_edit_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="24dp"
+        android:fontFamily="@font/lato"
         android:hint="new password"
         android:inputType="textPassword"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/epNewEmail"></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/new_edit_email"/>
 
     <Button
-        android:id="@+id/editButton"
-        android:layout_width="0dp"
+        android:id="@+id/edit_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="80dp"
+        android:background="@drawable/rounded_button_dark"
+        android:paddingHorizontal="50dp"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:text="Confirm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/epNewPassword"></Button>
+        app:layout_constraintTop_toBottomOf="@+id/new_edit_password"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
