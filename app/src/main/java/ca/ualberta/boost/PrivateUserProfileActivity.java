@@ -31,10 +31,6 @@ import ca.ualberta.boost.models.ActiveUser;
 public class PrivateUserProfileActivity extends AppCompatActivity implements EditUserProfileFragment.OnFragmentInteractionListener {
 
     //firebase
-    private FirebaseAuth auth;
-    private FirebaseFirestore db;
-    private CollectionReference handler;
-    DocumentReference documentReference;
     FirebaseUser currentUser;
     User user;
 
@@ -60,10 +56,6 @@ public class PrivateUserProfileActivity extends AppCompatActivity implements Edi
         userRating = findViewById(R.id.userProfilePrivateRating);
 
 
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        handler = db.collection("rides");
-        documentReference = db.collection("rides").document(auth.getUid());
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         user = ActiveUser.getUser();
 
@@ -97,10 +89,6 @@ public class PrivateUserProfileActivity extends AppCompatActivity implements Edi
 
         //UPDATE FIREBASE
         //retrieve current User profile info
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        handler = db.collection("rides");
-        documentReference = db.collection("rides").document(auth.getUid());
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         user = ActiveUser.getUser();
 

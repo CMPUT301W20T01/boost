@@ -32,10 +32,6 @@ import ca.ualberta.boost.models.User;
  * UPDATE TEXTVIEW AND SEND DATA TO PREVIOUS ACTIVITY TO UPDATE ON FIREBASE
  */
 public class EditUserProfileFragment extends DialogFragment {
-    private FirebaseAuth auth;
-    private FirebaseFirestore db;
-    private CollectionReference handler;
-    DocumentReference documentReference;
     FirebaseUser currentUser;
     User user;
 
@@ -80,10 +76,6 @@ public class EditUserProfileFragment extends DialogFragment {
 
 
         //retrieve current User profile info
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        handler = db.collection("rides");
-        documentReference = db.collection("rides").document(auth.getUid());
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         user = ActiveUser.getUser();
 
