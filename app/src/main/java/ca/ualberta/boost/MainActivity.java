@@ -19,13 +19,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.models.Promise;
+import ca.ualberta.boost.models.PromiseImpl;
+import ca.ualberta.boost.models.User;
+import ca.ualberta.boost.models.UserType;
+import ca.ualberta.boost.stores.UserStore;
 
 /**
  * MainActivity is responsible for signing in the user
@@ -33,10 +38,10 @@ import androidx.appcompat.app.AppCompatActivity;
  * the class also will launch the sign up page if that button is clicked
  */
 
-public class MainActivity extends AppCompatActivity implements Runnable {
+public class MainActivity extends AppCompatActivity {
 
-    private EditText loginEmail;
-    private EditText loginPassword;
+    private EditText loginEmailView;
+    private EditText loginPasswordView;
 
     private Button signUpButton;
     private Button signInButton;
@@ -44,8 +49,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private ProgressBar circleProgressBar;
 
     private FirebaseAuth auth;
-    private FirebaseFirestore db;
-    private CollectionReference handler;
 
     //Stores User's generated ID from firebase
     String currentUserId;
@@ -60,11 +63,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         // put your code here...
         circleProgressBar.setAlpha(0);
-
     }
 
     @Override
@@ -77,12 +79,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         //get references to fireStore
         auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        handler = db.collection("users");
 
         //initialize EditText views
-        loginEmail = findViewById(R.id.sign_in_email);
-        loginPassword = findViewById(R.id.sign_in_password);
+        loginEmailView = findViewById(R.id.sign_in_email);
+        loginPasswordView = findViewById(R.id.sign_in_password);
 
         //open SignUp activity when the sign_up_button is clicked by calling openSignUpActivity
         signUpButton = findViewById(R.id.sign_up_button);
@@ -99,9 +99,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             @Override
             public void onClick(View v) {
                 Log.i("values","works");
-//                signInUser();
+                signInUser();
                 //launching a thread here
-                run();
+//                run();
             }
         });
     }
@@ -109,93 +109,77 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     //sign in as a Driver or a rider
     private void signInUser() {
         circleProgressBar.setAlpha(1);
-        if (authenticate()) {
-            auth.signInWithEmailAndPassword(loginEmail.getText().toString().trim(), loginPassword.getText().toString().trim())
+        final String email = loginEmailView.getText().toString().trim();
+        final String password = loginPasswordView.getText().toString().trim();
+        if (isValidInput(email, password)) {
+            auth.signInWithEmailAndPassword(email, password)
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            Toast.makeText(MainActivity.this, "Sign In Successful!", Toast.LENGTH_SHORT).show();
-//                            currentUserId = auth.getCurrentUser().getEmail().toString();
-                            currentUserId = auth.getUid();
-                            //check if user is rider or a driver
-                            checkRole(currentUserId);
+                            UserStore.getUserByEmail(email).addOnSuccessListener(new OnSuccessListener<User>() {
+                                @Override
+                                public void onSuccess(User user) {
+                                    Toast.makeText(MainActivity.this, "Sign in successful!", Toast.LENGTH_SHORT).show();
+                                    ActiveUser.login(user);
+                                    launchHome(user.getType());
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(MainActivity.this, "Incorrect username or password.", Toast.LENGTH_SHORT).show();
+                                    circleProgressBar.setAlpha(0);
+                                }
+                            });
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            Log.d("Sign In", e.toString());
+                            Toast.makeText(MainActivity.this, "Incorrect username or password.", Toast.LENGTH_SHORT).show();
                             circleProgressBar.setAlpha(0);
                         }
                     });
-        } else{
+        } else {
             circleProgressBar.setAlpha(0);
         }
     }
 
     //method to open Rider or Driver HomePage
-    private void launchHome(String role){
-        if(role.matches("Rider")) {
-            Intent intent = new Intent(this, RiderMainPage.class);
-            startActivity(intent);
-        } else{
-            Intent intent = new Intent(this, DriverMainPage.class);
-            startActivity(intent);
+    private void launchHome(UserType type) {
+        Intent intent;
+        if (type == UserType.RIDER) {
+            intent = new Intent(this, RiderMainPage.class);
+        } else { // type == UserType.DRIVER
+            intent = new Intent(this, DriverMainPage.class);
         }
+        startActivity(intent);
         finish();
     }
 
     //method to open SignUp activity
-    public void openSignUpActivity(){
+    public void openSignUpActivity() {
         Intent intent = new Intent(this, SignUpActivity.class );
         startActivity(intent);
     }
 
     //method to check if user to login has signed up already
-    private boolean authenticate(){
-        if(loginEmail.getText().toString().matches("")){
-            Toast.makeText(this, "Enter a Email", Toast.LENGTH_SHORT).show();
+    private boolean isValidInput(String username, String password) {
+        if(username.isEmpty()) {
+            Toast.makeText(this, "Username required", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(loginPassword.getText().toString().matches("")){
-            Toast.makeText(this, "Enter a password", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if(loginEmail.getText().toString().length() < 6){
-            Toast.makeText(this, "password too short lol", Toast.LENGTH_SHORT).show();
+        if(password.isEmpty()) {
+            Toast.makeText(this, "Password required", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
     }
 
-    @Override
-    public void run(){
-        android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_DISPLAY);
-        signInUser();
-    }
-
-    //method to check the role of a user
-    private void checkRole(final String id){
-        handler.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for(QueryDocumentSnapshot document: task.getResult()){
-                                if(id.matches(document.get("id").toString())){
-                                    Log.i("value",document.get("id").toString());
-                                    launchHome(document.get("role").toString());
-                                }
-                            }
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(MainActivity.this, "Something went wrong please contact the database administrator", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
+//    @Override
+//    public void run() {
+////        android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_DISPLAY);
+//        signInUser();
+//    }
 }
 

@@ -15,6 +15,7 @@ import javax.annotation.Nullable;
 
 public abstract class User {
 
+    private UserType type;
     private String firstName;
     private String username;
     private String password;
@@ -25,7 +26,8 @@ public abstract class User {
     private @Nullable Ride activeRide;
 
     // constructor
-    protected User(String firstName, String username, String password, String email, String phoneNumber) {
+    protected User(UserType type, String firstName, String username, String password, String email, String phoneNumber) {
+        this.type = type;
         this.username = username;
         this.firstName = firstName;
         this.password = password;
@@ -36,6 +38,10 @@ public abstract class User {
     public abstract Map<String, Object> data();
 
     // getters
+    public UserType getType() {
+        return type;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -71,6 +77,10 @@ public abstract class User {
     }
 
     // setters
+    public void setType(UserType type) {
+        this.type = type;
+    }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }

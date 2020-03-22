@@ -11,6 +11,7 @@ import ca.ualberta.boost.stores.UserStore;
 
 public class ActiveUser {
     private static User user = null;
+    private static Ride currentRide = null;
 
     private ActiveUser() {} // can't build Active User
 
@@ -23,20 +24,34 @@ public class ActiveUser {
         return user;
     }
 
+    public static Ride getCurrentRide() {
+        if (user == null) {
+            return null;
+        }
+        return currentRide;
+    }
+
+    public static boolean setCurrentRide(Ride ride) {
+        if (currentRide == null) {
+            currentRide = ride;
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isOnRide() {
+        return currentRide != null;
+    }
+
     /**
-     * Set the user using the app
-     * @param username
-     *      The current user's username
-     * @param password
-     *      The current user's password
+     *
+     * @param user
      */
-    public static void login(String username, final String password) {
-        UserStore.getUser(username)
-            .addOnSuccessListener(new OnSuccessListener<User>() {
-                @Override
-                public void onSuccess(User user) {
-                    ActiveUser.user = user;
-                }
-            });
+    public static void login(User user) {
+        ActiveUser.user = user;
+    }
+
+    public static void logout() {
+        ActiveUser.user = null;
     }
 }

@@ -2,6 +2,7 @@ package ca.ualberta.boost.models;
 
 import android.annotation.SuppressLint;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Date;
@@ -97,11 +98,11 @@ public class Ride {
         return fare;
     }
 
-    public String getDriver_username() {
+    public String getDriverUsername() {
         return driver_username;
     }
 
-    public String getRider_username() {
+    public String getRiderUsername() {
         return rider_username;
     }
 
@@ -121,11 +122,11 @@ public class Ride {
         this.fare = fare;
     }
 
-    public void setDriver_username(String driver) {
+    public void setDriverUsername(String driver) {
         this.driver_username = driver;
     }
 
-    public void setRider_username(String rider) {
+    public void setRiderUsername(String rider) {
         this.rider_username = rider;
     }
 
@@ -179,6 +180,24 @@ public class Ride {
     }
 
     /**
+     * Converts String to RideStatus
+     */
+    private static RideStatus toEnum(String string){
+        switch(string){
+            case "PENDING":
+                return RideStatus.PENDING;
+            case "ACCEPTED":
+                return RideStatus.ACCEPTED;
+            case "FINISHED":
+                return RideStatus.FINISHED;
+            case "CANCELLED":
+                return RideStatus.CANCELLED;
+            default:
+                throw new IllegalArgumentException("Bad status");
+        }
+    }
+
+    /**
      * Creates a Ride object from a Map of string, object pairs
      * @param data
      *      The Map of data that represents the Ride
@@ -186,6 +205,7 @@ public class Ride {
      *      A new Ride object
      */
     public static Ride build(Map<String, Object> data) {
+        Timestamp timestamp = (Timestamp) data.get("request_time");
         return new Ride(
                 // convert GeoPoints to LatLng
                 toLatLng((GeoPoint) data.get("start_location")),
@@ -193,8 +213,8 @@ public class Ride {
                 (double) data.get("fare"),
                 (String) data.get("driver"),
                 (String) data.get("rider"),
-                (RideStatus) data.get("status"),
-                (Date) data.get("request_time"));
+                toEnum(data.get("status").toString()),
+                timestamp.toDate());
     }
 }
 

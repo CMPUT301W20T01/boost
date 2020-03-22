@@ -49,7 +49,7 @@ public class RideStore {
      * @return
      *      The instance of the RideStore
      */
-    private static RideStore getInstance() {
+    public static RideStore getInstance() {
         if (instance == null) {
             instance = new RideStore();
         }

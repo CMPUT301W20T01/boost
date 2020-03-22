@@ -28,7 +28,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
+import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Driver;
+import ca.ualberta.boost.models.Promise;
+import ca.ualberta.boost.models.PromiseImpl;
+import ca.ualberta.boost.models.Rider;
+import ca.ualberta.boost.models.User;
+import ca.ualberta.boost.stores.UserStore;
 
 /**
  * SignUpActivity is responsible for signing up the user
@@ -46,9 +52,6 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     private Button signUpButton;
     private Spinner spinner;
 
-    //fireStore
-    CollectionReference ref;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,9 +68,6 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         password = findViewById(R.id.sign_up_password);
 
         signUpButton = findViewById(R.id.confirm_sign_up_button);
-
-        //fireStore reference to users
-        ref = FirebaseFirestore.getInstance().collection("users");
 
         //Reference spinner
         spinner = findViewById(R.id.spinner);
@@ -124,21 +124,18 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
     //stores user into database users
     private void storeUser() {
-        Map<String, String> map = new HashMap<>();
-        map.put("Name", firstName.getText().toString());
-        map.put("Username", userName.getText().toString());
-        map.put("Email", email.getText().toString());
-        map.put("Phone", phoneNumber.getText().toString());
-        map.put("Password", password.getText().toString());
-        map.put("id", auth.getUid());
-        map.put("role",spinner.getSelectedItem().toString());
-        Log.i("value",spinner.getSelectedItem().toString());
-        ref.document(auth.getUid()).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(SignUpActivity.this, "into the db", Toast.LENGTH_SHORT).show();
-            }
-        });
+        User user;
+        if (spinner.getSelectedItem().toString().equals("Rider")) {
+            user = new Rider(firstName.getText().toString(), userName.getText().toString(),
+                                   password.getText().toString(), email.getText().toString(),
+                                   phoneNumber.getText().toString());
+        } else {
+            user = new Driver(firstName.getText().toString(), userName.getText().toString(),
+                                     password.getText().toString(), email.getText().toString(),
+                                     phoneNumber.getText().toString());
+        }
+
+        UserStore.saveUser(user);
     }
 
     //signs in user and launches the home activity
@@ -149,6 +146,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
+
                             if(spinner.getSelectedItem().toString().matches("Rider")) {
                                 launchHomeRider();
                             } else {
@@ -189,26 +187,20 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
     }
 
-    public boolean uniqueUserName(final String username){
-        final boolean[] flag = new boolean[1];
-        flag[0] = false;
-        ref.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for(QueryDocumentSnapshot document: task.getResult()){
-                                if(username.matches(document.get("Username").toString())){
-                                    Toast.makeText(SignUpActivity.this, "Username is already in use lol", Toast.LENGTH_SHORT).show();
-                                    Log.i("value",username);
-                                    Log.i("value",document.get("Username").toString());
-                                    flag[0] = true;
-                                }
-                            }
-                        }
-                    }
-                });
-        Log.i("value",String.valueOf(flag[0]));
-        return flag[0];
+    public Promise<Boolean> uniqueUsername(String username) {
+        final PromiseImpl<Boolean> isUnique = new PromiseImpl<>();
+        UserStore.getUser(username).addOnSuccessListener(new OnSuccessListener<User>() {
+            @Override
+            public void onSuccess(User user) {
+                isUnique.resolve(false);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                isUnique.resolve(true);
+            }
+        });
+
+        return isUnique;
     }
 }

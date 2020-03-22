@@ -104,13 +104,10 @@ public class PrivateUserProfileActivity extends AppCompatActivity implements Edi
         db = FirebaseFirestore.getInstance();
         collection = db.collection("users");
         // Update an existing document
-        //NOT COMPLETED
         DocumentReference docRef = collection.document(auth.getUid());
         docRef.update("Email", newEmail, "Phone", newPhone);
         auth.getCurrentUser().updateEmail(newEmail);
 
-
-        // (async) Update one field
 
     }
 
