@@ -28,7 +28,7 @@ import ca.ualberta.boost.models.ActiveUser;
 /**RETRIEVE USER PROFILE AND DISPLAY IT
  * EDIT PROFILE TO FIREBASE IF REQUIRED
  */
-public class PrivateUserProfileActivity extends AppCompatActivity implements EditUserProfileFragment.OnFragmentInteractionListener {
+public class UserProfileActivity extends AppCompatActivity implements EditUserProfileFragment.OnFragmentInteractionListener {
 
     //firebase
     FirebaseUser currentUser;
