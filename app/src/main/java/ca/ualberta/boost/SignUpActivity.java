@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import org.w3c.dom.Text;
 
+import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Driver;
 import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.PromiseImpl;

@@ -11,6 +11,7 @@ import ca.ualberta.boost.stores.UserStore;
 
 public class ActiveUser {
     private static User user = null;
+    private static Ride currentRide = null;
 
     private ActiveUser() {} // can't build Active User
 
@@ -21,6 +22,25 @@ public class ActiveUser {
      */
     public static User getUser() {
         return user;
+    }
+
+    public static Ride getCurrentRide() {
+        if (user == null) {
+            return null;
+        }
+        return currentRide;
+    }
+
+    public static boolean setCurrentRide(Ride ride) {
+        if (currentRide == null) {
+            currentRide = ride;
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isOnRide() {
+        return currentRide != null;
     }
 
     /**
