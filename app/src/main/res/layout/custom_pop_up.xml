@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:orientation="vertical"
+    android:layout_height="300dp"
+    android:background="#152238"
+    android:padding="5dp"
+    android:layout_gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contact driver"
+        android:textSize="28dp"
+        android:layout_gravity="center"
+        android:textColor="#ffffff"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="bottom">
+
+        <Button
+            android:id="@+id/email_driver_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="30dp"
+            android:text="email" />
+
+        <Button
+            android:id="@+id/call_driver_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="30dp"
+            android:text="call" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

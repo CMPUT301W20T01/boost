@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -53,6 +54,8 @@ import ca.ualberta.boost.models.Rider;
 import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.stores.UserStore;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
+
 
 /**
  * RiderMainPage defines the Home Page activity for Riders
@@ -93,7 +96,10 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     private Button confirmRequestButton;
     private Button cancelRequestButton;
     private Button logoutButton;
-//    private Button viewRequestButton;
+    private Button contactButton;
+
+
+    //    private Button viewRequestButton;
     private EditText searchPickupText;
     private EditText searchDestinationText;
     private LinearLayout searchesLayout;
@@ -102,6 +108,8 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
 
     // attributes
     private Ride ride;
+
+    Dialog myDialog;
 
 
     @Override
@@ -127,6 +135,9 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         cancelRequestButton = findViewById(R.id.cancelRequestButton);
         viewRequestButton = findViewById(R.id.viewRideRequestButton);
         logoutButton = findViewById(R.id.logoutButton);
+        contactButton = findViewById(R.id.contact_driver_button);
+        myDialog = new Dialog(this);
+
 
         // get location permission
         getLocationPermission();
@@ -153,18 +164,33 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                 launchProfileScreen();
             }
         });
+
+        //contact driver dialogue open
+        contactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openContactDialog();
+            }
+        });
+
+
     }
+
+    private void openContactDialog(){
+        Intent intent = new Intent(this, ContactDriverActivity.class);
+        startActivity(intent);
+    }
+
 
     /**
      * Initializes the map object, markers and ride
      *
-     * @param googleMap
-     *      the map object
+     * @param googleMap the map object
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if(mLocationPermissionsGranted){
+        if (mLocationPermissionsGranted) {
             getDeviceLocation();
             // makes a blue dot on the map showing current location
             mMap.setMyLocationEnabled(true);
@@ -174,27 +200,27 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
             // mMap.getUiSettings().setAllGesturesEnabled(true);
 
             // init markers and make them invisible
-            pickupMarker = mMap.addMarker(new  MarkerOptions()
+            pickupMarker = mMap.addMarker(new MarkerOptions()
                     .title("Pickup")
-                    .position(new LatLng(0,0))
+                    .position(new LatLng(0, 0))
                     .draggable(true)
                     .visible(false)
             );
 
-            destinationMarker = mMap.addMarker(new  MarkerOptions()
+            destinationMarker = mMap.addMarker(new MarkerOptions()
                     .title("Destination")
-                    .position(new LatLng(0,0))
+                    .position(new LatLng(0, 0))
                     .draggable(true)
                     .visible(false)
             );
-          
+
             init();
         }
     }
 
     /**
-     *  Creates a pending ride for the rider and adds it to the database.
-     *  This method is run when "accept" is pressed from the RideRequestSummaryFragment
+     * Creates a pending ride for the rider and adds it to the database.
+     * This method is run when "accept" is pressed from the RideRequestSummaryFragment
      */
     @Override
     public void onAcceptPressed(Ride newRide) {
@@ -204,13 +230,13 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         /* TODO: set Rider as current user and send ride to database */
         // ride.setRider();
         Map<String, String> map = new HashMap<>();
-        map.put("Driver","");
+        map.put("Driver", "");
         map.put("end_location", ride.getEndLocation().toString());
         map.put("fare", String.valueOf(ride.getFare()));
-        map.put("rider",user.getEmail());
+        map.put("rider", user.getEmail());
         map.put("riderId", auth.getUid());
-        map.put("start_location",ride.getStartLocation().toString());
-        map.put("status","Pending");
+        map.put("start_location", ride.getStartLocation().toString());
+        map.put("status", "Pending");
         handler.document(user.getEmail()).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -285,6 +311,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
 
 
     }
+
     /**
      * Allows user to choose start and end location, price, and request a ride
      * This function is run when the "Request Ride" button is clicked.
@@ -301,7 +328,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                 if (actionId == EditorInfo.IME_ACTION_SEARCH
                         || actionId == EditorInfo.IME_ACTION_DONE
                         || event.getAction() == KeyEvent.ACTION_DOWN
-                        || event.getAction() == KeyEvent.KEYCODE_ENTER){
+                        || event.getAction() == KeyEvent.KEYCODE_ENTER) {
                     Log.d("RIDER", "Got input");
                     geoLocate(searchPickupText, "Pickup");
                 }
@@ -315,7 +342,7 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                 if (actionId == EditorInfo.IME_ACTION_SEARCH
                         || actionId == EditorInfo.IME_ACTION_DONE
                         || event.getAction() == KeyEvent.ACTION_DOWN
-                        || event.getAction() == KeyEvent.KEYCODE_ENTER){
+                        || event.getAction() == KeyEvent.KEYCODE_ENTER) {
                     geoLocate(searchDestinationText, "Destination");
                 }
                 return false;
@@ -329,18 +356,18 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         Geocoder geocoder = new Geocoder(RiderMainPage.this);
         List<Address> results = new ArrayList<>();
         // get a list of results from the search location string
-        try{
+        try {
             results = geocoder.getFromLocationName(searchString, 20);
-        }catch (IOException e){
+        } catch (IOException e) {
             Toast.makeText(RiderMainPage.this,
                     "unable to find location", Toast.LENGTH_SHORT).show();
         }
         // successful results
-        if (results.size() > 0){
+        if (results.size() > 0) {
             Address address = results.get(0);
             //searchEditText.setText(address.getFeatureName());
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-            if (markerTitle.equals("Pickup")){
+            if (markerTitle.equals("Pickup")) {
                 placeMarker(pickupMarker, latLng);
             } else {
                 placeMarker(destinationMarker, latLng);
@@ -351,12 +378,10 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     /**
      * Places a marker or moves an existing one
      *
-     * @param marker
-     *      The marker to move/place from a searched location
-     * @param latLng
-     *      the new Latlng position for the marker
+     * @param marker The marker to move/place from a searched location
+     * @param latLng the new Latlng position for the marker
      */
-    private void placeMarker(Marker marker, LatLng latLng){
+    private void placeMarker(Marker marker, LatLng latLng) {
         marker.setPosition(latLng);
         marker.setVisible(true);
         moveCamera(latLng, DEFAULT_ZOOM);
@@ -366,14 +391,13 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     /**
      * Update the ride with the marker's new position
      *
-     * @param marker
-     *      the marker to get the position with which we update ride
+     * @param marker the marker to get the position with which we update ride
      */
-    private void updateRideLocation(Marker marker){
-        if (marker.getTitle().equals(pickupMarker.getTitle())){
+    private void updateRideLocation(Marker marker) {
+        if (marker.getTitle().equals(pickupMarker.getTitle())) {
             ride.setStartLocation(marker.getPosition());
             Toast.makeText(RiderMainPage.this, "updated start location", Toast.LENGTH_SHORT).show();
-        } else{
+        } else {
             ride.setEndLocation(marker.getPosition());
             Toast.makeText(RiderMainPage.this, "updated end location", Toast.LENGTH_SHORT).show();
         }
@@ -425,39 +449,38 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
     by CodingWithMitch (https://www.youtube.com/channel/UCoNZZLhPuuRteu02rh7bzsw) */
 
     /**
-     *  Gets the device's current location
+     * Gets the device's current location
      */
-    private void getDeviceLocation(){
+    private void getDeviceLocation() {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        try{
-            if(mLocationPermissionsGranted){
+        try {
+            if (mLocationPermissionsGranted) {
                 Task location = mFusedLocationProviderClient.getLastLocation();
                 location.addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             Location currentLocation = (Location) task.getResult();
                             moveCamera(new LatLng(currentLocation.getLatitude(),
                                     currentLocation.getLongitude()), DEFAULT_ZOOM);
-                        }else{
+                        } else {
                             Toast.makeText(RiderMainPage.this, "unable to get current location", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
             }
-        }catch (SecurityException e){
+        } catch (SecurityException e) {
             Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
         }
     }
 
     /**
      * Moves the camera to latitude and longitude at zoom level
-     * @param latLng
-     *      the latitude and longitude to move the camera to
-     * @param zoom
-     *      the zoom level that the camera will have
+     *
+     * @param latLng the latitude and longitude to move the camera to
+     * @param zoom   the zoom level that the camera will have
      */
-    private void moveCamera(LatLng latLng, float zoom){
+    private void moveCamera(LatLng latLng, float zoom) {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
@@ -471,45 +494,42 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
                 Manifest.permission.ACCESS_COARSE_LOCATION};
         // check if we have fine location permission
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-               Manifest.permission.ACCESS_FINE_LOCATION)
+                Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             // check if we have coarse location permission
             if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                     Manifest.permission.ACCESS_COARSE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED){
+                    == PackageManager.PERMISSION_GRANTED) {
                 /* if we have both permissions then set
                  mLocationPermissionsGranted to true and initialize map
                 */
                 mLocationPermissionsGranted = true;
                 initMap();
-            // request coarse location permission
-            }else{
+                // request coarse location permission
+            } else {
                 ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
             }
-        // request fine location permission
-        }else{
+            // request fine location permission
+        } else {
             ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
 
 
     /**
-     *  Handles the result of the permission request.
+     * Handles the result of the permission request.
      *
-     * @param requestCode
-     *      the integer request code for the permission we are requesting
-     * @param permissions
-     *      list of strings of the permissions we are requesting
-     * @param grantResults
-     *      list of ints of the request results
+     * @param requestCode  the integer request code for the permission we are requesting
+     * @param permissions  list of strings of the permissions we are requesting
+     * @param grantResults list of ints of the request results
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         mLocationPermissionsGranted = false;
         // look for request permission result
-        switch(requestCode){
-            case LOCATION_PERMISSION_REQUEST_CODE:{
-                if(grantResults.length > 0 ){
+        switch (requestCode) {
+            case LOCATION_PERMISSION_REQUEST_CODE: {
+                if (grantResults.length > 0) {
                     for (int grantResult : grantResults) {
                         // permission is not granted
                         if (grantResult != PackageManager.PERMISSION_GRANTED) {
@@ -526,12 +546,13 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         }
     }
 
-    private void launchCurrentRequestActivity(){
+
+    private void launchCurrentRequestActivity() {
         Intent intent = new Intent(this, RiderCurrentRideRequestActivity.class);
         startActivity(intent);
     }
 
-    private void launchHomeScreen(){
+    private void launchHomeScreen() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
@@ -540,5 +561,6 @@ public class RiderMainPage extends FragmentActivity implements OnMapReadyCallbac
         Intent intent = new Intent(this, PrivateUserProfileActivity.class);
         startActivity(intent);
     }
+
 
 }

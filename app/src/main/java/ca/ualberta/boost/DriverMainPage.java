@@ -195,6 +195,7 @@ public class DriverMainPage extends FragmentActivity implements OnMapReadyCallba
     private void launchHomeScreen(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void launchProfileScreen() {
