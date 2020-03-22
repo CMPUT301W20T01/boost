@@ -155,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
             intent = new Intent(this, DriverMainPage.class);
         }
         startActivity(intent);
-        finish();
     }
 
     //method to open SignUp activity
