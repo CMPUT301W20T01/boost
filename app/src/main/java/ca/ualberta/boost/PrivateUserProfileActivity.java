@@ -56,7 +56,7 @@ public class PrivateUserProfileActivity extends AppCompatActivity implements Edi
         userRating = findViewById(R.id.userProfilePrivateRating);
 
 
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+//        currentUser = FirebaseAuth.getInstance().getCurrentUser();
         user = ActiveUser.getUser();
 
         //retrieve current User profile info
@@ -89,7 +89,7 @@ public class PrivateUserProfileActivity extends AppCompatActivity implements Edi
 
         //UPDATE FIREBASE
         //retrieve current User profile info
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+//        currentUser = FirebaseAuth.getInstance().getCurrentUser();
         user = ActiveUser.getUser();
 
         user.setEmail(newEmail);

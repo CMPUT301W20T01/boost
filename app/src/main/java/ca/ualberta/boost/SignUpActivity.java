@@ -5,28 +5,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.w3c.dom.Text;
 
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Driver;
@@ -50,7 +46,8 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     private EditText phoneNumber;
     private EditText password;
     private Button signUpButton;
-    private Spinner spinner;
+    private Switch typeSwitch;
+    private TextView switchText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,13 +66,19 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
         signUpButton = findViewById(R.id.confirm_sign_up_button);
 
-        //Reference spinner
-        spinner = findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this , R.array.userType, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
-
+        //Reference switch
+        switchText = findViewById(R.id.switch_text);
+        typeSwitch = findViewById(R.id.type_switch);
+        typeSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    switchText.setText("Driver");
+                } else {
+                    switchText.setText("Rider");
+                }
+            }
+        });
 
         //Create and add user when button clicked
         signUpButton.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +92,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
     // adds user to database
     private void addUser() {
-        if(authenticate()) {
+        if(isValidInput()) {
             auth.createUserWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim())
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
@@ -125,14 +128,17 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     //stores user into database users
     private void storeUser() {
         User user;
-        if (spinner.getSelectedItem().toString().equals("Rider")) {
-            user = new Rider(firstName.getText().toString(), userName.getText().toString(),
-                                   password.getText().toString(), email.getText().toString(),
-                                   phoneNumber.getText().toString());
-        } else {
+
+        if (typeSwitch.isChecked()) {
+            //driver
             user = new Driver(firstName.getText().toString(), userName.getText().toString(),
-                                     password.getText().toString(), email.getText().toString(),
-                                     phoneNumber.getText().toString());
+                         password.getText().toString(), email.getText().toString(),
+                         phoneNumber.getText().toString());
+        } else {
+            //rider
+            user = new Rider(firstName.getText().toString(), userName.getText().toString(),
+                       password.getText().toString(), email.getText().toString(),
+                       phoneNumber.getText().toString());
         }
 
         UserStore.saveUser(user);
@@ -141,16 +147,15 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     //signs in user and launches the home activity
     private void signInUser () {
         //uniqueUserName(userName.getText().toString());
-        if(authenticate()) {
+        if (isValidInput()) {
             auth.signInWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim())
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-
-                            if(spinner.getSelectedItem().toString().matches("Rider")) {
-                                launchHomeRider();
-                            } else {
+                            if (typeSwitch.isChecked()) {
                                 launchHomeDriver();
+                            } else {
+                                launchHomeRider();
                             }
                         }
                     });
@@ -158,7 +163,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     //Return true if fields have values and password is longer than 6 characters
-    private boolean authenticate(){
+    private boolean isValidInput() {
         if(email.getText().toString().matches("")){
             Toast.makeText(this, "Enter a Email", Toast.LENGTH_SHORT).show();
             return false;
