@@ -22,21 +22,25 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firestore.v1.WriteResult;
 
+import ca.ualberta.boost.models.User;
+import ca.ualberta.boost.models.ActiveUser;
+
 /**RETRIEVE USER PROFILE AND DISPLAY IT
  * EDIT PROFILE TO FIREBASE IF REQUIRED
  */
 public class PrivateUserProfileActivity extends AppCompatActivity implements EditUserProfileFragment.OnFragmentInteractionListener {
-    FirebaseAuth auth;
+
+    //firebase
     FirebaseUser currentUser;
-    private FirebaseFirestore db;
-    private CollectionReference collection;
-    DocumentReference documentReference;
+    User user;
 
     TextView userName;
     TextView userEmail;
     TextView userPhoneNum;
     Button editButton;
     TextView userRating;
+    TextView userPassword;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,41 +49,21 @@ public class PrivateUserProfileActivity extends AppCompatActivity implements Edi
 
         //Initialize
         userName = findViewById(R.id.userProfilePrivateName);
+        userPassword = findViewById(R.id.userProfilePassword);
         userEmail = findViewById(R.id.userProfilePrivateEmail);
         userPhoneNum = findViewById(R.id.userProfilePrivatePhone);
         editButton = findViewById(R.id.userProfilePrivateButton);
         userRating = findViewById(R.id.userProfilePrivateRating);
 
 
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        collection = db.collection("users");
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        user = ActiveUser.getUser();
 
         //retrieve current User profile info
-        collection.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for(QueryDocumentSnapshot document: task.getResult()){
-                                    if((auth.getUid().matches(document.get("id").toString()))){
-                                    userName.setText(document.get("Name").toString());
-                                    userEmail.setText(document.get("Email").toString());
-                                    userPhoneNum.setText(document.get("Phone").toString());
-                                        /**
-                                         *
-                                         * ONLY UNCOMMENT THE FOLLOWING LINES IF YOU ARE USING A KNOWN USER PROFILE WITH THE
-                                         * RatingUp AND Rating Down FIELDS IN THE DATABASE OR ELSE THE CODE WILL BREAK.
-                                         */
-//                                    userRating.setText(
-//                                         document.get("RatingUp").toString()+"\uD83D\uDC4D    "
-//                                         +document.get("RatingDown").toString()+"\uD83D\uDC4E");
-                                }
-                            }
-                        }
-
-                    }
-                });
+        userName.setText(user.getUsername());
+        userEmail.setText(user.getEmail());
+        userPhoneNum.setText(user.getPhoneNumber());
+        userPassword.setText(user.getPassword());
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,30 +74,29 @@ public class PrivateUserProfileActivity extends AppCompatActivity implements Edi
     }
 
     @Override
-    public void onOkPressedEdit(String newEmail, String newPhone) {
+    public void onOkPressedEdit(String newEmail, String newPhone, String newUsername, String newPassword) {
 
         userEmail = findViewById(R.id.userProfilePrivateEmail);
         userPhoneNum = findViewById(R.id.userProfilePrivatePhone);
+        userName = findViewById(R.id.userProfilePrivateName);
+        userPassword = findViewById(R.id.userProfilePassword);
 
         //UPDATE TEXTVIEW
         userEmail.setText(newEmail);
         userPhoneNum.setText(newPhone);
+        userName.setText(newUsername);
+        userPassword.setText(newPassword);
 
         //UPDATE FIREBASE
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        collection = db.collection("users");
-        // Update an existing document
-        DocumentReference docRef = collection.document(auth.getUid());
-        docRef.update("Email", newEmail, "Phone", newPhone);
-        auth.getCurrentUser().updateEmail(newEmail);
+        //retrieve current User profile info
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        user = ActiveUser.getUser();
 
-
-    }
-
-    private void launchEditProfile(){
-        Intent intent = new Intent(this, EditProfileActivity.class);
-        startActivity(intent);
+        user.setEmail(newEmail);
+        user.setUsername(newUsername);
+        user.setPhoneNumber(newPhone);
+        user.setPassword(newPassword);
+        synchronized (user){user.notify();}// DOESNT CHANGE FIREBASE??
     }
 
 }
