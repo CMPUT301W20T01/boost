@@ -24,6 +24,7 @@ import com.google.firestore.v1.WriteResult;
 
 import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.stores.UserStore;
 
 /**RETRIEVE USER PROFILE AND DISPLAY IT
  * EDIT PROFILE TO FIREBASE IF REQUIRED
@@ -31,10 +32,11 @@ import ca.ualberta.boost.models.ActiveUser;
 public class UserProfileActivity extends AppCompatActivity implements EditUserProfileFragment.OnFragmentInteractionListener {
 
     //firebase
-    FirebaseUser currentUser;
+//    FirebaseUser currentUser;
     User user;
 
     TextView userName;
+    TextView userFirstName;
     TextView userEmail;
     TextView userPhoneNum;
     Button editButton;
@@ -48,7 +50,8 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         setContentView(R.layout.user_profile_private);
 
         //Initialize
-        userName = findViewById(R.id.userProfilePrivateName);
+        userName = findViewById(R.id.userProfileUserName);
+        userFirstName = findViewById(R.id.userProfileFirstName);
         userPassword = findViewById(R.id.userProfilePassword);
         userEmail = findViewById(R.id.userProfilePrivateEmail);
         userPhoneNum = findViewById(R.id.userProfilePrivatePhone);
@@ -56,11 +59,12 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         userRating = findViewById(R.id.userProfilePrivateRating);
 
 
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+       // currentUser = FirebaseAuth.getInstance().getCurrentUser();
         user = ActiveUser.getUser();
 
         //retrieve current User profile info
         userName.setText(user.getUsername());
+        userFirstName.setText(user.getFirstName());
         userEmail.setText(user.getEmail());
         userPhoneNum.setText(user.getPhoneNumber());
         userPassword.setText(user.getPassword());
@@ -74,29 +78,20 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
     }
 
     @Override
-    public void onOkPressedEdit(String newEmail, String newPhone, String newUsername, String newPassword) {
-
-        userEmail = findViewById(R.id.userProfilePrivateEmail);
-        userPhoneNum = findViewById(R.id.userProfilePrivatePhone);
-        userName = findViewById(R.id.userProfilePrivateName);
-        userPassword = findViewById(R.id.userProfilePassword);
+    public void onOkPressedEdit(String newEmail, String newPhone, String newName) {
 
         //UPDATE TEXTVIEW
         userEmail.setText(newEmail);
         userPhoneNum.setText(newPhone);
-        userName.setText(newUsername);
-        userPassword.setText(newPassword);
+        userFirstName.setText(newName);
+
 
         //UPDATE FIREBASE
-        //retrieve current User profile info
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        user = ActiveUser.getUser();
-
         user.setEmail(newEmail);
-        user.setUsername(newUsername);
+        user.setFirstName(newName);
         user.setPhoneNumber(newPhone);
-        user.setPassword(newPassword);
-        synchronized (user){user.notify();}// DOESNT CHANGE FIREBASE??
+        UserStore.saveUser(user);
+
     }
 
 }

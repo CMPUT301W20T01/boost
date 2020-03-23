@@ -85,6 +85,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         startMarkers = new ArrayList<>();
         endMarker = mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(0,0))
+                                .title("Destination")
                                 .visible(false));
 
         // cancel button
@@ -125,6 +126,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+
                // if the marker is a start location marker
                if (startMarkers.contains(marker)){
                    // make markers less opaque
@@ -143,6 +145,8 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
                    // show button that says VIEW DETAILS
                    detailsButton.setVisibility(View.VISIBLE);
                }
+               // show both markers titles
+               marker.showInfoWindow();
                 return true;
             }
 
@@ -185,7 +189,8 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
             Ride ride = rideList.get(i);
             Log.d("TestingViewRide", ride.getRiderUsername());
             startMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .position(ride.getStartLocation())));
+                    .position(ride.getStartLocation())
+                    .title("Pickup")));
             }
     }
 
@@ -230,6 +235,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
          set driver's current ride to this ride
          goto driver ride page activity
          */
+
     }
 
     /**

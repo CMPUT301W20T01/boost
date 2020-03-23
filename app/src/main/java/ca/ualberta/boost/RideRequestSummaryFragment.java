@@ -39,7 +39,7 @@ public class RideRequestSummaryFragment extends DialogFragment{
      * positive button (accept) is pressed
      */
     public interface OnFragmentInteractionListener {
-        void onAcceptPressed(Ride newRide);
+        void onAcceptPressed();
     }
 
     @Override
@@ -59,7 +59,6 @@ public class RideRequestSummaryFragment extends DialogFragment{
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_ride_request_summary, null);
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_ride_summary, null);
         fareText = view.findViewById(R.id.fareText);
-        tipText = view.findViewById(R.id.tipText);
 
         fareText.setText(Double.toString(ride.getFare()));
 
@@ -74,12 +73,8 @@ public class RideRequestSummaryFragment extends DialogFragment{
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        double tip = Double.parseDouble(tipText.getText().toString());
-                        ride.setFare(ride.getFare() + tip);
                         // send ride request in parent activity
-                        listener.onAcceptPressed(ride);
-
-
+                        listener.onAcceptPressed();
                     }
                 }).create();
     }

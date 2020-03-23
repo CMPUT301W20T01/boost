@@ -94,12 +94,12 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
      *  This method is run when "accept" is pressed from the RideRequestSummaryFragment
      */
     @Override
-    public void onAcceptPressed(Ride newRide) {
+    public void onAcceptPressed() {
         setRiderMainPageVisibility();
-        ride = new Ride(newRide.getStartLocation(), newRide.getEndLocation(),
-                newRide.getFare(), newRide.getRiderUsername());
-
-        RideStore.saveRide(ride);
+        // makes a ride with pending status and automatic date
+        Ride finalRide = new Ride(ride.getStartLocation(), ride.getEndLocation(),
+                ride.getFare(), ride.getRiderUsername());
+        ActiveUser.setCurrentRide(finalRide);
     }
 
     @Override
