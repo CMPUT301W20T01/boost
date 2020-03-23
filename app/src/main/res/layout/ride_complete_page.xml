@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/ride_complete_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/lato_black"
+        android:textColor="@color/colourPrimary"
+        android:text="Ride Complete!"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/rate_driver_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="55dp"
+        android:fontFamily="@font/lato_black"
+        android:text="Rate your driver:"
+        android:textColor="@color/colourPrimaryDark"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ride_complete_title" />
+
+    <ImageButton
+        android:id="@+id/thumbs_up_button"
+        android:layout_width="89dp"
+        android:layout_height="71dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="32dp"
+        android:background="@color/fui_transparent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rate_driver_text"
+        app:srcCompat="@drawable/thumbs_up_states" />
+
+    <ImageButton
+        android:id="@+id/thumbs_down_button"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="100dp"
+        android:background="@color/fui_transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/thumbs_up_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/thumbs_up_button"
+        app:srcCompat="@drawable/thumbs_down_states" />
+
+    <TextView
+        android:id="@+id/add_tip_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/lato_black"
+        android:text="Add a tip:"
+        android:textColor="@color/colourPrimaryDark"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/thumbs_up_button" />
+
+    <TextView
+        android:id="@+id/tip_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:ems="4"
+        android:fontFamily="@font/lato"
+        android:inputType="none"
+        android:text="$0.00"
+        android:textAlignment="center"
+        android:textColor="@color/colourPrimaryDark"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_tip_text" />
+
+    <ImageButton
+        android:id="@+id/subtract_tip_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="@color/fui_transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/tip_amount"
+        app:layout_constraintEnd_toStartOf="@+id/tip_amount"
+        app:layout_constraintTop_toTopOf="@+id/tip_amount"
+        app:srcCompat="@drawable/subtract_button" />
+
+    <ImageButton
+        android:id="@+id/add_tip_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@color/fui_transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/tip_amount"
+        app:layout_constraintStart_toEndOf="@+id/tip_amount"
+        app:layout_constraintTop_toTopOf="@+id/tip_amount"
+        app:srcCompat="@drawable/add_button" />
+
+    <TextView
+        android:id="@+id/total_fare_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="64dp"
+        android:fontFamily="@font/lato_black"
+        android:text="Total:"
+        android:textColor="@color/colourPrimaryDark"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tip_amount" />
+
+    <TextView
+        android:id="@+id/total_fare_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="120dp"
+        android:fontFamily="@font/lato"
+        android:text="$34.50"
+        android:textColor="@color/colourPrimaryDark"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="@+id/total_fare_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/total_fare_text" />
+
+    <Button
+        android:id="@+id/purchase_code_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:background="@drawable/rounded_button_light"
+        android:fontFamily="@font/lato_black"
+        android:paddingHorizontal="30dp"
+        android:text="Purchase Code"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/total_fare_text" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
