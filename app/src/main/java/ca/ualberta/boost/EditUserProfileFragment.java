@@ -32,23 +32,19 @@ import ca.ualberta.boost.models.User;
  * UPDATE TEXTVIEW AND SEND DATA TO PREVIOUS ACTIVITY TO UPDATE ON FIREBASE
  */
 public class EditUserProfileFragment extends DialogFragment {
-    FirebaseUser currentUser;
+//    FirebaseUser currentUser;
     User user;
 
 
     private EditText email;
     private EditText phone;
-    private EditText username;
-    private EditText password;
+    private EditText name;
     private OnFragmentInteractionListener listener;
 
     EditUserProfileFragment(){}
-    EditUserProfileFragment(FirebaseUser currentUser){
-        this.currentUser = currentUser;
-    }
 
     public interface OnFragmentInteractionListener {
-        void onOkPressedEdit(String newEmail, String newPhone,String newUsername, String newPassword);
+        void onOkPressedEdit(String newEmail, String newPhone,String newName);
     }
 
     @Override
@@ -71,19 +67,14 @@ public class EditUserProfileFragment extends DialogFragment {
         //Initialize
         email = view.findViewById(R.id.email_input);
         phone = view.findViewById(R.id.phone_input);
-        username = view.findViewById(R.id.username_input);
-        password = view.findViewById(R.id.password_input);
+        name = view.findViewById(R.id.name_input);
 
-
-        //retrieve current User profile info
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
         user = ActiveUser.getUser();
 
         //retrieve current User profile info
-        username.setText(user.getUsername());
+        name.setText(user.getFirstName());
         email.setText(user.getEmail());
         phone.setText(user.getPhoneNumber());
-        password.setText(user.getPassword());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
@@ -95,9 +86,8 @@ public class EditUserProfileFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         String email_input = email.getText().toString();
                         String phone_input  = phone.getText().toString();
-                        String username_input = username.getText().toString();
-                        String password_input  = password.getText().toString();
-                        listener.onOkPressedEdit(email_input, phone_input,username_input,password_input);
+                        String name_input = name.getText().toString();
+                        listener.onOkPressedEdit(email_input, phone_input,name_input);
                     }
                 }).create();
 
