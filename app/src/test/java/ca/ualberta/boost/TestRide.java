@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import ca.ualberta.boost.models.Driver;
 import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.RideStatus;
 import ca.ualberta.boost.models.Rider;
 
 public class TestRide {
@@ -20,11 +21,7 @@ public class TestRide {
         double lon2 = -122.409840;
         LatLng startLocation = new LatLng(lat1, lon1);
         LatLng endLocation = new LatLng(lat2, lon2);
-        Ride ride = new Ride(startLocation, endLocation, 10.00, new Rider("Elton",
-                                                                                "rocketman",
-                                                                                "tinyDancer",
-                                                                                "rocketman@gmail.com",
-                                                                                "03251947").getUsername());
+        Ride ride = new Ride(startLocation, endLocation, 10.00, "rocketman");
         return ride;
     }
 
@@ -35,6 +32,12 @@ public class TestRide {
         assertEquals(10.00, ride.getFare());
 
         assertEquals(13.83, ride.baseFare());
-        
+    }
+
+    @Test
+    void testRideStatus() {
+        Ride ride = mockRide1();
+
+        assertEquals(RideStatus.PENDING, ride.getRideStatus());
     }
 }

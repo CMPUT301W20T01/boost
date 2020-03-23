@@ -1,5 +1,7 @@
 package ca.ualberta.boost.models;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import ca.ualberta.boost.stores.RideStore;
@@ -41,12 +43,6 @@ public class ActiveUser {
         return false;
     }
 
-    public static void cancelRide() {
-
-    }
-
-
-
     public static boolean isOnRide() {
         return currentRide != null;
     }
@@ -55,7 +51,7 @@ public class ActiveUser {
      *
      * @param user
      */
-    public static void login(User user) {
+    public static void login(@NonNull User user) {
         ActiveUser.user = user;
     }
 
