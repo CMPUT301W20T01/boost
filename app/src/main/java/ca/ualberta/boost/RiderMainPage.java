@@ -99,7 +99,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
         // makes a ride with pending status and automatic date
         Ride finalRide = new Ride(ride.getStartLocation(), ride.getEndLocation(),
                 ride.getFare(), ride.getRiderUsername());
-        RideStore.saveRide(finalRide);
+        ActiveUser.setCurrentRide(finalRide);
     }
 
     @Override
