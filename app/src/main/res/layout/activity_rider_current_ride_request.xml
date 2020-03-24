@@ -13,21 +13,25 @@
         android:layout_height="wrap_content"
         android:text="Current Request"
         android:id="@+id/edit_profile_title"
-        android:textSize="30dp">
+        android:textSize="30dp"
+        android:layout_marginBottom="15dp"
+        android:background="#FFAA1D">
     </TextView>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/usernameRideRequest"
-        android:textSize="20dp">
+        android:textSize="20dp"
+        android:layout_marginBottom="15dp">
     </TextView>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/requestStartLocation"
-        android:textSize="20dp">
+        android:textSize="20dp"
+        android:layout_marginBottom="15dp">
     </TextView>
     <TextView
         android:layout_width="match_parent"
@@ -39,20 +43,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/requestFare"
-        android:textSize="20dp">
+        android:textSize="20dp"
+        android:layout_marginBottom="15dp">
     </TextView>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/requestStatus"
-        android:textSize="20dp">
+        android:textSize="20dp"
+        android:layout_marginBottom="15dp">
     </TextView>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/driverUserName"
         android:textSize="20dp"
-        android:layout_marginBottom="50dp">
+        android:layout_marginBottom="15dp">
     </TextView>
 
     <Button
@@ -60,7 +66,10 @@
         android:layout_height="wrap_content"
         android:text="Cancel"
         android:textSize="30dp"
-        android:id="@+id/cancelRideRequestButton">
+        android:id="@+id/cancelRideRequestButton"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rounded_button_dark"
+        android:textColor="#ffffffff">
     </Button>
 
 

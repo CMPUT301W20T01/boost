@@ -5,7 +5,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -75,6 +77,9 @@ public class RideRequestSummaryFragment extends DialogFragment{
                     public void onClick(DialogInterface dialog, int which) {
                         // send ride request in parent activity
                         listener.onAcceptPressed();
+                        Log.i("testValue","here");
+                        Intent intent = new Intent(getContext(), RiderCurrentRideRequestActivity.class);
+                        startActivity(intent);
                     }
                 }).create();
     }
