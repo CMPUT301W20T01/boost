@@ -24,6 +24,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".DriverRideActivity"></activity>
+        <activity android:name=".QRActivity" android:exported="true"/>
+        <activity android:name=".QRCodeFragment" android:exported="true"/>
+        <activity android:name=".DriverAcceptedRiderPendingFragment" />
         <activity android:name=".RiderCurrentRideRequestActivity" />
         <activity android:name=".UserProfileActivity" />
         <activity android:name=".EditUserProfileFragment" />
