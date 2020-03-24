@@ -24,6 +24,7 @@ import com.google.firestore.v1.WriteResult;
 
 import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.stores.UserStore;
 
 /**RETRIEVE USER PROFILE AND DISPLAY IT
  * EDIT PROFILE TO FIREBASE IF REQUIRED
@@ -93,10 +94,10 @@ public class PrivateUserProfileActivity extends AppCompatActivity implements Edi
         user = ActiveUser.getUser();
 
         user.setEmail(newEmail);
-        user.setUsername(newUsername);
+//        user.setUsername(newUsername); NOT ALLOWED TO SAVE USER
         user.setPhoneNumber(newPhone);
         user.setPassword(newPassword);
-        synchronized (user){user.notify();}// DOESNT CHANGE FIREBASE??
+        UserStore.saveUser(user);
     }
 
 }
