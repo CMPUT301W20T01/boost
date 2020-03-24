@@ -3,6 +3,7 @@ package ca.ualberta.boost;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class UserContactInformationFragment extends DialogFragment {
         riderEmail = view.findViewById(R.id.userFragmentEmail);
         //get username from previous fragment
         email = getArguments().getString("username");
+        Log.i("testValue",email);
         db = FirebaseFirestore.getInstance();
         collection = db.collection("users");
         collection.get()
@@ -49,6 +51,7 @@ public class UserContactInformationFragment extends DialogFragment {
                             for(QueryDocumentSnapshot document: task.getResult()){
                                 if(test.matches(document.get("username").toString())){
                                     riderPhoneNumber.setText("Phone Number: " + document.get("phoneNumber").toString());
+                                    Log.i("testValue",riderPhoneNumber.getText().toString());
                                     riderEmail.setText("Email: " + document.get("email").toString());
                                 }
                             }
