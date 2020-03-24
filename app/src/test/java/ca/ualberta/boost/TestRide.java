@@ -24,7 +24,7 @@ public class TestRide {
                                                                                 "rocketman",
                                                                                 "tinyDancer",
                                                                                 "rocketman@gmail.com",
-                                                                                "03251947"));
+                                                                                "03251947").getUsername());
         return ride;
     }
 
