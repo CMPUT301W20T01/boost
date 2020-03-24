@@ -2,22 +2,17 @@ package ca.ualberta.boost;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -26,33 +21,25 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.Ride;
-import ca.ualberta.boost.models.Rider;
-import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.stores.RideStore;
-import ca.ualberta.boost.stores.UserStore;
 
 /**
  * ViewRidesRequestsActivity is responsible for allowing drivers to search for
  * open ride requests, and displays these ride requests
  */
 
-public class ViewRideRequestsActivity extends MapActivity implements RideRequestFragment.OnFragmentInteractionListener {
+public class ViewRideRequestsActivity extends MapActivity implements RequestDetailsFragment.OnFragmentInteractionListener {
 
     // constants
     BitmapDescriptor SPECIAL = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
@@ -62,11 +49,6 @@ public class ViewRideRequestsActivity extends MapActivity implements RideRequest
     private EditText searchStartText;
     private Button cancelButton;
     private Button detailsButton;
-
-    // firebase
-    private FirebaseAuth auth;
-    private FirebaseFirestore db;
-    private CollectionReference handler;
 
     // attributes
     private LatLng startLocation;
@@ -85,11 +67,6 @@ public class ViewRideRequestsActivity extends MapActivity implements RideRequest
         searchStartText = findViewById(R.id.searchStartEditText);
         cancelButton = findViewById(R.id.cancelButton);
         detailsButton = findViewById(R.id.detailsButton);
-
-        // firebase
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        handler = db.collection("rides");
     }
 
     @Override
@@ -108,6 +85,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RideRequest
         startMarkers = new ArrayList<>();
         endMarker = mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(0,0))
+                                .title("Destination")
                                 .visible(false));
 
         // cancel button
@@ -125,7 +103,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RideRequest
                 if (chosenRide != null){
                     String pickupAddress = reverseGeoLocate(chosenRide.getStartLocation());
                     String destinationAddress = reverseGeoLocate(chosenRide.getEndLocation());
-                    new RideRequestFragment(chosenRide, pickupAddress, destinationAddress).show(getSupportFragmentManager(), "REQ_SUM");
+                    new RequestDetailsFragment(chosenRide, pickupAddress, destinationAddress).show(getSupportFragmentManager(), "REQ_SUM");
                 }
             }
         });
@@ -148,6 +126,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RideRequest
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+
                // if the marker is a start location marker
                if (startMarkers.contains(marker)){
                    // make markers less opaque
@@ -166,6 +145,8 @@ public class ViewRideRequestsActivity extends MapActivity implements RideRequest
                    // show button that says VIEW DETAILS
                    detailsButton.setVisibility(View.VISIBLE);
                }
+               // show both markers titles
+               marker.showInfoWindow();
                 return true;
             }
 
@@ -208,7 +189,8 @@ public class ViewRideRequestsActivity extends MapActivity implements RideRequest
             Ride ride = rideList.get(i);
             Log.d("TestingViewRide", ride.getRiderUsername());
             startMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .position(ride.getStartLocation())));
+                    .position(ride.getStartLocation())
+                    .title("Pickup")));
             }
     }
 
@@ -253,6 +235,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RideRequest
          set driver's current ride to this ride
          goto driver ride page activity
          */
+
     }
 
     /**

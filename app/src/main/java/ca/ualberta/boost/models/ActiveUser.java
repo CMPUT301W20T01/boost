@@ -2,6 +2,7 @@ package ca.ualberta.boost.models;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import ca.ualberta.boost.stores.RideStore;
 import ca.ualberta.boost.stores.UserStore;
 
 /**
@@ -34,10 +35,17 @@ public class ActiveUser {
     public static boolean setCurrentRide(Ride ride) {
         if (currentRide == null) {
             currentRide = ride;
+            RideStore.saveRide(ride);
             return true;
         }
         return false;
     }
+
+    public static void cancelRide() {
+
+    }
+
+
 
     public static boolean isOnRide() {
         return currentRide != null;

@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
+                                    Log.d("Sign In", e.toString());
                                     Toast.makeText(MainActivity.this, "Incorrect username or password.", Toast.LENGTH_SHORT).show();
                                     circleProgressBar.setAlpha(0);
                                 }
@@ -155,7 +156,6 @@ public class MainActivity extends AppCompatActivity {
             intent = new Intent(this, DriverMainPage.class);
         }
         startActivity(intent);
-        finish();
     }
 
     //method to open SignUp activity

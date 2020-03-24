@@ -183,6 +183,7 @@ public class Ride {
      * Converts String to RideStatus
      */
     private static RideStatus toEnum(String string){
+
         switch(string){
             case "PENDING":
                 return RideStatus.PENDING;

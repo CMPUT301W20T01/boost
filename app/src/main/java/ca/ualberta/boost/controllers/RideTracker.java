@@ -19,7 +19,6 @@ public class RideTracker {
     }
 
     //functions
-    //change status of the ride, and notify rider/driver
     public void NotifyAccept(){
         rideEventListener.onAccepted(ride);
     }

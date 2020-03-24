@@ -39,7 +39,7 @@
         android:id="@+id/userProfilePrivatePasswordText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="12dp"
         android:text="Password:"
         android:textSize="24sp"
@@ -77,10 +77,21 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userProfilePrivateNameText" />
+        app:layout_constraintTop_toBottomOf="@+id/userProfileFirstNameText" />
 
     <TextView
-        android:id="@+id/userProfilePrivateNameText"
+        android:id="@+id/userProfileUserNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Username:"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/yellow_background_home_screen" />
+
+    <TextView
+        android:id="@+id/userProfileFirstNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -88,7 +99,17 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/yellow_background_home_screen" />
+        app:layout_constraintTop_toBottomOf="@+id/userProfileUserNameText" />
+
+    <TextView
+        android:id="@+id/userProfileFirstName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="First Name"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/userProfileFirstNameText"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/userProfileFirstNameText" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -98,14 +119,14 @@
         app:layout_constraintGuide_percent="0.31" />
 
     <TextView
-        android:id="@+id/userProfilePrivateName"
+        android:id="@+id/userProfileUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name"
+        android:text="Username"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/userProfilePrivateNameText"
+        app:layout_constraintBottom_toBottomOf="@+id/userProfileUserNameText"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/userProfilePrivateNameText" />
+        app:layout_constraintTop_toTopOf="@+id/userProfileUserNameText" />
 
     <TextView
         android:id="@+id/userProfilePrivateEmail"
@@ -133,7 +154,7 @@
         android:layout_marginTop="12dp"
         android:text="password"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginLeft="15dp"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toEndOf="@+id/userProfilePrivatePasswordText"
         app:layout_constraintTop_toBottomOf="@+id/userProfilePrivateRating" />

@@ -1,6 +1,5 @@
 package ca.ualberta.boost;
 
-import androidx.annotation.NonNull;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,23 +17,15 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
-import ca.ualberta.boost.models.Rider;
-import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.stores.RideStore;
-import ca.ualberta.boost.stores.UserStore;
 
 
 /**
@@ -103,12 +94,12 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
      *  This method is run when "accept" is pressed from the RideRequestSummaryFragment
      */
     @Override
-    public void onAcceptPressed(Ride newRide) {
+    public void onAcceptPressed() {
         setRiderMainPageVisibility();
-        ride = new Ride(newRide.getStartLocation(), newRide.getEndLocation(),
-                newRide.getFare(), newRide.getRiderUsername());
-
-        RideStore.saveRide(ride);
+        // makes a ride with pending status and automatic date
+        Ride finalRide = new Ride(ride.getStartLocation(), ride.getEndLocation(),
+                ride.getFare(), ride.getRiderUsername());
+        ActiveUser.setCurrentRide(finalRide);
     }
 
     @Override
@@ -343,7 +334,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     }
 
     private void launchProfileScreen() {
-        Intent intent = new Intent(this, PrivateUserProfileActivity.class);
+        Intent intent = new Intent(this, UserProfileActivity.class);
         startActivity(intent);
     }
 
