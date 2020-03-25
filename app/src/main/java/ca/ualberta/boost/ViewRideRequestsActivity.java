@@ -254,7 +254,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
 
         // update ride in database
         newRide.setDriverUsername(activeUser.getUsername());
-        newRide.accept();
+        newRide.driverAccept();
         RideStore.saveRide(newRide);
 
         // set driver's current ride to this ride
@@ -276,7 +276,14 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
     }
 
     @Override
-    public void onAccepted(Ride ride) {
+    public void onDriverAccepted(Ride ride) {
+        Intent intent = new Intent(this, DriverRideActivity.class);
+        startActivity(intent);
+    }
+
+
+    @Override
+    public void onRiderAccepted(Ride ride) {
         Intent intent = new Intent(this, DriverRideActivity.class);
         startActivity(intent);
     }

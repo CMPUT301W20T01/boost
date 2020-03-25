@@ -19,8 +19,12 @@ public class RideTracker {
     }
 
     //functions
-    public void NotifyAccept(){
-        rideEventListener.onAccepted(ride);
+    public void NotifyDriverAccept(){
+        rideEventListener.onDriverAccepted(ride);
+    }
+
+    public void NotifyRiderAccept(){
+        rideEventListener.onRiderAccepted(ride);
     }
 
     public void NotifyCancelled(){
@@ -34,4 +38,5 @@ public class RideTracker {
     public void updateLocation(){
         rideEventListener.onLocationChanged();
     } //NOT SURE
+    //listen to driver location
 }
