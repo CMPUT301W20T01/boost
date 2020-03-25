@@ -3,6 +3,8 @@ package ca.ualberta.boost;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,9 +32,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.stores.RideStore;
+import ca.ualberta.boost.stores.UserStore;
 
 /**
  * ViewRidesRequestsActivity is responsible for allowing drivers to search for
@@ -57,6 +62,8 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
     private ArrayList<Marker> startMarkers;
     private Marker endMarker;
     private Ride chosenRide;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,10 +88,12 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
 
     @Override
     protected void init() {
+
         mMap = getMap();
         startMarkers = new ArrayList<>();
         endMarker = mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(0,0))
+                                .title("Destination")
                                 .visible(false));
 
         // cancel button
@@ -125,6 +134,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+
                // if the marker is a start location marker
                if (startMarkers.contains(marker)){
                    // make markers less opaque
@@ -143,6 +153,8 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
                    // show button that says VIEW DETAILS
                    detailsButton.setVisibility(View.VISIBLE);
                }
+               // show both markers titles
+               marker.showInfoWindow();
                 return true;
             }
 
@@ -185,7 +197,8 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
             Ride ride = rideList.get(i);
             Log.d("TestingViewRide", ride.getRiderUsername());
             startMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .position(ride.getStartLocation())));
+                    .position(ride.getStartLocation())
+                    .title("Pickup")));
             }
     }
 
@@ -223,13 +236,21 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
      */
     @Override
     public void onAcceptPressed(Ride newRide) {
-        /*
-         TODO: set newRide.driver_username to current user's username
-         set newRide's status to accepted
-         update ride in database
-         set driver's current ride to this ride
-         goto driver ride page activity
-         */
+
+        User activeUser = ActiveUser.getUser();
+
+        // update ride in database
+        newRide.setDriverUsername(activeUser.getUsername());
+        newRide.accept();
+        RideStore.saveRide(newRide);
+
+        // set driver's current ride to this ride
+        activeUser.setActiveRide(newRide);
+        UserStore.saveUser(activeUser);
+      
+        new DriverAcceptedRiderPendingFragment(chosenRide).show(getSupportFragmentManager(), "Pending_Rider_Accept");
+
+
     }
 
     /**
