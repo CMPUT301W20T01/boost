@@ -6,7 +6,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/generate_button"
+        android:id="@+id/scan_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -14,11 +14,11 @@
         android:text="Scan"/>
 
     <Button
-        android:id="@+id/scan_button"
+        android:id="@+id/generate_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Generate"
-        app:layout_constraintBottom_toBottomOf="@+id/generate_button"
+        app:layout_constraintBottom_toBottomOf="@+id/scan_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

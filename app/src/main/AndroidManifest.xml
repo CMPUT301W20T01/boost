@@ -24,12 +24,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".DriverRideActivity"></activity>
+        <activity android:name=".QRActivity" android:exported="true"/>
+        <activity android:name=".QRCodeFragment" android:exported="true"/>
+        <activity android:name=".DriverAcceptedRiderPendingFragment" />
         <activity android:name=".RiderCurrentRideRequestActivity" />
         <activity android:name=".UserProfileActivity" />
         <activity android:name=".EditUserProfileFragment" />
         <activity android:name=".ViewRideRequestsActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".DriverMainPage" />
+        <activity android:name=".OnCompleteActivity" android:screenOrientation="portrait"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

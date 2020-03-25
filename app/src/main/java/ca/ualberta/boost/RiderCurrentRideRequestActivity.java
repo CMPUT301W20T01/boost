@@ -2,6 +2,7 @@ package ca.ualberta.boost;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -70,6 +71,7 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
         riderUserName = findViewById(R.id.usernameRideRequest);
         cancelButton = findViewById(R.id.cancelRideRequestButton);
 
+
         //firebase
 //        auth = FirebaseAuth.getInstance();
 //        db = FirebaseFirestore.getInstance();
@@ -89,6 +91,27 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
             }
         });
 
+        driverUserName.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(driverUserName.getText().toString().matches("")){
+                    Toast.makeText(RiderCurrentRideRequestActivity.this, "No Driver Yet", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    //Launch the profile page with the driver's information
+                    Bundle bundle = new Bundle();
+                    //send username to contact information fragment
+                    bundle.putString("username",driverUserName.getText().toString());
+                    UserContactInformationFragment userContactInformationFragment = new UserContactInformationFragment();
+                    userContactInformationFragment.setArguments(bundle);
+                    userContactInformationFragment.show(getSupportFragmentManager(), "my fragment");
+//                    FragmentManager manager = getSupportFragmentManager();
+
+                }
+                return false;
+            }
+        });
+
     }
 
     //function to retrieve the relevant information about a ride request for the current user
@@ -101,14 +124,14 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
                 Log.i("RESULT","rides numbers: "+rides.size());
                 for (Ride currentRide : rides) {
                     if (currentRide.getRiderUsername().equals(currentUser.getUsername())){
-                        startLocation.setText(currentRide.getStartLocation().toString());
-                        endLocation.setText(currentRide.getEndLocation().toString());
-                        fare.setText(Double.toString(currentRide.getFare()));
-                        status.setText(currentRide.getRideStatus().toString());
+                        startLocation.setText("Start Location: "+currentRide.getStartLocation().toString());
+                        endLocation.setText("End Location: "+currentRide.getEndLocation().toString());
+                        fare.setText("Fare: "+Double.toString(currentRide.getFare()) + "QR Bucks");
+                        status.setText("Status: "+currentRide.getRideStatus().toString());
                         driverUserName.setText(currentRide.getDriverUsername());
                         Log.i("testValue",currentRide.getRiderUsername());
                         Log.i("testValue",currentUser.getUsername());
-                        riderUserName.setText(currentRide.getRiderUsername());
+                        riderUserName.setText("Rider: "+currentRide.getRiderUsername());
                 }
             }
         }
@@ -186,6 +209,7 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
         fare.setText("");
         status.setText("");
         riderUserName.setText("");
+        driverUserName.setText("");
     }
 }
 
