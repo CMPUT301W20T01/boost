@@ -3,6 +3,8 @@ package ca.ualberta.boost;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -57,6 +59,8 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
     private ArrayList<Marker> startMarkers;
     private Marker endMarker;
     private Ride chosenRide;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +85,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
 
     @Override
     protected void init() {
+
         mMap = getMap();
         startMarkers = new ArrayList<>();
         endMarker = mMap.addMarker(new MarkerOptions()
@@ -235,6 +240,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
          set driver's current ride to this ride
          goto driver ride page activity
          */
+        new DriverAcceptedRiderPendingFragment(chosenRide).show(getSupportFragmentManager(), "Pending_Rider_Accept");
 
     }
 
