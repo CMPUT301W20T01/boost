@@ -94,7 +94,6 @@ public class DriverAcceptedRiderPendingFragment extends DialogFragment {
 
                         // set driver's current ride to this ride
                         activeUser.setActiveRide(null);
-                        UserStore.saveUser(null);
                     }
                 });
         //NEED TO IMPLEMENT CHANGE RIDE STATUS TO PENDING AGAIN;
