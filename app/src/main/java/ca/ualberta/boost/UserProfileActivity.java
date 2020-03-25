@@ -75,6 +75,26 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                 new EditUserProfileFragment().show(getSupportFragmentManager(),"Edit User Contact Info");
             }
         });
+
+       userEmail.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               String email = userEmail.getText().toString();
+               Intent intent = new Intent(UserProfileActivity.this, EmailActivity.class);
+               intent.putExtra("to", email);
+               startActivity(intent);
+           }
+       });
+
+       userPhoneNum.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               String phone = userPhoneNum.getText().toString();
+               Intent intent = new Intent(UserProfileActivity.this, CallActivity.class);
+               intent.putExtra("call", phone);
+               startActivity(intent);
+           }
+       });
     }
 
     @Override

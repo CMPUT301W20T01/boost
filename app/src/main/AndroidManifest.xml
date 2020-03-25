@@ -14,6 +14,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
 
     <application
         android:name=".BoostApplication"
@@ -23,7 +25,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DriverRideActivity"></activity>
+
+        <activity android:name=".CallActivity"></activity>
+        <activity android:name=".EmailActivity" />
+        <activity android:name=".DriverRideActivity" />
         <activity android:name=".QRActivity" android:exported="true"/>
         <activity android:name=".QRCodeFragment" android:exported="true"/>
         <activity android:name=".DriverAcceptedRiderPendingFragment" />
@@ -52,7 +57,9 @@
         <activity
             android:name=".RiderMainPage"
             android:label="@string/title_activity_rider_main_page" />
-        <activity android:name=".MainActivity" android:screenOrientation="portrait">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
