@@ -46,6 +46,7 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ride_complete_page);
+        getSupportFragmentManager();
 
 //        ride = ActiveUser.getCurrentRide();
 //        UserStore.getUser(ride.getDriverUsername()).addOnSuccessListener(new OnSuccessListener<User>() {
@@ -101,6 +102,8 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.purchase_code_button:
                 // Bring up QR code fragment
+                QRCodeFragment fragment = new QRCodeFragment(totalAmount.doubleValue());
+                fragment.show(getSupportFragmentManager(),"QRCode");
                 break;
             default:
                 break;
