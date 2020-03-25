@@ -33,6 +33,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import ca.ualberta.boost.controllers.RideEventListener;
+import ca.ualberta.boost.controllers.RideTracker;
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.Ride;
@@ -45,7 +47,7 @@ import ca.ualberta.boost.stores.UserStore;
  * open ride requests, and displays these ride requests
  */
 
-public class ViewRideRequestsActivity extends MapActivity implements RequestDetailsFragment.OnFragmentInteractionListener {
+public class ViewRideRequestsActivity extends MapActivity implements RequestDetailsFragment.OnFragmentInteractionListener, RideEventListener {
 
     // constants
     BitmapDescriptor SPECIAL = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
@@ -66,6 +68,10 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
 
+    //RIDE EVENT LISTENER
+    RideTracker rideTracker;
+    private RideEventListener rideEventListener;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +81,9 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         searchStartText = findViewById(R.id.searchStartEditText);
         cancelButton = findViewById(R.id.cancelButton);
         detailsButton = findViewById(R.id.detailsButton);
+
+        //RIDE LISTENER
+        rideTracker = new RideTracker(rideEventListener,null);
     }
 
     @Override
@@ -160,6 +169,9 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
             }
 
         });
+
+        //SET UP RIDE EVENT LISTENER
+        rideTracker = new RideTracker(rideEventListener, null);
 
     }
 
@@ -251,6 +263,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
       
         new DriverAcceptedRiderPendingFragment(chosenRide).show(getSupportFragmentManager(), "Pending_Rider_Accept");
 
+
     }
 
     /**
@@ -262,4 +275,20 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         finish();
     }
 
+    @Override
+    public void onAccepted(Ride ride) {
+        Intent intent = new Intent(this, DriverRideActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onCancelled(Ride ride) {
+
+    }
+
+    @Override
+    public void onFinished(Ride ride) {}//NULL
+
+    @Override
+    public void onLocationChanged() {}//NULL
 }

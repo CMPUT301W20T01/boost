@@ -15,5 +15,5 @@ public interface RideEventListener {
     public void onAccepted(Ride ride);
     public void onCancelled(Ride ride);
     public void onFinished(Ride ride);
-    public void onLocationChanged(MapView view);
+    public void onLocationChanged(); //NOT SURE
 }

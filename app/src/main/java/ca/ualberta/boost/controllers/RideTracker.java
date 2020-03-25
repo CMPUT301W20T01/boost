@@ -3,19 +3,19 @@ package ca.ualberta.boost.controllers;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 
+import javax.annotation.Nullable;
+
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.RideStatus;
 
 public class RideTracker {
     RideEventListener rideEventListener;
     Ride ride;
-    MapView mapView; //UNSURE
 
     //constructor
-    RideTracker(RideEventListener rideEventListener, Ride ride){
+    public RideTracker(RideEventListener rideEventListener, @Nullable Ride ride){
         this.rideEventListener = rideEventListener;
         this.ride = ride;
-        this.mapView = mapView;
     }
 
     //functions
@@ -32,6 +32,6 @@ public class RideTracker {
     }
 
     public void updateLocation(){
-        rideEventListener.onLocationChanged(mapView);
-    }
+        rideEventListener.onLocationChanged();
+    } //NOT SURE
 }
