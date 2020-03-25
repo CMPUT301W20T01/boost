@@ -33,7 +33,7 @@ public class TestUser {
                                                                                 "rocketman",
                                                                                 "tinyDancer",
                                                                                 "rocketman@gmail.com",
-                                                                                "03251947"));
+                                                                                "03251947").getUsername());
         return ride;
     }
 
@@ -50,7 +50,7 @@ public class TestUser {
                                                                                 "rocketman",
                                                                                 "tinyDancer",
                                                                                 "rocketman@gmail.com",
-                                                                                "03251947"));
+                                                                                "03251947").getUsername());
         return ride;
     }
 
@@ -73,16 +73,6 @@ public class TestUser {
         assertEquals(driver.getFirstName(), "Bob");
     }
 
-    @Test
-    void testAddRide() {
-        Driver driver = mockDriver();
-
-        assertEquals(driver.getAllRides().size(), 0);
-
-        Ride ride = mockRide1();
-        driver.addRide(ride);
-        assertEquals(driver.getAllRides().size(), 1);
-    }
 
     @Test
     void testRating() {

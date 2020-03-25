@@ -42,10 +42,6 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
 
     //firebase
     private FirebaseAuth auth;
-    private FirebaseFirestore db;
-    private CollectionReference handler;
-    DocumentReference documentReference;
-    FirebaseUser user;
 
     // views
     private Button viewRequestButton;
@@ -71,10 +67,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
         super.onCreate(savedInstanceState);
 
         auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        handler = db.collection("rides");
-        documentReference = db.collection("rides").document(auth.getUid());
-        user = FirebaseAuth.getInstance().getCurrentUser();
+
         // get views
         searchPickupText = findViewById(R.id.searchPickupEditText);
         searchDestinationText = findViewById(R.id.searchDestinationEditText);
