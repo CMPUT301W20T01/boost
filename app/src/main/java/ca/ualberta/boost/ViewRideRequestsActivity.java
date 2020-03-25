@@ -2,6 +2,7 @@ package ca.ualberta.boost;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -32,9 +33,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.stores.RideStore;
+import ca.ualberta.boost.stores.UserStore;
 
 /**
  * ViewRidesRequestsActivity is responsible for allowing drivers to search for
@@ -233,13 +237,18 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
      */
     @Override
     public void onAcceptPressed(Ride newRide) {
-        /*
-         TODO: set newRide.driver_username to current user's username
-         set newRide's status to accepted
-         update ride in database
-         set driver's current ride to this ride
-         goto driver ride page activity
-         */
+
+        User activeUser = ActiveUser.getUser();
+
+        // update ride in database
+        newRide.setDriverUsername(activeUser.getUsername());
+        newRide.accept();
+        RideStore.saveRide(newRide);
+
+        // set driver's current ride to this ride
+        activeUser.setActiveRide(newRide);
+        UserStore.saveUser(activeUser);
+      
         new DriverAcceptedRiderPendingFragment(chosenRide).show(getSupportFragmentManager(), "Pending_Rider_Accept");
 
     }

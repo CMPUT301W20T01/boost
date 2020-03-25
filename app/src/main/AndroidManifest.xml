@@ -23,6 +23,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".DriverRideActivity"></activity>
         <activity android:name=".QRActivity" android:exported="true"/>
         <activity android:name=".QRCodeFragment" android:exported="true"/>
@@ -59,6 +60,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
