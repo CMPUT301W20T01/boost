@@ -84,8 +84,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addUser();
-//                uniqueUserName(userName.getText().toString());
+                uniqueUsername(userName.getText().toString());
             }
         });
     }
@@ -173,7 +172,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
             return false;
         }
         if(email.getText().toString().length() < 6){
-            Toast.makeText(this, "password too short lol", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Password must be 6 characters or longer", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -192,20 +191,22 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
     }
 
-    public Promise<Boolean> uniqueUsername(String username) {
-        final PromiseImpl<Boolean> isUnique = new PromiseImpl<>();
+    public void uniqueUsername(String username) {
+       // final PromiseImpl<Boolean> isUnique = new PromiseImpl<>();
         UserStore.getUser(username).addOnSuccessListener(new OnSuccessListener<User>() {
             @Override
             public void onSuccess(User user) {
-                isUnique.resolve(false);
+               // isUnique.resolve(false);
+                Toast.makeText(getApplicationContext(), "Username is taken", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                isUnique.resolve(true);
+                //isUnique.resolve(true);
+                addUser();
             }
         });
 
-        return isUnique;
+      //  return isUnique;
     }
 }

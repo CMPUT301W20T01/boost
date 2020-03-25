@@ -40,21 +40,31 @@ public class SignUpActivityTest {
         Activity activity = rule.getActivity();
     }
 
+    /**
+     * Tests that user cannot sign up with a non unique username
+     */
     @Test
     public void checkUniqueUsername() {
         Activity activity = rule.getActivity();
         solo.enterText((EditText) solo.getView(R.id.sign_up_first_name), "Test Name");
-        solo.enterText((EditText) solo.getView(R.id.sign_up_username), "michelle11");
-        // "test111@gmail.com is already taken
-        solo.enterText((EditText) solo.getView(R.id.sign_up_email), "test111@gmail.com");
-        solo.enterText((EditText) solo.getView(R.id.sign_up_phone_number), "1111111111");
-        solo.enterText((EditText) solo.getView(R.id.sign_up_password), "password1");
+        // driverMichelle is already taken
+        solo.enterText((EditText) solo.getView(R.id.sign_up_username), "driverMichelle");
+        solo.enterText((EditText) solo.getView(R.id.sign_up_email), "nkjnkjsd@gmail.com");
+        solo.enterText((EditText) solo.getView(R.id.sign_up_phone_number), "7809999999");
+        solo.enterText((EditText) solo.getView(R.id.sign_up_password), "testPassword");
         solo.clickOnButton("Sign Up");
-        solo.sleep(8000);
+        solo.searchText("Username is taken");
         // signup should fail and remain on signup activity
-        solo.assertCurrentActivity("Right Activity", SignUpActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
     }
 
+    /**
+     * Tests that signing up successfully sends a user to firebase
+     */
+    @Test
+    public void checkSignUp() {
+
+    }
 
 
     /**
