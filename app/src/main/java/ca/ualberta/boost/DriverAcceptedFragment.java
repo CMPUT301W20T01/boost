@@ -37,13 +37,15 @@ import static com.firebase.ui.auth.AuthUI.TAG;
  * if yes, move driver to CurrentRide Activity
  * if no, move driver back to ViewRideRequest
  */
-public class DriverAcceptedRiderPendingFragment extends DialogFragment {
+public class DriverAcceptedFragment extends DialogFragment {
     private RequestDetailsFragment.OnFragmentInteractionListener listener;
     private Ride ride;
     private TextView riderText;
+    RideTracker rideTracker;
 
-    DriverAcceptedRiderPendingFragment(Ride ride){
+    DriverAcceptedFragment(Ride ride){
         this.ride = ride;
+        new RideTracker(this.ride);
     }
 
     /**
@@ -75,6 +77,13 @@ public class DriverAcceptedRiderPendingFragment extends DialogFragment {
 
         riderText = view.findViewById(R.id.riderText);
         riderText.setText(ride.getRiderUsername());
+
+        riderText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new UserContactInformationFragment();
+            }
+        });
         //MAKING PENDING CONFIRMATION
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                 .setCustomTitle(titleView)

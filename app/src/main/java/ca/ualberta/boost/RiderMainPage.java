@@ -35,7 +35,7 @@ import ca.ualberta.boost.stores.RideStore;
  * complete a ride.
  */
 
-public class RiderMainPage extends MapActivity implements RideRequestSummaryFragment.OnFragmentInteractionListener {
+public class RiderMainPage extends MapActivity implements RideRequestSummaryFragment.OnFragmentInteractionListener, RiderAcceptedFragment.OnFragmentInteractionListener {
 
     // constant values
     private static final String TAG = "RiderMainPage";
@@ -90,9 +90,13 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     public void onAcceptPressed() {
         setRiderMainPageVisibility();
         // makes a ride with pending status and automatic date
-        Ride finalRide = new Ride(ride.getStartLocation(), ride.getEndLocation(),
+        ride = new Ride(ride.getStartLocation(), ride.getEndLocation(),
                 ride.getFare(), ride.getRiderUsername());
-        ActiveUser.setCurrentRide(finalRide);
+        ActiveUser.setCurrentRide(ride);
+
+        //RUN PENDING FRAGMENT
+        new RiderAcceptedFragment(ride).show(getSupportFragmentManager(), "Pending_Driver_Accept");
+
     }
 
     @Override
@@ -289,8 +293,6 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
      */
     private void handleCancelRideClick() {
         setRiderMainPageVisibility();
-        searchDestinationText.setText("");
-        searchPickupText.setText("");
     }
 
     /**
@@ -308,6 +310,8 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
      * and hides views associated with ride requesting
      */
     private void setRiderMainPageVisibility() {
+        searchDestinationText.setText("");
+        searchPickupText.setText("");
         viewRequestLayout.setVisibility(View.VISIBLE);
         confirmCancelLayout.setVisibility(View.GONE);
         searchesLayout.setVisibility(View.GONE);
@@ -331,4 +335,8 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
         startActivity(intent);
     }
 
+    @Override
+    public void onRiderAcceptPressed(Ride newRide) {
+        Log.d(TAG, "on rider accepted pressed");
+    }
 }
