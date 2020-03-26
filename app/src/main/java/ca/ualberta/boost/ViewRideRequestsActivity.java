@@ -273,14 +273,14 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
 
     @Override
     public void onDriverAccepted(Ride ride) {
-        Intent intent = new Intent(this, DriverRideActivity.class);
+        Intent intent = new Intent(this, CurrentRideActivity.class);
         startActivity(intent);
     }
 
 
     @Override
     public void onRiderAccepted(Ride ride) {
-        Intent intent = new Intent(this, DriverRideActivity.class);
+        Intent intent = new Intent(this, CurrentRideActivity.class);
         startActivity(intent);
     }
 

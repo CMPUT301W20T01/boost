@@ -38,7 +38,7 @@ import static com.firebase.ui.auth.AuthUI.TAG;
  * if no, move driver back to ViewRideRequest
  */
 public class RiderAcceptedFragment extends DialogFragment {
-    private RequestDetailsFragment.OnFragmentInteractionListener listener;
+    private RiderAcceptedFragment.OnFragmentInteractionListener listener;
     private Ride ride;
     private TextView riderText;
 
@@ -52,14 +52,14 @@ public class RiderAcceptedFragment extends DialogFragment {
      * positive button (accept) is pressed
      */
     public interface OnFragmentInteractionListener {
-        void onAcceptPressed(Ride newRide);
+        void onRiderAcceptPressed(Ride newRide);
     }
 
     @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
-        if (context instanceof RequestDetailsFragment.OnFragmentInteractionListener){
-            listener = (RequestDetailsFragment.OnFragmentInteractionListener) context;
+        if (context instanceof RiderAcceptedFragment.OnFragmentInteractionListener){
+            listener = (RiderAcceptedFragment.OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + "must implement OnFragmentInteractionListener");
@@ -93,7 +93,7 @@ public class RiderAcceptedFragment extends DialogFragment {
                         ActiveUser.cancelRide();
 
                         // set driver's current ride to this ride
-                        activeUser.setActiveRide(null);
+                        //activeUser.setActiveRide(null);
                     }
                 });
         //NEED TO IMPLEMENT CHANGE RIDE STATUS TO PENDING AGAIN;
