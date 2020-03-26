@@ -8,6 +8,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.robotium.solo.Solo;
 
@@ -21,6 +22,7 @@ import ca.ualberta.boost.stores.UserStore;
 public class SignUpActivityTest {
     private Solo solo;
     private FirebaseFirestore fb;
+    private FirebaseAuth auth;
     private String TAG = "SignUpIntentTest";
 
     @Rule
@@ -37,6 +39,7 @@ public class SignUpActivityTest {
     public void setUp() throws Exception {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         fb = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
     }
 
     /**
@@ -56,9 +59,9 @@ public class SignUpActivityTest {
     public void checkUniqueUsername() {
         Activity activity = rule.getActivity();
         solo.enterText((EditText) solo.getView(R.id.sign_up_first_name), "Test Name");
-        // driverMichelle is already taken
-        solo.enterText((EditText) solo.getView(R.id.sign_up_username), "driverMichelle");
-        solo.enterText((EditText) solo.getView(R.id.sign_up_email), "nkjnkjsd@gmail.com");
+        // riderMichelle is already taken
+        solo.enterText((EditText) solo.getView(R.id.sign_up_username), "riderMichelle");
+        solo.enterText((EditText) solo.getView(R.id.sign_up_email), "testingtesting@gmail.com");
         solo.enterText((EditText) solo.getView(R.id.sign_up_phone_number), "7809999999");
         solo.enterText((EditText) solo.getView(R.id.sign_up_password), "testPassword");
         solo.clickOnButton("Sign Up");
@@ -90,6 +93,10 @@ public class SignUpActivityTest {
                         Log.d(TAG, "user deleted");
                     }
                 });
+        if (auth.getCurrentUser() != null){
+            auth.getCurrentUser().delete();
+        }
+
 
     }
 
