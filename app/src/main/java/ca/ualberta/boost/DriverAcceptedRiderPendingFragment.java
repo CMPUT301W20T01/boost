@@ -10,11 +10,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+
+import ca.ualberta.boost.controllers.RideTracker;
+import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.User;
+import ca.ualberta.boost.stores.RideStore;
+import ca.ualberta.boost.stores.UserStore;
+
+import static com.firebase.ui.auth.AuthUI.TAG;
 
 /**
  * DriverAcceptedRidePendingFragment defines a fragment after
@@ -42,7 +56,7 @@ public class DriverAcceptedRiderPendingFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(final Context context) {
         super.onAttach(context);
         if (context instanceof RequestDetailsFragment.OnFragmentInteractionListener){
             listener = (RequestDetailsFragment.OnFragmentInteractionListener) context;
@@ -50,6 +64,7 @@ public class DriverAcceptedRiderPendingFragment extends DialogFragment {
             throw new RuntimeException(context.toString()
                     + "must implement OnFragmentInteractionListener");
         }
+
     }
 
     @NonNull
@@ -61,13 +76,31 @@ public class DriverAcceptedRiderPendingFragment extends DialogFragment {
         riderText = view.findViewById(R.id.riderText);
         riderText.setText(ride.getRiderUsername());
         //MAKING PENDING CONFIRMATION
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        // building the dialog
-        return builder
-                .setView(view)
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                 .setCustomTitle(titleView)
-                .setNegativeButton("Cancel", null).create();
+                .setView(view)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //CANCEL THE RIDE OFFER
+                        //-set driver to null
+                        //-set status to pending
+                        User activeUser = ActiveUser.getUser();
+
+                        // update ride in database
+                        ride.setDriverUsername(null);
+                        ride.setPending();
+                        RideStore.saveRide(ride);
+
+                        // set driver's current ride to this ride
+                        activeUser.setActiveRide(null);
+                    }
+                });
+        //NEED TO IMPLEMENT CHANGE RIDE STATUS TO PENDING AGAIN;
+
+        AlertDialog alert = builder.create();
+        alert.setCanceledOnTouchOutside(false);
+
+        return alert;
     }
 }

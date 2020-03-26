@@ -2,6 +2,7 @@ package ca.ualberta.boost;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -249,7 +250,6 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         UserStore.saveUser(activeUser);
       
         new DriverAcceptedRiderPendingFragment(chosenRide).show(getSupportFragmentManager(), "Pending_Rider_Accept");
-
 
     }
 
