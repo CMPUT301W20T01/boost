@@ -42,11 +42,9 @@ public class ActiveUser {
     }
 
     public static void cancelRide() {
-
+        currentRide = null;
     }
-
-
-
+    
     public static boolean isOnRide() {
         return currentRide != null;
     }
