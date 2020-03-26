@@ -28,7 +28,7 @@
 
         <activity android:name=".CallActivity"></activity>
         <activity android:name=".EmailActivity" />
-        <activity android:name=".DriverRideActivity" />
+        <activity android:name=".CurrentRideActivity" />
         <activity android:name=".QRActivity" android:exported="true"/>
         <activity android:name=".QRCodeFragment" android:exported="true"/>
         <activity android:name=".DriverAcceptedRiderPendingFragment" />

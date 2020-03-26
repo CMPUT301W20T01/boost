@@ -80,6 +80,7 @@ public class RideRequestSummaryFragment extends DialogFragment{
                         Log.i("testValue","here");
                         Intent intent = new Intent(getContext(), RiderCurrentRideRequestActivity.class);
                         startActivity(intent);
+                        listener.onAcceptPressed();
                     }
                 }).create();
     }
