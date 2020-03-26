@@ -43,7 +43,6 @@ public class QRCodeFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_qr_code, null);
-        View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_qr, null);
         Log.i("RESULT","FRAGMENT QR");
 
         //generate QR
@@ -51,12 +50,14 @@ public class QRCodeFragment extends DialogFragment {
 
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
 
-        try {
-            BitMatrix bitMatrix = qrCodeWriter.encode(Double.toString(fare), BarcodeFormat.QR_CODE, 200, 200);
-            Bitmap bitmap = Bitmap.createBitmap(200,200, Bitmap.Config.RGB_565);
+        int QRsize = 800;
 
-            for (int x = 0; x < 200; x++) {
-                for (int y = 0; y < 200; y++) {
+        try {
+            BitMatrix bitMatrix = qrCodeWriter.encode(Double.toString(fare), BarcodeFormat.QR_CODE, QRsize, QRsize);
+            Bitmap bitmap = Bitmap.createBitmap(QRsize,QRsize, Bitmap.Config.RGB_565);
+
+            for (int x = 0; x < QRsize; x++) {
+                for (int y = 0; y < QRsize; y++) {
                     bitmap.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
                 }
             }
@@ -66,12 +67,10 @@ public class QRCodeFragment extends DialogFragment {
             e.printStackTrace();
         }
 
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         // building the dialog
         return builder
-                .setView(view)
-                .setCustomTitle(titleView).create();
+                .setView(view).create();
     }
 }
