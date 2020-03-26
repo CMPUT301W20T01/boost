@@ -293,8 +293,6 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
      */
     private void handleCancelRideClick() {
         setRiderMainPageVisibility();
-        searchDestinationText.setText("");
-        searchPickupText.setText("");
     }
 
     /**
@@ -312,6 +310,8 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
      * and hides views associated with ride requesting
      */
     private void setRiderMainPageVisibility() {
+        searchDestinationText.setText("");
+        searchPickupText.setText("");
         viewRequestLayout.setVisibility(View.VISIBLE);
         confirmCancelLayout.setVisibility(View.GONE);
         searchesLayout.setVisibility(View.GONE);

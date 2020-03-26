@@ -147,6 +147,7 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
                         Log.i("TEST","Cancelling "+currentRide.getRiderUsername());
                         currentRide.cancel();
                         RideStore.saveRide(currentRide);
+                        ActiveUser.cancelRide();
                     }
                 }
             }

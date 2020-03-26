@@ -14,7 +14,7 @@ import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
 
 // TODO: Rename class to RideActivity because this class will be called by both Drivers and Riders
-public class DriverRideActivity extends MapActivity {
+public class CurrentRideActivity extends MapActivity {
     // attributes
     private Ride ride;
     public Marker pickupMarker;
