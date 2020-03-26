@@ -135,37 +135,6 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
         });
     }
 
-    //function to retrieve the relevant information about a ride request for the current user
-    private void setRideRequest3(){
-        Log.i("RESULT","Attempt to retrieve requests");
-        requests.addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
-            @Override
-            public void onSuccess(Collection<Ride> rides) {
-                Log.i("RESULT","onSuccess to retrieve requests");
-                Log.i("RESULT","rides numbers: "+rides.size());
-                for (Ride currentRide : rides) {
-                    if (currentRide.getRiderUsername().equals(currentUser.getUsername())){
-                        startLocation.setText("Start Location: "+currentRide.getStartLocation().toString());
-                        endLocation.setText("End Location: "+currentRide.getEndLocation().toString());
-                        fare.setText("Fare: "+Double.toString(currentRide.getFare()) + "QR Bucks");
-                        status.setText("Status: "+currentRide.getRideStatus().toString());
-                        driverUserName.setText(currentRide.getDriverUsername());
-                        Log.i("testValue",currentRide.getRiderUsername());
-                        Log.i("testValue",currentUser.getUsername());
-                        riderUserName.setText("Rider: "+currentRide.getRiderUsername());
-                    }
-                }
-            }
-        });
-        requests.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.i("RESULT","onFailure to retrieve requests");
-                Toast.makeText(RiderCurrentRideRequestActivity.this, "Currently no active request", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     //function to cancel a ride request
     private void cancelRideRequest() {
         Log.i("TAG","..........cancelling ride.......");
