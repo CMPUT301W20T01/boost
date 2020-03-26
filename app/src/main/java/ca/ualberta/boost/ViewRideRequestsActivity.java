@@ -80,7 +80,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         detailsButton = findViewById(R.id.detailsButton);
 
         //RIDE LISTENER
-        rideTracker = new RideTracker(rideEventListener,null);
+        //rideTracker = new RideTracker(r,null);
     }
 
     @Override
@@ -168,7 +168,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         });
 
         //SET UP RIDE EVENT LISTENER
-        rideTracker = new RideTracker(rideEventListener, null);
+        //rideTracker = new RideTracker(rideEventListener, null);
 
     }
 
@@ -246,6 +246,8 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
      */
     @Override
     public void onAcceptPressed(Ride newRide) {
+
+        new RideTracker(newRide);
 
         User activeUser = ActiveUser.getUser();
 

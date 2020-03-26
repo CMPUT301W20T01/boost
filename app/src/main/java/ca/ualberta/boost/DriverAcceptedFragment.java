@@ -41,9 +41,11 @@ public class DriverAcceptedFragment extends DialogFragment {
     private RequestDetailsFragment.OnFragmentInteractionListener listener;
     private Ride ride;
     private TextView riderText;
+    RideTracker rideTracker;
 
     DriverAcceptedFragment(Ride ride){
         this.ride = ride;
+        new RideTracker(this.ride);
     }
 
     /**
@@ -75,6 +77,13 @@ public class DriverAcceptedFragment extends DialogFragment {
 
         riderText = view.findViewById(R.id.riderText);
         riderText.setText(ride.getRiderUsername());
+
+        riderText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new UserContactInformationFragment();
+            }
+        });
         //MAKING PENDING CONFIRMATION
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                 .setCustomTitle(titleView)

@@ -13,6 +13,7 @@ import androidx.fragment.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,10 +41,12 @@ import static com.firebase.ui.auth.AuthUI.TAG;
 public class RiderAcceptedFragment extends DialogFragment {
     private RiderAcceptedFragment.OnFragmentInteractionListener listener;
     private Ride ride;
-    private TextView riderText;
+    private TextView driverText;
+    Button positiveButton;
 
     RiderAcceptedFragment(Ride ride){
         this.ride = ride;
+        new RideTracker(this.ride);
     }
 
     /**
@@ -73,12 +76,27 @@ public class RiderAcceptedFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_rider_pending_driver_request, null);
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_pending, null);
 
-        riderText = view.findViewById(R.id.riderText);
-        riderText.setText(ride.getRiderUsername());
+        driverText = view.findViewById(R.id.driverText);
+        driverText.setText(ride.getDriverUsername());
+
+        //WHEN DRIVER ACCEPTED, TEXTVIEW WILL SHOW UP DRIVER NAME
+        //CLICK ON THE NAME WILL POP UP PROFILE INFO FRAGMENT
+        //DOES NOT WORK???
+        driverText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new UserContactInformationFragment();
+            }
+        });
+
+        //LISTENING TO RIDE
+        new RideTracker(ride);
+
         //MAKING PENDING CONFIRMATION
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                 .setCustomTitle(titleView)
                 .setView(view)
+                .setPositiveButton("Accept",null)
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

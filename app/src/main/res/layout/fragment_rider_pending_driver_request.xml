@@ -9,7 +9,7 @@
         android:id="@+id/riderDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Waiting for driver to accept"
+        android:text="Waiting for driver to accept: "
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,7 +19,7 @@
         app:layout_constraintVertical_bias="0.499" />
 
     <TextView
-        android:id="@+id/riderText"
+        android:id="@+id/driverText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
