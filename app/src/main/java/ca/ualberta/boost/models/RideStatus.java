@@ -8,7 +8,8 @@ package ca.ualberta.boost.models;
 
 public enum RideStatus {
     PENDING,
-    ACCEPTED,
+    DRIVERACCEPTED,
+    RIDERACCEPTED,
     FINISHED,
     CANCELLED;
 
@@ -23,8 +24,10 @@ public enum RideStatus {
         switch(status) {
             case PENDING:
                 return "pending";
-            case ACCEPTED:
-                return "accepted";
+            case DRIVERACCEPTED:
+                return "driver accepted";
+            case RIDERACCEPTED:
+                return "rider accepted";
             case FINISHED:
                 return "finished";
             case CANCELLED:
