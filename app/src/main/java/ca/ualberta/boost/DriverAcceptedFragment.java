@@ -37,12 +37,12 @@ import static com.firebase.ui.auth.AuthUI.TAG;
  * if yes, move driver to CurrentRide Activity
  * if no, move driver back to ViewRideRequest
  */
-public class DriverAcceptedRiderPendingFragment extends DialogFragment {
+public class DriverAcceptedFragment extends DialogFragment {
     private RequestDetailsFragment.OnFragmentInteractionListener listener;
     private Ride ride;
     private TextView riderText;
 
-    DriverAcceptedRiderPendingFragment(Ride ride){
+    DriverAcceptedFragment(Ride ride){
         this.ride = ride;
     }
 

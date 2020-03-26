@@ -2,7 +2,6 @@ package ca.ualberta.boost;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -26,9 +25,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -261,7 +257,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         activeUser.setActiveRide(newRide);
         UserStore.saveUser(activeUser);
       
-        new DriverAcceptedRiderPendingFragment(chosenRide).show(getSupportFragmentManager(), "Pending_Rider_Accept");
+        new DriverAcceptedFragment(chosenRide).show(getSupportFragmentManager(), "Pending_Rider_Accept");
 
 
     }
