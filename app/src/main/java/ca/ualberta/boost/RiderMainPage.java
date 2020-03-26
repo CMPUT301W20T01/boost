@@ -18,15 +18,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.stores.RideStore;
-
 
 /**
  * RiderMainPage defines the Home Page activity for Riders

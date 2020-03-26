@@ -68,7 +68,6 @@ public class RideRequestSummaryFragment extends DialogFragment{
 
         // building the dialog
         return builder
-
                 .setView(view)
                 .setCustomTitle(titleView)
                 .setNegativeButton("Cancel", null) // null -> does nothing

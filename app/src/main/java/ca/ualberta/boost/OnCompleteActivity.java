@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 
+import ca.ualberta.boost.controllers.RideTracker;
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Driver;
 import ca.ualberta.boost.models.Ride;
@@ -75,6 +76,8 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
 
         qrCodeButton = findViewById(R.id.purchase_code_button);
         qrCodeButton.setOnClickListener(this);
+
+
     }
 
     @Override
@@ -90,10 +93,10 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.subtract_tip_button:
                 if (tipAmount.compareTo(TIP_RATE) >= 0) {
-                    // if tipamount > tip rate -> subtract tip rate
+                    // if tipamount > tip rate -> subtract tip rate from tipamount
                     changeTipText(tipAmount.subtract(TIP_RATE));
                 } else if (tipAmount.compareTo(TIP_RATE) < 0 && tipAmount.compareTo(BigDecimal.ZERO) > 0){
-                    // if tipamount < tip rate and tipamount > 0 -> make 0
+                    // if tipamount < tip rate and tipamount > 0 -> make tipamount 0
                     changeTipText(BigDecimal.ZERO);
                 }
                 break;
@@ -101,9 +104,7 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
                 changeTipText(tipAmount.add(TIP_RATE));
                 break;
             case R.id.purchase_code_button:
-                // Bring up QR code fragment
-                QRCodeFragment fragment = new QRCodeFragment(totalAmount.doubleValue());
-                fragment.show(getSupportFragmentManager(),"QRCode");
+                launchQrCode();
                 break;
             default:
                 break;
@@ -122,6 +123,8 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void launchQrCode() {
+        QRCodeFragment fragment = new QRCodeFragment(totalAmount.doubleValue());
+        fragment.show(getSupportFragmentManager(),"QRCode");
         //go to QR fragment
         //if thumbsUpButton.isSelected, add to driver's ratings, vice versa for thumbs down,
         // don't change driver's rating otherwise
