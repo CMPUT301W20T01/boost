@@ -93,6 +93,10 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
         Ride finalRide = new Ride(ride.getStartLocation(), ride.getEndLocation(),
                 ride.getFare(), ride.getRiderUsername());
         ActiveUser.setCurrentRide(finalRide);
+
+        //RUN PENDING FRAGMENT
+        new RiderAcceptedFragment(ride).show(getSupportFragmentManager(), "Pending_Driver_Accept");
+
     }
 
     @Override

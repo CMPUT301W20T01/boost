@@ -78,8 +78,8 @@ public class RideRequestSummaryFragment extends DialogFragment{
                         // send ride request in parent activity
                         listener.onAcceptPressed();
                         Log.i("testValue","here");
-                        Intent intent = new Intent(getContext(), RiderCurrentRideRequestActivity.class);
-                        startActivity(intent);
+//                        Intent intent = new Intent(getContext(), RiderCurrentRideRequestActivity.class);
+//                        startActivity(intent);
                     }
                 }).create();
     }
