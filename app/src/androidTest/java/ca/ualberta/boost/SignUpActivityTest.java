@@ -69,36 +69,7 @@ public class SignUpActivityTest {
         // signup should fail and remain on signup activity
         solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
     }
-
-    /**
-     * Tests that signing up successfully sends a user to firebase
-     */
-    @Test
-    public void checkSignUp() {
-        Activity activity = rule.getActivity();
-        solo.enterText((EditText) solo.getView(R.id.sign_up_first_name), "Test Name");
-        solo.enterText((EditText) solo.getView(R.id.sign_up_username), "TestSignUp");
-        solo.enterText((EditText) solo.getView(R.id.sign_up_email), "TestSignUp@gmail.com");
-        solo.enterText((EditText) solo.getView(R.id.sign_up_phone_number), "7801234567");
-        solo.enterText((EditText) solo.getView(R.id.sign_up_password), "testPassword");
-        solo.clickOnButton("Sign Up");
-        solo.sleep(3000);
-        solo.assertCurrentActivity("Wrong Activity", RiderMainPage.class);
-        // delete the test user
-        fb.collection("users").document("TestSignUp")
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "user deleted");
-                    }
-                });
-        if (auth.getCurrentUser() != null){
-            auth.getCurrentUser().delete();
-        }
-
-
-    }
+    
 
 
     /**
