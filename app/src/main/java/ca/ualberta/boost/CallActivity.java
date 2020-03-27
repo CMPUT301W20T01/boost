@@ -30,10 +30,26 @@ public class CallActivity extends AppCompatActivity {
         //todo: make number driver number
         editTextNumber = findViewById(R.id.edit_text_number);
         ImageView imageCall = findViewById(R.id.image_call);
+        ImageView backButton = findViewById(R.id.call_activity_back_button);
+
 
         receiver = getIntent().getExtras().getString("call");
 
         editTextNumber.setText(receiver);
+
+        imageCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makePhoneCall();
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
 
