@@ -45,6 +45,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
     Button editButton;
     TextView userRating;
     TextView userPassword;
+    TextView password;
 
 
     @Override
@@ -60,7 +61,9 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         userPhoneNum = findViewById(R.id.userProfilePrivatePhone);
         editButton = findViewById(R.id.userProfilePrivateButton);
         userRating = findViewById(R.id.userProfilePrivateRating);
-        test = "";
+        password = findViewById(R.id.userProfilePrivatePasswordText);
+
+
 
         //get the username from the fragment
 //        try {
@@ -91,7 +94,11 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                             userFirstName.setText(user1.getFirstName());
                             userEmail.setText(user1.getEmail());
                             userPhoneNum.setText(user1.getPhoneNumber());
-                            userPassword.setText(user1.getPassword());
+//                            userRating.setText(user1.);
+                            userPassword.setAlpha(0);
+                            password.setAlpha(0);
+                            editButton.setAlpha(0);
+//                            userPassword.setText(user1.getPassword());
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -102,7 +109,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                     });
         }
 
-        Log.i("alex",test);
+//        Log.i("alex",test);
 
 //        if(test.matches("")){
 //            user1 = ActiveUser.getUser();
