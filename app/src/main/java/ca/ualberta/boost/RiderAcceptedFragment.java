@@ -89,9 +89,6 @@ public class RiderAcceptedFragment extends DialogFragment {
             }
         });
 
-        //LISTENING TO RIDE
-        new RideTracker(ride);
-
         //MAKING PENDING CONFIRMATION
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                 .setCustomTitle(titleView)

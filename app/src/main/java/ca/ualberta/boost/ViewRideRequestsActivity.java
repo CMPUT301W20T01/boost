@@ -8,6 +8,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,6 +27,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.core.Tag;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,6 +42,7 @@ import ca.ualberta.boost.controllers.RideTracker;
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.RideStatus;
 import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.stores.RideStore;
 import ca.ualberta.boost.stores.UserStore;
@@ -44,7 +52,7 @@ import ca.ualberta.boost.stores.UserStore;
  * open ride requests, and displays these ride requests
  */
 
-public class ViewRideRequestsActivity extends MapActivity implements RequestDetailsFragment.OnFragmentInteractionListener, RideEventListener {
+public class ViewRideRequestsActivity extends MapActivity implements RequestDetailsFragment.OnFragmentInteractionListener{
 
     // constants
     BitmapDescriptor SPECIAL = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
@@ -67,7 +75,6 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
 
     //RIDE EVENT LISTENER
     RideTracker rideTracker;
-    private RideEventListener rideEventListener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,8 +86,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         cancelButton = findViewById(R.id.cancelButton);
         detailsButton = findViewById(R.id.detailsButton);
 
-        //RIDE LISTENER
-        //rideTracker = new RideTracker(r,null);
+
     }
 
     @Override
@@ -118,6 +124,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
                 if (chosenRide != null){
                     String pickupAddress = reverseGeoLocate(chosenRide.getStartLocation());
                     String destinationAddress = reverseGeoLocate(chosenRide.getEndLocation());
+
                     new RequestDetailsFragment(chosenRide, pickupAddress, destinationAddress).show(getSupportFragmentManager(), "REQ_SUM");
                 }
             }
@@ -166,10 +173,6 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
             }
 
         });
-
-        //SET UP RIDE EVENT LISTENER
-        //rideTracker = new RideTracker(rideEventListener, null);
-
     }
 
 
@@ -246,9 +249,6 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
      */
     @Override
     public void onAcceptPressed(Ride newRide) {
-
-        new RideTracker(newRide);
-
         User activeUser = ActiveUser.getUser();
 
         // update ride in database
@@ -259,7 +259,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         // set driver's current ride to this ride
         activeUser.setActiveRide(newRide);
         UserStore.saveUser(activeUser);
-      
+
         new DriverAcceptedFragment(chosenRide).show(getSupportFragmentManager(), "Pending_Rider_Accept");
 
     }
@@ -273,27 +273,4 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         finish();
     }
 
-    @Override
-    public void onDriverAccepted(Ride ride) {
-        Intent intent = new Intent(this, CurrentRideActivity.class);
-        startActivity(intent);
-    }
-
-
-    @Override
-    public void onRiderAccepted(Ride ride) {
-        Intent intent = new Intent(this, CurrentRideActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onCancelled(Ride ride) {
-
-    }
-
-    @Override
-    public void onFinished(Ride ride) {}//NULL
-
-    @Override
-    public void onLocationChanged() {}//NULL
 }

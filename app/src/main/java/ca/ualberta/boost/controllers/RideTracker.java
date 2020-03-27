@@ -27,52 +27,26 @@ import ca.ualberta.boost.models.RideStatus;
 public class RideTracker {
     RideEventListener rideEventListener;
     Ride ride;
+    DocumentReference docRef = null;
 
-    public static final String TAG1 = "rides/";
-    public static final String TAG2 = "status";
     //constructor
     public RideTracker(Ride ride) {
         this.ride = ride;
-        Log.i("rideListener","Snapshot listener");
-        FirebaseFirestore.getInstance()
-                .collection("rides")
-                .document(ride.id())
-                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+
+        docRef = FirebaseFirestore.getInstance().collection("rides").document(ride.id());
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                        Log.i("rideListener","Snapshot listener");
                         RideTracker.this.onEvent(documentSnapshot, e);
                     }
                 });
 
-
-
-        FirebaseDatabase.getInstance().getReference(TAG1).child(FirebaseAuth.getInstance().getUid()).child(ride.id()).child(TAG2).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.i("rideListener","Snapshot listener");
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 
     //functions
-    public void NotifyDriverAccept(){
-        rideEventListener.onDriverAccepted(ride);
-    }
-    public void NotifyRiderAccept(){
-        rideEventListener.onRiderAccepted(ride);
-    }
-    public void NotifyCancelled(){
-        rideEventListener.onCancelled(ride);
-    }
-    public void NotifyFinished(){
-        rideEventListener.onFinished(ride);
-    }
+//    public void NotifyStatusChange(){
+//        rideEventListener.onStatusChange(ride);
+//    }
     private void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
         // code to get document and finding what changed in here
         //in case of error
@@ -82,7 +56,9 @@ public class RideTracker {
         }
 
         if (documentSnapshot != null && documentSnapshot.exists()){
-            Log.i("rideListener","Current data: " + documentSnapshot.getData());
+            Log.i("rideListener","Current data: " + documentSnapshot.getData().get("status"));
+//            NotifyStatusChange();
+
         } else {
             Log.i("rideListener","null");
         }
