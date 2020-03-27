@@ -9,6 +9,8 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
@@ -56,13 +58,15 @@ public class RiderMainPageTest {
      */
     @Test
     public void testRequestRide(){
+        final CollectionReference rideCollection = FirebaseFirestore.getInstance().collection("rides");
         Rider rider = new Rider("Test Rider", "IntentTestRider", "password", "IntentTestRider@gmail.com", "7801234567");
         ActiveUser.login(rider);
         solo.clickOnButton("Request Ride");
-        solo.enterText((EditText) solo.getView(R.id.searchPickupEditText), "beercade");
+        solo.typeText((EditText) solo.getView(R.id.searchPickupEditText), "beercade");
         solo.pressSoftKeyboardSearchButton();
-        solo.enterText((EditText) solo.getView(R.id.searchDestinationEditText), "cafe mosaics");
+        solo.typeText((EditText) solo.getView(R.id.searchDestinationEditText), "cafe mosaics");
         solo.pressSoftKeyboardSearchButton();
+        solo.sleep(1000);
         solo.clickOnButton("Confirm");
         solo.clickOnText("Accept");
         // have to wait to get actualRide
@@ -73,20 +77,19 @@ public class RiderMainPageTest {
         ridePromise.addOnSuccessListener(new OnSuccessListener<Ride>() {
             @Override
             public void onSuccess(Ride ride) {
-                ActiveUser.logout();
                 assertEquals(actualRide.id(), ride.id());
                 // remove ride from firebase
+                rideCollection.document(ride.id()).delete();
+
             }
         });
         ridePromise.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 // test failed
-                ActiveUser.logout();
-                // remove ride from firebase
             }
         });
-
+        ActiveUser.logout();
     }
 
     /**
