@@ -2,6 +2,7 @@ package ca.ualberta.boost;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,7 +35,8 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
 
     //firebase
 //    FirebaseUser currentUser;
-    User user;
+    User user1;
+    String test;
 
     TextView userName;
     TextView userFirstName;
@@ -57,17 +60,88 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         userPhoneNum = findViewById(R.id.userProfilePrivatePhone);
         editButton = findViewById(R.id.userProfilePrivateButton);
         userRating = findViewById(R.id.userProfilePrivateRating);
+        test = "";
+
+        //get the username from the fragment
+//        try {
+//            Intent i = getIntent();
+//            test = i.getStringExtra("someUsername");
+//            Log.i("alex", test);
+//        } catch(Exception e){
+//            Log.i("testValue",e.toString());
+//        }
+
+        Intent i = getIntent();
+        if(i.getStringExtra("someUsername")==null){
+            user1 = ActiveUser.getUser();
+            userName.setText(user1.getUsername());
+            userFirstName.setText(user1.getFirstName());
+            userEmail.setText(user1.getEmail());
+            userPhoneNum.setText(user1.getPhoneNumber());
+            userPassword.setText(user1.getPassword());
+
+        } else {
+            test = i.getStringExtra("someUsername");
+            UserStore.getUser(test)
+                    .addOnSuccessListener(new OnSuccessListener<User>() {
+                        @Override
+                        public void onSuccess(User user) {
+                            user1 = user;
+                            userName.setText(user1.getUsername());
+                            userFirstName.setText(user1.getFirstName());
+                            userEmail.setText(user1.getEmail());
+                            userPhoneNum.setText(user1.getPhoneNumber());
+                            userPassword.setText(user1.getPassword());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(UserProfileActivity.this, "didn't work", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+
+        Log.i("alex",test);
+
+//        if(test.matches("")){
+//            user1 = ActiveUser.getUser();
+//            userName.setText(user1.getUsername());
+//            userFirstName.setText(user1.getFirstName());
+//            userEmail.setText(user1.getEmail());
+//            userPhoneNum.setText(user1.getPhoneNumber());
+//            userPassword.setText(user1.getPassword());
+//        } else {
+//            UserStore.getUser(test)
+//                    .addOnSuccessListener(new OnSuccessListener<User>() {
+//                        @Override
+//                        public void onSuccess(User user) {
+//                            user1 = user;
+//                            userName.setText(user1.getUsername());
+//                            userFirstName.setText(user1.getFirstName());
+//                            userEmail.setText(user1.getEmail());
+//                            userPhoneNum.setText(user1.getPhoneNumber());
+//                            userPassword.setText(user1.getPassword());
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Toast.makeText(UserProfileActivity.this, "didn't work", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//        }
 
 
        // currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        user = ActiveUser.getUser();
+//        user = ActiveUser.getUser();
 
         //retrieve current User profile info
-        userName.setText(user.getUsername());
-        userFirstName.setText(user.getFirstName());
-        userEmail.setText(user.getEmail());
-        userPhoneNum.setText(user.getPhoneNumber());
-        userPassword.setText(user.getPassword());
+//        userName.setText(user1.getUsername());
+//        userFirstName.setText(user1.getFirstName());
+//        userEmail.setText(user1.getEmail());
+//        userPhoneNum.setText(user1.getPhoneNumber());
+//        userPassword.setText(user1.getPassword());
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +169,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                startActivity(intent);
            }
        });
+
     }
 
     @Override
@@ -107,10 +182,10 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
 
 
         //UPDATE FIREBASE
-        user.setEmail(newEmail);
-        user.setFirstName(newName);
-        user.setPhoneNumber(newPhone);
-        UserStore.saveUser(user);
+        user1.setEmail(newEmail);
+        user1.setFirstName(newName);
+        user1.setPhoneNumber(newPhone);
+        UserStore.saveUser(user1);
 
     }
 
