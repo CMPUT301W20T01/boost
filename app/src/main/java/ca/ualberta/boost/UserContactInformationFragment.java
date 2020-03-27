@@ -29,6 +29,8 @@ public class UserContactInformationFragment extends DialogFragment {
     public String email;
     TextView riderPhoneNumber;
     TextView riderEmail;
+    TextView positiveRating;
+    TextView negativeRating;
     private CollectionReference collection;
     private FirebaseFirestore db;
 
@@ -37,6 +39,8 @@ public class UserContactInformationFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         riderPhoneNumber = view.findViewById(R.id.userFragmentPhoneNumber);
         riderEmail = view.findViewById(R.id.userFragmentEmail);
+        positiveRating = view.findViewById(R.id.positiveRating);
+        negativeRating = view.findViewById(R.id.negativeRating);
         //get username from previous fragment
         email = getArguments().getString("username");
         Log.i("testValue",email);
@@ -53,6 +57,8 @@ public class UserContactInformationFragment extends DialogFragment {
                                     riderPhoneNumber.setText("Phone Number: " + document.get("phoneNumber").toString());
                                     Log.i("testValue",riderPhoneNumber.getText().toString());
                                     riderEmail.setText("Email: " + document.get("email").toString());
+                                    positiveRating.setText(document.get("positiveRating").toString());
+                                    negativeRating.setText(document.get("negativeRating").toString());
                                 }
                             }
                         }

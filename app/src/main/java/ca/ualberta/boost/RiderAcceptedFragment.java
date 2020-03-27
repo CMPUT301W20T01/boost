@@ -91,6 +91,7 @@ public class RiderAcceptedFragment extends DialogFragment {
 
         //LISTENING TO RIDE
         new RideTracker(ride);
+        Log.i("testValue","something");
 
         //MAKING PENDING CONFIRMATION
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())

@@ -59,7 +59,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         userRating = findViewById(R.id.userProfilePrivateRating);
 
 
-       // currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        // currentUser = FirebaseAuth.getInstance().getCurrentUser();
         user = ActiveUser.getUser();
 
         //retrieve current User profile info
