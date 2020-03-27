@@ -51,6 +51,8 @@ public class DriverAcceptedFragment extends DialogFragment {
         new RideTracker(this.ride).addListener(new RideEventListener() {
             @Override
             public void onStatusChange(Ride ride) {
+                Log.i("rideListener","add Listener");
+
                 if (ride.getRideStatus()==RideStatus.RIDERACCEPTED){
                     //START INTENT
                     Log.i("rideListener","status changed to RIDERACCEPTED");
@@ -61,6 +63,8 @@ public class DriverAcceptedFragment extends DialogFragment {
 
                 if (ride.getRideStatus()==RideStatus.DRIVERACCEPTED){
                     Log.i("rideListener","status changed to DRIVERACCEPTED");
+                    Intent intent = new Intent(getActivity(), CurrentRideActivity.class);
+                    startActivity(intent);
                 }
 
                 if (ride.getRideStatus()==RideStatus.PENDING){

@@ -28,6 +28,7 @@ public class RideTracker {
     RideEventListener rideEventListener;
     Ride ride;
     DocumentReference docRef = null;
+    boolean checkDriver = false;
 
     //constructor
     public RideTracker(Ride ride) {
@@ -44,9 +45,12 @@ public class RideTracker {
     }
 
     //functions
-//    public void NotifyStatusChange(){
-//        rideEventListener.onStatusChange(ride);
-//    }
+
+    public boolean NotifyDriverAccepted() {
+        return checkDriver;
+    }
+
+
     private void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
         // code to get document and finding what changed in here
         //in case of error
@@ -57,7 +61,30 @@ public class RideTracker {
 
         if (documentSnapshot != null && documentSnapshot.exists()){
             Log.i("rideListener","Current data: " + documentSnapshot.getData().get("status"));
-//            NotifyStatusChange();
+
+            if ("DRIVERACCEPTED" == documentSnapshot.getData().get("status").toString()){
+                Log.i("rideListener","tracking status");
+                checkDriver = true;
+                rideEventListener.onStatusChange(ride);
+            }
+            if ("PENDING" == documentSnapshot.getData().get("status").toString()){
+                Log.i("rideListener","tracking status");
+                checkDriver = false;
+                rideEventListener.onStatusChange(ride);
+            }
+
+            if ("RIDERACCEPTED" == documentSnapshot.getData().get("status").toString()){
+                Log.i("rideListener","tracking status");
+                checkDriver = false;
+                rideEventListener.onStatusChange(ride);
+            }
+
+            if ("COMPLETED" == documentSnapshot.getData().get("status").toString()){
+                Log.i("rideListener","tracking status");
+                checkDriver = false;
+                rideEventListener.onStatusChange(ride);
+            }
+
 
         } else {
             Log.i("rideListener","null");

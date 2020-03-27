@@ -55,8 +55,8 @@ public class RiderAcceptedFragment extends DialogFragment {
                 if (ride.getRideStatus()== RideStatus.RIDERACCEPTED){
                     //START INTENT
                     Log.i("rideListener","status changed to RIDERACCEPTED");
-//                    Intent intent = new Intent(getActivity(), CurrentRideActivity.class);
-//                    startActivity(intent);
+                    Intent intent = new Intent(getActivity(), CurrentRideActivity.class);
+                    startActivity(intent);
 
                 }
 
@@ -64,18 +64,18 @@ public class RiderAcceptedFragment extends DialogFragment {
                     Log.i("rideListener","status changed to DRIVERACCEPTED");
                     Toast.makeText(getContext(), "Driver: "+ride.getDriverUsername()+" has accepted.", Toast.LENGTH_SHORT).show();
 
-//                    driverText = getView().findViewById(R.id.driverText);
-//                    driverText.setText(ride.getDriverUsername());
-//
-//                    //WHEN DRIVER ACCEPTED, TEXTVIEW WILL SHOW UP DRIVER NAME
-//                    //CLICK ON THE NAME WILL POP UP PROFILE INFO FRAGMENT
-//                    //DOES NOT WORK???
-//                    driverText.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            new UserContactInformationFragment();
-//                        }
-//                    });
+                    driverText = getView().findViewById(R.id.driverText);
+                    driverText.setText(ride.getDriverUsername());
+
+                    //WHEN DRIVER ACCEPTED, TEXTVIEW WILL SHOW UP DRIVER NAME
+                    //CLICK ON THE NAME WILL POP UP PROFILE INFO FRAGMENT
+                    //DOES NOT WORK???
+                    driverText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new UserContactInformationFragment();
+                        }
+                    });
                 }
             }
 
@@ -114,33 +114,12 @@ public class RiderAcceptedFragment extends DialogFragment {
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_pending, null);
 
         driverText = view.findViewById(R.id.driverText);
-        driverText.setText(ride.getDriverUsername());
 
-        //WHEN DRIVER ACCEPTED, TEXTVIEW WILL SHOW UP DRIVER NAME
-        //CLICK ON THE NAME WILL POP UP PROFILE INFO FRAGMENT
-        //DOES NOT WORK???
-        driverText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new UserContactInformationFragment();
-            }
-        });
 
         //MAKING PENDING CONFIRMATION
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                 .setCustomTitle(titleView)
                 .setView(view)
-                .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ride.riderAccept();
-                        RideStore.saveRide(ride);
-
-                        Intent intent = new Intent(getActivity(), CurrentRideActivity.class);
-                        startActivity(intent);
-
-                    }
-                })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -162,7 +141,25 @@ public class RiderAcceptedFragment extends DialogFragment {
 
         AlertDialog alert = builder.create();
         alert.setCanceledOnTouchOutside(false);
+        if (new RideTracker(ride).NotifyDriverAccepted()) {
+            alert.setButton(DialogInterface.BUTTON_POSITIVE, "Accept", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
+                    driverText.setText(ride.getDriverUsername());
+
+                    driverText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new UserContactInformationFragment();
+                        }
+                    });
+
+                    ride.riderAccept();
+                    RideStore.saveRide(ride);
+                }
+            });
+        }
         return alert;
     }
 }
