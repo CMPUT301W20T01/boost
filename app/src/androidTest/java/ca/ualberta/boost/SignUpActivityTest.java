@@ -69,7 +69,7 @@ public class SignUpActivityTest {
         // signup should fail and remain on signup activity
         solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
     }
-    
+
 
 
     /**

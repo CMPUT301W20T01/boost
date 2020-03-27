@@ -117,7 +117,7 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
             results = geocoder.getFromLocationName(name, 20);
         }catch (IOException e){
             Toast.makeText(MapActivity.this,
-                    "unable to find location", Toast.LENGTH_SHORT).show();
+                    "Unable to find location", Toast.LENGTH_SHORT).show();
         }
         // successful results
         if (results.size() > 0){

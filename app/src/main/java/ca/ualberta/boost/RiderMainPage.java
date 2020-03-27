@@ -240,7 +240,8 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     private void handleSearch(EditText searchEditText, String markerTitle) {
         String searchString = searchEditText.getText().toString();
         LatLng latLng = geoLocate(searchString);
-            if (markerTitle.equals("Pickup")){
+        if (latLng != null) {
+            if (markerTitle.equals("Pickup")) {
                 moveMarker(pickupMarker, latLng);
                 updateRideLocation(pickupMarker);
             } else {
@@ -248,9 +249,12 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
                 updateRideLocation(destinationMarker);
             }
             // if both markers are visible
-            if (pickupMarker.isVisible() && destinationMarker.isVisible()){
+            if (pickupMarker.isVisible() && destinationMarker.isVisible()) {
                 zoomToMarkers(pickupMarker, destinationMarker);
             }
+        } else {
+            Toast.makeText(RiderMainPage.this, "Cannot find the location. Please enter an address.", Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
