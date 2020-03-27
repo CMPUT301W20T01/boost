@@ -51,7 +51,7 @@ public class RiderAcceptedFragment extends DialogFragment {
         this.ride = ride;
         new RideTracker(this.ride).addListener(new RideEventListener() {
             @Override
-            public void onStatusChange(@javax.annotation.Nullable Ride ride) {
+            public void onStatusChange( Ride ride) {
                 if (ride.getRideStatus()== RideStatus.RIDERACCEPTED){
                     //START INTENT
                     Log.i("rideListener","status changed to RIDERACCEPTED");
@@ -120,6 +120,23 @@ public class RiderAcceptedFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                 .setCustomTitle(titleView)
                 .setView(view)
+                .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        driverText.setText(ride.getDriverUsername());
+
+                        driverText.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                new UserContactInformationFragment();
+                            }
+                        });
+
+                        ride.riderAccept();
+                        RideStore.saveRide(ride);
+                    }
+                })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -141,25 +158,6 @@ public class RiderAcceptedFragment extends DialogFragment {
 
         AlertDialog alert = builder.create();
         alert.setCanceledOnTouchOutside(false);
-        if (new RideTracker(ride).NotifyDriverAccepted()) {
-            alert.setButton(DialogInterface.BUTTON_POSITIVE, "Accept", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                    driverText.setText(ride.getDriverUsername());
-
-                    driverText.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            new UserContactInformationFragment();
-                        }
-                    });
-
-                    ride.riderAccept();
-                    RideStore.saveRide(ride);
-                }
-            });
-        }
         return alert;
     }
 }
