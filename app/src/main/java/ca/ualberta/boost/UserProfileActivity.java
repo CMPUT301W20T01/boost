@@ -2,6 +2,7 @@ package ca.ualberta.boost;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -69,12 +71,49 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         userEmail.setText(user.getEmail());
         userPhoneNum.setText(user.getPhoneNumber());
 
+     
+
+        Intent i = getIntent();
+        if(i.getStringExtra("someUsername")==null){
+            user1 = ActiveUser.getUser();
+            userName.setText(user1.getUsername());
+            userFirstName.setText(user1.getFirstName());
+            userEmail.setText(user1.getEmail());
+            userPhoneNum.setText(user1.getPhoneNumber());
+            userPassword.setText(user1.getPassword());
+
+        } else {
+            test = i.getStringExtra("someUsername");
+            UserStore.getUser(test)
+                    .addOnSuccessListener(new OnSuccessListener<User>() {
+                        @Override
+                        public void onSuccess(User user) {
+                            user1 = user;
+                            userName.setText(user1.getUsername());
+                            userFirstName.setText(user1.getFirstName());
+                            userEmail.setText(user1.getEmail());
+                            userPhoneNum.setText(user1.getPhoneNumber());
+                            userPassword.setAlpha(0);
+                            password.setAlpha(0);
+                            editButton.setAlpha(0);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(UserProfileActivity.this, "didn't work", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+      
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
+
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +149,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                openCallActivity();
            }
        });
+
     }
 
     @Override
@@ -122,10 +162,10 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
 
 
         //UPDATE FIREBASE
-        user.setEmail(newEmail);
-        user.setFirstName(newName);
-        user.setPhoneNumber(newPhone);
-        UserStore.saveUser(user);
+        user1.setEmail(newEmail);
+        user1.setFirstName(newName);
+        user1.setPhoneNumber(newPhone);
+        UserStore.saveUser(user1);
 
     }
 
