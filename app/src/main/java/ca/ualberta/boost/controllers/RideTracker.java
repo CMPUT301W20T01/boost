@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +32,8 @@ public class RideTracker {
     Ride ride;
     DocumentReference docRef = null;
     boolean checkDriver = false;
+    String driver = null;
+
 
     //constructor
     public RideTracker(Ride ride) {
@@ -71,6 +74,14 @@ public class RideTracker {
 
                 ride.driverAccept();
                 ActiveUser.setCurrentRide(ride);
+                RideStore.getRide(ride.id()).addOnSuccessListener(new OnSuccessListener<Ride>() {
+                    @Override
+                    public void onSuccess(Ride ride) {
+                        driver = ride.getDriverUsername();
+                    }
+                });
+                Log.i("rideListener","updated driver username in local ride");
+                ride.setDriverUsername(driver);
 
                 rideEventListener.onStatusChange(ride);
             }
@@ -79,8 +90,10 @@ public class RideTracker {
             if ("RIDERACCEPTED".equals(documentSnapshot.getData().get("status").toString())){
                 Log.i("rideListener","tracking status rider");
                 checkDriver = false;
+
                 ride.riderAccept();
                 ActiveUser.setCurrentRide(ride);
+
                 rideEventListener.onStatusChange(ride);
             }
 

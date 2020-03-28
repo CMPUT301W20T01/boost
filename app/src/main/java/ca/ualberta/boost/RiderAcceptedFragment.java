@@ -81,7 +81,7 @@ public class RiderAcceptedFragment extends DialogFragment {
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_pending, null);
 
         Log.d("rideListener","add listener");
-        new RideTracker(this.ride).addListener(new RideEventListener() {
+        new RideTracker(ride).addListener(new RideEventListener() {
             @Override
             public void onStatusChange( Ride ride) {
                 if (ride.getRideStatus()== RideStatus.RIDERACCEPTED){
