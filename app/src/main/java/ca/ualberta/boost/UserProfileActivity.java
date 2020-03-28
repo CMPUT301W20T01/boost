@@ -95,9 +95,9 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                             userEmail.setText(user1.getEmail());
                             userPhoneNum.setText(user1.getPhoneNumber());
 //                            userRating.setText(user1.);
-                            userPassword.setAlpha(0);
-                            password.setAlpha(0);
-                            editButton.setAlpha(0);
+                            userPassword.setVisibility(View.INVISIBLE);
+                            password.setVisibility(View.INVISIBLE);
+                            editButton.setVisibility(View.INVISIBLE);
 //                            userPassword.setText(user1.getPassword());
                         }
                     })
