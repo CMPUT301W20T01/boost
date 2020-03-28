@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 public class EmailActivity extends AppCompatActivity {
     EditText emailTo;
@@ -44,15 +45,13 @@ public class EmailActivity extends AppCompatActivity {
             }
         });
 
-        Button cancelButton = findViewById(R.id.cancel_email_button);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        ImageView backButton = findViewById(R.id.email_activity_back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-
-
 
 
     }

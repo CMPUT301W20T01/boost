@@ -15,35 +15,29 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+/**
+ * CallActivity is responsible for handling phone calls between Rider and Driver
+ */
+
 public class CallActivity extends AppCompatActivity {
     private static final int REQUEST_CALL =1;
     private EditText editTextNumber;
-
-    String receiver;
+    private String driverNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call);
 
-
-        //todo: make number driver number
+        //initialize EditText and ImageView Buttons
         editTextNumber = findViewById(R.id.edit_text_number);
-        ImageView imageCall = findViewById(R.id.image_call);
+
+        //get driver's number from UserProfileActivity and set it as number to call
+        driverNumber = getIntent().getExtras().getString("call");
+        editTextNumber.setText(driverNumber);
+
+        //go back to previous page once the back button is clicked
         ImageView backButton = findViewById(R.id.call_activity_back_button);
-
-
-        receiver = getIntent().getExtras().getString("call");
-
-        editTextNumber.setText(receiver);
-
-        imageCall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                makePhoneCall();
-            }
-        });
-
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +45,14 @@ public class CallActivity extends AppCompatActivity {
             }
         });
 
-
+        //call driver once the call button is clicked
+        ImageView imageCall = findViewById(R.id.image_call);
+        imageCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makePhoneCall();
+            }
+        });
 
     }
 
