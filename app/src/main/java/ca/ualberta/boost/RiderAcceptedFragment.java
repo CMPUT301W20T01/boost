@@ -133,8 +133,8 @@ public class RiderAcceptedFragment extends DialogFragment {
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         ride.riderAccept();
+
                         RideStore.saveRide(ride);
                     }
                 })

@@ -73,6 +73,8 @@ public class RideTracker {
                 checkDriver = true;
 
                 ride.driverAccept();
+
+                // update ride in database
                 RideStore.getRide(ride.id()).addOnSuccessListener(new OnSuccessListener<Ride>() {
                     @Override
                     public void onSuccess(Ride ride) {
@@ -81,9 +83,9 @@ public class RideTracker {
                     }
                 });
                 Log.i("rideListener","in local ride, updated driver name: "+ driver);
-                ride.setDriverUsername(driver);
-
-                ActiveUser.setCurrentRide(ride);
+                if (driver != null){
+                    ride.setDriverUsername(driver);
+                }
                 rideEventListener.onStatusChange(ride);
             }
 
