@@ -141,6 +141,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         }
 
         UserStore.saveUser(user);
+        ActiveUser.login(user);
     }
 
     //signs in user and launches the home activity
