@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -82,11 +81,12 @@ public class RiderAcceptedFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_rider_pending_driver_request, null);
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_pending, null);
+
         driverText = view.findViewById(R.id.driverText);
 
 
         Log.d("rideListener","add listener");
-        new RideTracker(ride).addListener(new RideEventListener() {
+        new RideTracker(this.ride).addListener(new RideEventListener() {
             @Override
             public void onStatusChange( Ride ride) {
                 if (ride.getRideStatus()== RideStatus.RIDERACCEPTED){
@@ -104,25 +104,25 @@ public class RiderAcceptedFragment extends DialogFragment {
                     RideStore.getRide(ride.id()).addOnSuccessListener(new OnSuccessListener<Ride>() {
                         @Override
                         public void onSuccess(Ride ride) {
-                            Log.i("rideListener","onSuccess RideStore in RiderFragment: "+ride.getDriverUsername());
-                            driver = ride.getDriverUsername();
-                        }
-
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.i("rideListener","onFailure RideStore in RiderFragment"+e);
-
+                            Log.i("rideListener","onSuccess RideStore get driver:" + ride.getDriverUsername());
+                            driver =ride.getRiderUsername();
                         }
                     });
+                    Log.i("rideListener","got driver:" + driver);
 
+                    Toast.makeText(getContext(), "Driver: "+driver+" has accepted.", Toast.LENGTH_SHORT).show();
 
-                    Log.i("rideListener","Driver acquired: "+driver);
+                    //driverText.setText(ride.getDriverUsername());
 
-                    driverText.setText(driver);
-                    Toast.makeText(mContext, "Driver: "+ride.getDriverUsername()+" has accepted.", Toast.LENGTH_SHORT).show();
-
+                    //WHEN DRIVER ACCEPTED, TEXTVIEW WILL SHOW UP DRIVER NAME
+                    //CLICK ON THE NAME WILL POP UP PROFILE INFO FRAGMENT
+                    //DOES NOT WORK???
+                    driverText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new UserContactInformationFragment();
+                        }
+                    });
                 }
             }
 
@@ -140,8 +140,8 @@ public class RiderAcceptedFragment extends DialogFragment {
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ride.riderAccept();
 
+                        ride.riderAccept();
                         RideStore.saveRide(ride);
                     }
                 })
