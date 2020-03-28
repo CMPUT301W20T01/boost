@@ -73,16 +73,17 @@ public class RideTracker {
                 checkDriver = true;
 
                 ride.driverAccept();
-                ActiveUser.setCurrentRide(ride);
                 RideStore.getRide(ride.id()).addOnSuccessListener(new OnSuccessListener<Ride>() {
                     @Override
                     public void onSuccess(Ride ride) {
+                        Log.i("rideListener","onSuccess RideStore to get driver username in firebase "+ride.getDriverUsername());
                         driver = ride.getDriverUsername();
                     }
                 });
-                Log.i("rideListener","updated driver username in local ride");
+                Log.i("rideListener","in local ride, updated driver name: "+ driver);
                 ride.setDriverUsername(driver);
 
+                ActiveUser.setCurrentRide(ride);
                 rideEventListener.onStatusChange(ride);
             }
 

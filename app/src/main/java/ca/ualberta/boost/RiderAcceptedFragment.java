@@ -99,11 +99,13 @@ public class RiderAcceptedFragment extends DialogFragment {
                     Log.i("rideListener","Driver acquired: "+ActiveUser.getCurrentRide().getDriverUsername());
                     if (ActiveUser.getCurrentRide().getDriverUsername()!=null){
                         ride.setDriverUsername(ActiveUser.getCurrentRide().getDriverUsername());
+
+                        driverText = getView().findViewById(R.id.driverText);
+                        driverText.setText(ride.getDriverUsername());
                     }
                     Toast.makeText(getContext(), "Driver: "+ride.getDriverUsername()+" has accepted.", Toast.LENGTH_SHORT).show();
 
-                    driverText = getView().findViewById(R.id.driverText);
-                    driverText.setText(ride.getDriverUsername());
+
 
                     //WHEN DRIVER ACCEPTED, TEXTVIEW WILL SHOW UP DRIVER NAME
                     //CLICK ON THE NAME WILL POP UP PROFILE INFO FRAGMENT
