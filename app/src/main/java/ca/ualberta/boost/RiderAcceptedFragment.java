@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -104,7 +105,17 @@ public class RiderAcceptedFragment extends DialogFragment {
                             Log.i("rideListener","onSuccess RideStore in RiderFragment: "+ride.getDriverUsername());
                             driver = ride.getDriverUsername();
                         }
+
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.i("rideListener","onFailure RideStore in RiderFragment"+e);
+
+                        }
                     });
+                    
+
                     Log.i("rideListener","Driver acquired: "+driver);
 
                     driverText = getView().findViewById(R.id.driverText);
