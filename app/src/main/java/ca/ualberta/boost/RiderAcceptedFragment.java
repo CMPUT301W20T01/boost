@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
@@ -47,6 +48,7 @@ public class RiderAcceptedFragment extends DialogFragment {
     private TextView driverText;
     private Context mContext;
     Button positiveButton;
+    private String driver;
 
     RiderAcceptedFragment(Ride ride){
         this.ride = ride;
@@ -96,26 +98,22 @@ public class RiderAcceptedFragment extends DialogFragment {
                 if (ride.getRideStatus()==RideStatus.DRIVERACCEPTED){
                     Log.i("rideListener","status changed to DRIVERACCEPTED");
 
-                    Log.i("rideListener","Driver acquired: "+ActiveUser.getCurrentRide().getDriverUsername());
+                    RideStore.getRide(ride.id()).addOnSuccessListener(new OnSuccessListener<Ride>() {
+                        @Override
+                        public void onSuccess(Ride ride) {
+                            Log.i("rideListener","onSuccess RideStore in RiderFragment: "+ride.getDriverUsername());
+                            driver = ride.getDriverUsername();
+                        }
+                    });
+                    Log.i("rideListener","Driver acquired: "+driver);
                     if (ActiveUser.getCurrentRide().getDriverUsername()!=null){
-                        ride.setDriverUsername(ActiveUser.getCurrentRide().getDriverUsername());
+                        ride.setDriverUsername(driver);
 
                         driverText = getView().findViewById(R.id.driverText);
-                        driverText.setText(ride.getDriverUsername());
+                        driverText.setText(driver);
                     }
                     Toast.makeText(getContext(), "Driver: "+ride.getDriverUsername()+" has accepted.", Toast.LENGTH_SHORT).show();
 
-
-
-                    //WHEN DRIVER ACCEPTED, TEXTVIEW WILL SHOW UP DRIVER NAME
-                    //CLICK ON THE NAME WILL POP UP PROFILE INFO FRAGMENT
-                    //DOES NOT WORK???
-                    driverText.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            new UserContactInformationFragment();
-                        }
-                    });
                 }
             }
 

@@ -78,7 +78,7 @@ public class RideTracker {
                 RideStore.getRide(ride.id()).addOnSuccessListener(new OnSuccessListener<Ride>() {
                     @Override
                     public void onSuccess(Ride ride) {
-                        Log.i("rideListener","onSuccess RideStore to get driver username in firebase "+ride.getDriverUsername());
+                        Log.i("rideListener","onSuccess RideStore in RideTracker: "+ride.getDriverUsername());
                         driver = ride.getDriverUsername();
                     }
                 });
