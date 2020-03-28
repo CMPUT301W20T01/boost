@@ -41,7 +41,7 @@ import static com.firebase.ui.auth.AuthUI.TAG;
  * if no, move driver back to ViewRideRequest
  */
 public class DriverAcceptedFragment extends DialogFragment {
-    private RequestDetailsFragment.OnFragmentInteractionListener listener;
+    private DriverAcceptedFragment.OnFragmentInteractionListener listener;
     private Ride ride;
     private TextView riderText;
     RideTracker rideTracker;
@@ -65,8 +65,8 @@ public class DriverAcceptedFragment extends DialogFragment {
     @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
-        if (context instanceof RequestDetailsFragment.OnFragmentInteractionListener){
-            listener = (RequestDetailsFragment.OnFragmentInteractionListener) context;
+        if (context instanceof DriverAcceptedFragment.OnFragmentInteractionListener){
+            listener = (DriverAcceptedFragment.OnFragmentInteractionListener) context;
             mContext = context;
         } else {
             throw new RuntimeException(context.toString()
@@ -86,10 +86,9 @@ public class DriverAcceptedFragment extends DialogFragment {
 
         new RideTracker(ride).addListener(new RideEventListener() {
             @Override
-            public void onStatusChange(Ride ride) {
-                Log.i("rideListener","add Listener");
+            public void onStatusChange(Ride changedRide) {
 
-                if (ride.getRideStatus()==RideStatus.RIDERACCEPTED){
+                if (changedRide.getRideStatus()==RideStatus.RIDERACCEPTED){
                     //START INTENT
                     Log.i("rideListener","status changed to RIDERACCEPTED");
                     Intent intent = new Intent(mContext, CurrentRideActivity.class);
@@ -97,11 +96,12 @@ public class DriverAcceptedFragment extends DialogFragment {
 
                 }
 
-                if (ride.getRideStatus()==RideStatus.DRIVERACCEPTED){
+                if (changedRide.getRideStatus()==RideStatus.DRIVERACCEPTED){
                     Log.i("rideListener","status changed to DRIVERACCEPTED");
+
                 }
 
-                if (ride.getRideStatus()==RideStatus.PENDING){
+                if (changedRide.getRideStatus()==RideStatus.PENDING){
                     Log.i("rideListener","status changed to PENDING");
                 }
 

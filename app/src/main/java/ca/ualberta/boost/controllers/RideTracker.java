@@ -21,8 +21,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import ca.ualberta.boost.RiderMainPage;
+import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.RideStatus;
+import ca.ualberta.boost.stores.RideStore;
 
 public class RideTracker {
     RideEventListener rideEventListener;
@@ -63,18 +65,22 @@ public class RideTracker {
             Log.i("rideListener","Current data: " + documentSnapshot.getData().get("status"));
 
 
-            if ("DRIVERACCEPTED" == documentSnapshot.getData().get("status").toString()){
-                Log.i("rideListener","tracking status");
+            if ("DRIVERACCEPTED".equals(documentSnapshot.getData().get("status").toString())){
+                Log.i("rideListener","tracking status driver");
                 checkDriver = true;
+                ride.driverAccept();
+                ActiveUser.setCurrentRide(ride);
                 rideEventListener.onStatusChange(ride);
             }
 
-            if ("RIDERACCEPTED" == documentSnapshot.getData().get("status").toString()){
-                Log.i("rideListener","tracking status");
+
+            if ("RIDERACCEPTED".equals(documentSnapshot.getData().get("status").toString())){
+                Log.i("rideListener","tracking status rider");
                 checkDriver = false;
+                ride.riderAccept();
+                ActiveUser.setCurrentRide(ride);
                 rideEventListener.onStatusChange(ride);
             }
-
 
 
         } else {

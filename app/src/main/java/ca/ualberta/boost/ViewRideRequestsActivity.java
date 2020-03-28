@@ -52,7 +52,7 @@ import ca.ualberta.boost.stores.UserStore;
  * open ride requests, and displays these ride requests
  */
 
-public class ViewRideRequestsActivity extends MapActivity implements RequestDetailsFragment.OnFragmentInteractionListener, RiderAcceptedFragment.OnFragmentInteractionListener{
+public class ViewRideRequestsActivity extends MapActivity implements RequestDetailsFragment.OnFragmentInteractionListener, DriverAcceptedFragment.OnFragmentInteractionListener{
 
     // constants
     BitmapDescriptor SPECIAL = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
@@ -264,15 +264,15 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
 
     }
 
-    /**
-     * Rider accepts the driver request offer
-     * move over to CurrentRideActivity
-     */
-    @Override
-    public void onRiderAcceptPressed(Ride newRide) {
-        Intent intent = new Intent(this, CurrentRideActivity.class);
-        startActivity(intent);
-    }
+//    /**
+//     * Rider accepts the driver request offer
+//     * move over to CurrentRideActivity
+//     */
+//    @Override
+//    public void onRiderAcceptPressed(Ride newRide) {
+//        Intent intent = new Intent(this, CurrentRideActivity.class);
+//        startActivity(intent);
+//    }
 
     /**
      * Go to DriverMainPage activity and finish this activity

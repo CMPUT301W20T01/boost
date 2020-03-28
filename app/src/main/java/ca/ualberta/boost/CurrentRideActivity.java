@@ -61,6 +61,6 @@ public class CurrentRideActivity extends MapActivity {
                 .position(ride.getEndLocation())
         );
         // move camera to show both markers
-//        zoomToMarkers(pickupMarker, destinationMarker);
+      //  zoomToMarkers(pickupMarker, destinationMarker);
     }
 }
