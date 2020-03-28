@@ -9,6 +9,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,7 +55,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     private EditText searchDestinationText;
     private LinearLayout searchesLayout;
     private LinearLayout confirmCancelLayout;
-    private LinearLayout viewRequestLayout;
+    private RelativeLayout viewRequestLayout;
 
     // attributes
     private Ride ride;
@@ -79,7 +80,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
         viewRequestLayout = findViewById(R.id.viewRequestLayout);
         confirmRequestButton = findViewById(R.id.confirmRequestButton);
         cancelRequestButton = findViewById(R.id.cancelRequestButton);
-        viewRequestButton = findViewById(R.id.viewRideRequestButton);
+ //       viewRequestButton = findViewById(R.id.viewRideRequestButton);
     }
 
     /**
@@ -156,12 +157,12 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
             }
         });
 
-        viewRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchCurrentRequestActivity();
-            }
-        });
+//        viewRequestButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                launchCurrentRequestActivity();
+//            }
+//        });
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
