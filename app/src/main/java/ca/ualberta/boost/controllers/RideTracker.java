@@ -83,9 +83,7 @@ public class RideTracker {
                     }
                 });
                 Log.i("rideListener","in local ride, updated driver name: "+ driver);
-                if (driver != null){
-                    ride.setDriverUsername(driver);
-                }
+
                 rideEventListener.onStatusChange(ride);
             }
 

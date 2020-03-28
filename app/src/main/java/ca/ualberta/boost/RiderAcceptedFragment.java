@@ -106,12 +106,9 @@ public class RiderAcceptedFragment extends DialogFragment {
                         }
                     });
                     Log.i("rideListener","Driver acquired: "+driver);
-                    if (ActiveUser.getCurrentRide().getDriverUsername()!=null){
-                        ride.setDriverUsername(driver);
 
-                        driverText = getView().findViewById(R.id.driverText);
-                        driverText.setText(driver);
-                    }
+                    driverText = getView().findViewById(R.id.driverText);
+                    driverText.setText(driver);
                     Toast.makeText(getContext(), "Driver: "+ride.getDriverUsername()+" has accepted.", Toast.LENGTH_SHORT).show();
 
                 }
