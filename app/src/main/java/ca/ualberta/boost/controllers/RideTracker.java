@@ -62,14 +62,10 @@ public class RideTracker {
         if (documentSnapshot != null && documentSnapshot.exists()){
             Log.i("rideListener","Current data: " + documentSnapshot.getData().get("status"));
 
+
             if ("DRIVERACCEPTED" == documentSnapshot.getData().get("status").toString()){
                 Log.i("rideListener","tracking status");
                 checkDriver = true;
-                rideEventListener.onStatusChange(ride);
-            }
-            if ("PENDING" == documentSnapshot.getData().get("status").toString()){
-                Log.i("rideListener","tracking status");
-                checkDriver = false;
                 rideEventListener.onStatusChange(ride);
             }
 
@@ -79,11 +75,6 @@ public class RideTracker {
                 rideEventListener.onStatusChange(ride);
             }
 
-            if ("COMPLETED" == documentSnapshot.getData().get("status").toString()){
-                Log.i("rideListener","tracking status");
-                checkDriver = false;
-                rideEventListener.onStatusChange(ride);
-            }
 
 
         } else {

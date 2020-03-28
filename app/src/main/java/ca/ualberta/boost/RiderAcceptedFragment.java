@@ -45,18 +45,52 @@ public class RiderAcceptedFragment extends DialogFragment {
     private RiderAcceptedFragment.OnFragmentInteractionListener listener;
     private Ride ride;
     private TextView driverText;
+    private Context mContext;
     Button positiveButton;
 
     RiderAcceptedFragment(Ride ride){
         this.ride = ride;
+    }
+
+    /**
+     * Interface that enforces the implementing class to handle
+     * what happens when the fragment's
+     * positive button (accept) is pressed
+     */
+    public interface OnFragmentInteractionListener {
+        void onRiderAcceptPressed(Ride newRide);
+    }
+
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        if (context instanceof RiderAcceptedFragment.OnFragmentInteractionListener){
+            listener = (RiderAcceptedFragment.OnFragmentInteractionListener) context;
+            this.mContext = context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + "must implement OnFragmentInteractionListener");
+        }
+
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_rider_pending_driver_request, null);
+        View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_pending, null);
+
+        driverText = view.findViewById(R.id.driverText);
+
         new RideTracker(this.ride).addListener(new RideEventListener() {
             @Override
             public void onStatusChange( Ride ride) {
                 if (ride.getRideStatus()== RideStatus.RIDERACCEPTED){
                     //START INTENT
                     Log.i("rideListener","status changed to RIDERACCEPTED");
-                    Intent intent = new Intent(getActivity(), CurrentRideActivity.class);
-                    startActivity(intent);
+                    Intent intent = new Intent(mContext, CurrentRideActivity.class);
+
+                    mContext.startActivity(intent);
 
                 }
 
@@ -84,36 +118,6 @@ public class RiderAcceptedFragment extends DialogFragment {
 
             }
         });
-    }
-
-    /**
-     * Interface that enforces the implementing class to handle
-     * what happens when the fragment's
-     * positive button (accept) is pressed
-     */
-    public interface OnFragmentInteractionListener {
-        void onRiderAcceptPressed(Ride newRide);
-    }
-
-    @Override
-    public void onAttach(final Context context) {
-        super.onAttach(context);
-        if (context instanceof RiderAcceptedFragment.OnFragmentInteractionListener){
-            listener = (RiderAcceptedFragment.OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + "must implement OnFragmentInteractionListener");
-        }
-
-    }
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_rider_pending_driver_request, null);
-        View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_pending, null);
-
-        driverText = view.findViewById(R.id.driverText);
 
 
         //MAKING PENDING CONFIRMATION
@@ -124,15 +128,6 @@ public class RiderAcceptedFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        driverText.setText(ride.getDriverUsername());
-
-                        driverText.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                new UserContactInformationFragment();
-                            }
-                        });
-
                         ride.riderAccept();
                         RideStore.saveRide(ride);
                     }
@@ -141,17 +136,11 @@ public class RiderAcceptedFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //CANCEL THE RIDE OFFER
-                        //-set driver to null
-                        //-set status to pending
-                        User activeUser = ActiveUser.getUser();
-
                         // update ride in database
                         ride.cancel();
                         RideStore.saveRide(ride);
                         ActiveUser.cancelRide();
 
-                        // set driver's current ride to this ride
-                        //activeUser.setActiveRide(null);
                     }
                 });
         //NEED TO IMPLEMENT CHANGE RIDE STATUS TO PENDING AGAIN;

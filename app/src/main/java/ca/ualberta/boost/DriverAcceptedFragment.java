@@ -45,40 +45,11 @@ public class DriverAcceptedFragment extends DialogFragment {
     private Ride ride;
     private TextView riderText;
     RideTracker rideTracker;
+    private Context mContext;
 
     DriverAcceptedFragment(Ride ride){
         this.ride = ride;
-        new RideTracker(this.ride).addListener(new RideEventListener() {
-            @Override
-            public void onStatusChange(Ride ride) {
-                Log.i("rideListener","add Listener");
 
-                if (ride.getRideStatus()==RideStatus.RIDERACCEPTED){
-                    //START INTENT
-                    Log.i("rideListener","status changed to RIDERACCEPTED");
-                    Intent intent = new Intent(getActivity(), CurrentRideActivity.class);
-                    startActivity(intent);
-
-                }
-
-                if (ride.getRideStatus()==RideStatus.DRIVERACCEPTED){
-                    Log.i("rideListener","status changed to DRIVERACCEPTED");
-                    Intent intent = new Intent(getActivity(), CurrentRideActivity.class);
-                    startActivity(intent);
-                }
-
-                if (ride.getRideStatus()==RideStatus.PENDING){
-                    Log.i("rideListener","status changed to PENDING");
-                }
-
-            }
-
-            @Override
-            public void onLocationChanged() {
-                //NOTHING YET
-            }
-        });
-        Log.i("rideListener","called ride Listener for: "+ride.id());
 
     }
 
@@ -96,6 +67,7 @@ public class DriverAcceptedFragment extends DialogFragment {
         super.onAttach(context);
         if (context instanceof RequestDetailsFragment.OnFragmentInteractionListener){
             listener = (RequestDetailsFragment.OnFragmentInteractionListener) context;
+            mContext = context;
         } else {
             throw new RuntimeException(context.toString()
                     + "must implement OnFragmentInteractionListener");
@@ -111,6 +83,41 @@ public class DriverAcceptedFragment extends DialogFragment {
 
         riderText = view.findViewById(R.id.riderText);
         riderText.setText(ride.getRiderUsername());
+
+        new RideTracker(ride).addListener(new RideEventListener() {
+            @Override
+            public void onStatusChange(Ride ride) {
+                Log.i("rideListener","add Listener");
+
+                if (ride.getRideStatus()==RideStatus.RIDERACCEPTED){
+                    //START INTENT
+                    Log.i("rideListener","status changed to RIDERACCEPTED");
+                    Intent intent = new Intent(mContext, CurrentRideActivity.class);
+                    mContext.startActivity(intent);
+
+                }
+
+                if (ride.getRideStatus()==RideStatus.DRIVERACCEPTED){
+                    Log.i("rideListener","status changed to DRIVERACCEPTED");
+                }
+
+                if (ride.getRideStatus()==RideStatus.PENDING){
+                    Log.i("rideListener","status changed to PENDING");
+                }
+
+            }
+
+            @Override
+            public void onLocationChanged() {
+                //NOTHING YET
+            }
+        });
+        Log.i("rideListener","called ride Listener for: "+ride.id());
+
+
+
+
+
 
         //MAKING PENDING CONFIRMATION
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
