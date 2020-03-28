@@ -80,7 +80,6 @@ public class RiderAcceptedFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_rider_pending_driver_request, null);
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_pending, null);
 
-        driverText = view.findViewById(R.id.driverText);
         Log.d("rideListener","add listener");
         new RideTracker(this.ride).addListener(new RideEventListener() {
             @Override
@@ -96,6 +95,11 @@ public class RiderAcceptedFragment extends DialogFragment {
 
                 if (ride.getRideStatus()==RideStatus.DRIVERACCEPTED){
                     Log.i("rideListener","status changed to DRIVERACCEPTED");
+
+                    Log.i("rideListener","Driver acquired: "+ActiveUser.getCurrentRide().getDriverUsername());
+                    if (ActiveUser.getCurrentRide().getDriverUsername()!=null){
+                        ride.setDriverUsername(ActiveUser.getCurrentRide().getDriverUsername());
+                    }
                     Toast.makeText(getContext(), "Driver: "+ride.getDriverUsername()+" has accepted.", Toast.LENGTH_SHORT).show();
 
                     driverText = getView().findViewById(R.id.driverText);

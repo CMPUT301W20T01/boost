@@ -68,8 +68,10 @@ public class RideTracker {
             if ("DRIVERACCEPTED".equals(documentSnapshot.getData().get("status").toString())){
                 Log.i("rideListener","tracking status driver");
                 checkDriver = true;
+
                 ride.driverAccept();
                 ActiveUser.setCurrentRide(ride);
+
                 rideEventListener.onStatusChange(ride);
             }
 
