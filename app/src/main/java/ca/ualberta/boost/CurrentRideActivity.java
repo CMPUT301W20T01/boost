@@ -3,10 +3,15 @@ package ca.ualberta.boost;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -23,6 +28,7 @@ public class CurrentRideActivity extends MapActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -40,6 +46,10 @@ public class CurrentRideActivity extends MapActivity {
         ride = ActiveUser.getCurrentRide();
         GoogleMap mMap = getMap();
 
+
+        Toast.makeText(CurrentRideActivity.this, "Successfully transferred to CurrentRideActivity", Toast.LENGTH_SHORT).show();
+        Log.i("rideListener","CurrentRideActivity started");
+
         // add the location markers for the ride
         pickupMarker = mMap.addMarker(new MarkerOptions()
                 .title("Pickup")
@@ -51,6 +61,6 @@ public class CurrentRideActivity extends MapActivity {
                 .position(ride.getEndLocation())
         );
         // move camera to show both markers
-        zoomToMarkers(pickupMarker, destinationMarker);
+      //  zoomToMarkers(pickupMarker, destinationMarker);
     }
 }
