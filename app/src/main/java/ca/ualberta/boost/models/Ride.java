@@ -134,8 +134,12 @@ public class Ride {
         this.status = RideStatus.PENDING;
     }
 
-    public void accept() {
-        this.status = RideStatus.ACCEPTED;
+    public void driverAccept() {
+        this.status = RideStatus.DRIVERACCEPTED;
+    }
+
+    public void riderAccept() {
+        this.status = RideStatus.RIDERACCEPTED;
     }
 
     public void finish() {
@@ -187,8 +191,10 @@ public class Ride {
         switch(string){
             case "PENDING":
                 return RideStatus.PENDING;
-            case "ACCEPTED":
-                return RideStatus.ACCEPTED;
+            case "DRIVERACCEPTED":
+                return RideStatus.DRIVERACCEPTED;
+            case "RIDERACCEPTED":
+                return RideStatus.RIDERACCEPTED;
             case "FINISHED":
                 return RideStatus.FINISHED;
             case "CANCELLED":
