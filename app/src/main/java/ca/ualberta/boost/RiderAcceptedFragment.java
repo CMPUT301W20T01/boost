@@ -117,7 +117,7 @@ public class RiderAcceptedFragment extends DialogFragment {
                             }
                         }
                     });
-                    
+
                     //WHEN DRIVER ACCEPTED, TEXTVIEW WILL SHOW UP DRIVER NAME
                     //CLICK ON THE NAME WILL POP UP PROFILE INFO FRAGMENT
                     //DOES NOT WORK???
