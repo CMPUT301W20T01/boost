@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,9 +23,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+
+import ca.ualberta.boost.controllers.RideEventListener;
 import ca.ualberta.boost.controllers.RideTracker;
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.RideStatus;
+
+import ca.ualberta.boost.controllers.RideTracker;
+import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.models.Ride;
+
 import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.stores.RideStore;
 import ca.ualberta.boost.stores.UserStore;
@@ -38,14 +48,15 @@ import static com.firebase.ui.auth.AuthUI.TAG;
  * if no, move driver back to ViewRideRequest
  */
 public class DriverAcceptedFragment extends DialogFragment {
-    private RequestDetailsFragment.OnFragmentInteractionListener listener;
+    private DriverAcceptedFragment.OnFragmentInteractionListener listener;
     private Ride ride;
     private TextView riderText;
     RideTracker rideTracker;
+    private Context mContext;
 
     DriverAcceptedFragment(Ride ride){
         this.ride = ride;
-        new RideTracker(this.ride);
+
     }
 
     /**
@@ -60,8 +71,10 @@ public class DriverAcceptedFragment extends DialogFragment {
     @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
-        if (context instanceof RequestDetailsFragment.OnFragmentInteractionListener){
-            listener = (RequestDetailsFragment.OnFragmentInteractionListener) context;
+        if (context instanceof DriverAcceptedFragment.OnFragmentInteractionListener){
+            listener = (DriverAcceptedFragment.OnFragmentInteractionListener) context;
+            mContext = context;
+
         } else {
             throw new RuntimeException(context.toString()
                     + "must implement OnFragmentInteractionListener");
@@ -78,12 +91,38 @@ public class DriverAcceptedFragment extends DialogFragment {
         riderText = view.findViewById(R.id.riderText);
         riderText.setText(ride.getRiderUsername());
 
-        riderText.setOnClickListener(new View.OnClickListener() {
+        new RideTracker(ride).addListener(new RideEventListener() {
             @Override
-            public void onClick(View v) {
-                new UserContactInformationFragment();
+            public void onStatusChange(Ride changedRide) {
+
+                if (changedRide.getRideStatus()==RideStatus.RIDERACCEPTED){
+                    //START INTENT
+                    Log.i("rideListener","status changed to RIDERACCEPTED");
+                    Intent intent = new Intent(mContext, CurrentRideActivity.class);
+                    mContext.startActivity(intent);
+
+                }
+
+                if (changedRide.getRideStatus()==RideStatus.DRIVERACCEPTED){
+                    Log.i("rideListener","status changed to DRIVERACCEPTED");
+
+                }
+
+                if (changedRide.getRideStatus()==RideStatus.PENDING){
+                    Log.i("rideListener","status changed to PENDING");
+                }
+
+            }
+
+            @Override
+            public void onLocationChanged() {
+                //NOTHING YET
             }
         });
+        Log.i("rideListener","called ride Listener for: "+ride.id());
+
+
+
         //MAKING PENDING CONFIRMATION
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                 .setCustomTitle(titleView)

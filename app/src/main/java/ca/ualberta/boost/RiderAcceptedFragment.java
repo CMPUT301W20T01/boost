@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,13 +20,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+
+import ca.ualberta.boost.controllers.RideEventListener;
 import ca.ualberta.boost.controllers.RideTracker;
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.RideStatus;
+
 import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.stores.RideStore;
 import ca.ualberta.boost.stores.UserStore;
@@ -42,11 +51,13 @@ public class RiderAcceptedFragment extends DialogFragment {
     private RiderAcceptedFragment.OnFragmentInteractionListener listener;
     private Ride ride;
     private TextView driverText;
+    private Context mContext;
     Button positiveButton;
+    private String driver;
 
     RiderAcceptedFragment(Ride ride){
         this.ride = ride;
-        new RideTracker(this.ride);
+
     }
 
     /**
@@ -63,6 +74,8 @@ public class RiderAcceptedFragment extends DialogFragment {
         super.onAttach(context);
         if (context instanceof RiderAcceptedFragment.OnFragmentInteractionListener){
             listener = (RiderAcceptedFragment.OnFragmentInteractionListener) context;
+            this.mContext = context;
+
         } else {
             throw new RuntimeException(context.toString()
                     + "must implement OnFragmentInteractionListener");
@@ -77,41 +90,80 @@ public class RiderAcceptedFragment extends DialogFragment {
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_pending, null);
 
         driverText = view.findViewById(R.id.driverText);
-        driverText.setText(ride.getDriverUsername());
-
-        //WHEN DRIVER ACCEPTED, TEXTVIEW WILL SHOW UP DRIVER NAME
-        //CLICK ON THE NAME WILL POP UP PROFILE INFO FRAGMENT
-        //DOES NOT WORK???
-        driverText.setOnClickListener(new View.OnClickListener() {
+        Log.d("rideListener","add listener");
+        new RideTracker(this.ride).addListener(new RideEventListener() {
             @Override
-            public void onClick(View v) {
-                new UserContactInformationFragment();
+            public void onStatusChange( Ride ride) {
+                if (ride.getRideStatus()== RideStatus.RIDERACCEPTED){
+                    //START INTENT
+                    Log.i("rideListener","status changed to RIDERACCEPTED");
+                    Intent intent = new Intent(mContext, CurrentRideActivity.class);
+
+                    mContext.startActivity(intent);
+
+                }
+
+                if (ride.getRideStatus()==RideStatus.DRIVERACCEPTED){
+                    Log.i("rideListener","status changed to DRIVERACCEPTED");
+
+                    RideStore.getRide(ride.id()).addOnSuccessListener(new OnSuccessListener<Ride>() {
+                        @Override
+                        public void onSuccess(Ride ride) {
+                            Log.i("rideListener","onSuccess RideStore get driver:" + ride.getDriverUsername());
+                            driver =ride.getRiderUsername();
+
+                            Log.i("rideListener","got driver:" + driver);
+
+                            if (ride.getRiderUsername() !=null){
+                                Toast.makeText(getContext(), "Driver: "+driver+" has accepted.", Toast.LENGTH_SHORT).show();
+
+                                driverText.setText(driver);
+
+                            }
+                        }
+                    });
+                    
+                    //WHEN DRIVER ACCEPTED, TEXTVIEW WILL SHOW UP DRIVER NAME
+                    //CLICK ON THE NAME WILL POP UP PROFILE INFO FRAGMENT
+                    //DOES NOT WORK???
+                    driverText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new UserContactInformationFragment();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onLocationChanged() {
+
             }
         });
 
-        //LISTENING TO RIDE
-        new RideTracker(ride);
 
         //MAKING PENDING CONFIRMATION
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                 .setCustomTitle(titleView)
                 .setView(view)
-                .setPositiveButton("Accept",null)
+                .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        ride.riderAccept();
+                        RideStore.saveRide(ride);
+                    }
+                })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //CANCEL THE RIDE OFFER
-                        //-set driver to null
-                        //-set status to pending
-                        User activeUser = ActiveUser.getUser();
 
                         // update ride in database
                         ride.cancel();
                         RideStore.saveRide(ride);
                         ActiveUser.cancelRide();
 
-                        // set driver's current ride to this ride
-                        //activeUser.setActiveRide(null);
                     }
                 });
         //NEED TO IMPLEMENT CHANGE RIDE STATUS TO PENDING AGAIN;
