@@ -15,6 +15,5 @@ import ca.ualberta.boost.models.Rider;
 public interface RideEventListener {
     // you can define any parameter as per your requirement
     public void onStatusChange(@Nullable Ride ride);
-
     public void onLocationChanged(); //NOT SURE
 }

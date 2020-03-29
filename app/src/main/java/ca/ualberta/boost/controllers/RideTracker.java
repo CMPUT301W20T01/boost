@@ -22,7 +22,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import ca.ualberta.boost.RiderMainPage;
 import ca.ualberta.boost.models.ActiveUser;
-
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.RideStatus;
 import ca.ualberta.boost.stores.RideStore;
@@ -33,9 +32,6 @@ public class RideTracker {
     DocumentReference docRef = null;
     boolean checkDriver = false;
 
-
-    public static final String TAG1 = "rides/";
-    public static final String TAG2 = "status";
     //constructor
     public RideTracker(Ride ride) {
         this.ride = ride;
@@ -85,6 +81,7 @@ public class RideTracker {
                 ActiveUser.setCurrentRide(ride);
                 rideEventListener.onStatusChange(ride);
             }
+
 
         } else {
             Log.i("rideListener","null");
