@@ -35,7 +35,6 @@ public class EditUserProfileFragment extends DialogFragment {
 //    FirebaseUser currentUser;
     User user;
 
-
     private EditText email;
     private EditText phone;
     private EditText name;

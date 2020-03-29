@@ -1,20 +1,31 @@
 package ca.ualberta.boost;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
+
+/* Reference
+         =>YouTube tutorial by 'Android Coding' on 'How to Send Email in Android Studio | SendEmail | Android Coding'
+           URI to Video = https://www.youtube.com/watch?v=aV7-vcwEeRM
+           URI to username = https://www.youtube.com/channel/UCUIF5MImktJLDWDKe5oTdJQ
+*/
+
+/**
+ * EmailActivity is responsible for handling messages between Rider and Driver using intent
+ */
 
 public class EmailActivity extends AppCompatActivity {
+    //Declare EditTexts
     EditText emailTo;
     EditText emailSubject;
     EditText emailMessage;
 
+    //holds email from UserProfileActivity that was clicked
     String receiver ;
 
     @Override
@@ -22,16 +33,26 @@ public class EmailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email);
 
+        //initialize EditTexts
         emailTo = findViewById(R.id.editText_to);
         emailSubject = findViewById(R.id.editText_subject);
         emailMessage = findViewById(R.id.editText_Message);
 
+        //get email from UserProfileActivity and set emailTo
         receiver = getIntent().getExtras().getString("to");
-
         emailTo.setText(receiver);
 
+        //go back to previous activity when the ack button is clicked
+        ImageView backButton = findViewById(R.id.email_activity_back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
+        // open email client when sendButton is clicked
         Button sendButton = findViewById(R.id.send_message_button);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,15 +64,6 @@ public class EmailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        Button cancelButton = findViewById(R.id.cancel_email_button);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
 
 
 
