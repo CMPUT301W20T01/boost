@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,20 +34,17 @@ import ca.ualberta.boost.stores.UserStore;
  */
 public class UserProfileActivity extends AppCompatActivity implements EditUserProfileFragment.OnFragmentInteractionListener {
 
-    //firebase
 //    FirebaseUser currentUser;
-    User user1;
-    String test;
-
+    User user;
     TextView userName;
     TextView userFirstName;
     TextView userEmail;
     TextView userPhoneNum;
     Button editButton;
+    Button homeButton;
+    ImageView emailIcon;
+    ImageView callIcon;
     TextView userRating;
-    TextView userPassword;
-    TextView password;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,23 +54,24 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         //Initialize
         userName = findViewById(R.id.userProfileUserName);
         userFirstName = findViewById(R.id.userProfileFirstName);
-        userPassword = findViewById(R.id.userProfilePassword);
         userEmail = findViewById(R.id.userProfilePrivateEmail);
         userPhoneNum = findViewById(R.id.userProfilePrivatePhone);
         editButton = findViewById(R.id.userProfilePrivateButton);
         userRating = findViewById(R.id.userProfilePrivateRating);
-        password = findViewById(R.id.userProfilePrivatePasswordText);
+        homeButton = findViewById(R.id.go_home_button);
+        emailIcon = findViewById(R.id.email_icon_private);
+        callIcon = findViewById(R.id.call_icon_private);
 
+        // currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        user = ActiveUser.getUser();
 
+        //retrieve current User profile info
+        userName.setText(user.getUsername());
+        userFirstName.setText(user.getFirstName());
+        userEmail.setText(user.getEmail());
+        userPhoneNum.setText(user.getPhoneNumber());
 
-        //get the username from the fragment
-//        try {
-//            Intent i = getIntent();
-//            test = i.getStringExtra("someUsername");
-//            Log.i("alex", test);
-//        } catch(Exception e){
-//            Log.i("testValue",e.toString());
-//        }
+     
 
         Intent i = getIntent();
         if(i.getStringExtra("someUsername")==null){
@@ -94,11 +93,9 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                             userFirstName.setText(user1.getFirstName());
                             userEmail.setText(user1.getEmail());
                             userPhoneNum.setText(user1.getPhoneNumber());
-//                            userRating.setText(user1.);
                             userPassword.setAlpha(0);
                             password.setAlpha(0);
                             editButton.setAlpha(0);
-//                            userPassword.setText(user1.getPassword());
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -108,47 +105,15 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                         }
                     });
         }
-
-//        Log.i("alex",test);
-
-//        if(test.matches("")){
-//            user1 = ActiveUser.getUser();
-//            userName.setText(user1.getUsername());
-//            userFirstName.setText(user1.getFirstName());
-//            userEmail.setText(user1.getEmail());
-//            userPhoneNum.setText(user1.getPhoneNumber());
-//            userPassword.setText(user1.getPassword());
-//        } else {
-//            UserStore.getUser(test)
-//                    .addOnSuccessListener(new OnSuccessListener<User>() {
-//                        @Override
-//                        public void onSuccess(User user) {
-//                            user1 = user;
-//                            userName.setText(user1.getUsername());
-//                            userFirstName.setText(user1.getFirstName());
-//                            userEmail.setText(user1.getEmail());
-//                            userPhoneNum.setText(user1.getPhoneNumber());
-//                            userPassword.setText(user1.getPassword());
-//                        }
-//                    })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            Toast.makeText(UserProfileActivity.this, "didn't work", Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-//        }
+      
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
-       // currentUser = FirebaseAuth.getInstance().getCurrentUser();
-//        user = ActiveUser.getUser();
-
-        //retrieve current User profile info
-//        userName.setText(user1.getUsername());
-//        userFirstName.setText(user1.getFirstName());
-//        userEmail.setText(user1.getEmail());
-//        userPhoneNum.setText(user1.getPhoneNumber());
-//        userPassword.setText(user1.getPassword());
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,20 +125,28 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
        userEmail.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               String email = userEmail.getText().toString();
-               Intent intent = new Intent(UserProfileActivity.this, EmailActivity.class);
-               intent.putExtra("to", email);
-               startActivity(intent);
+               openEmailActivity();
            }
        });
 
        userPhoneNum.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               String phone = userPhoneNum.getText().toString();
-               Intent intent = new Intent(UserProfileActivity.this, CallActivity.class);
-               intent.putExtra("call", phone);
-               startActivity(intent);
+              openCallActivity();
+           }
+       });
+
+       emailIcon.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               openEmailActivity();
+           }
+       });
+
+       callIcon.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               openCallActivity();
            }
        });
 
@@ -196,4 +169,21 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
 
     }
 
+    public void openEmailActivity(){
+        String email = userEmail.getText().toString();
+        Intent intent = new Intent(UserProfileActivity.this, EmailActivity.class);
+        intent.putExtra("to", email);
+        startActivity(intent);
+    }
+
+    public void openCallActivity(){
+        String phone = userPhoneNum.getText().toString();
+        Intent intent = new Intent(UserProfileActivity.this, CallActivity.class);
+        intent.putExtra("call", phone);
+        startActivity(intent);
+
+    }
+
 }
+
+
