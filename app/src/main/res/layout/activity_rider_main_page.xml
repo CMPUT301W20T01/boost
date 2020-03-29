@@ -100,7 +100,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:text="View Profile" />
+                android:text="View Profile"
+                android:background="@drawable/rounded_button_dark"
+                android:textColor="@color/qr_code_white"
+                android:layout_gravity="center"/>
 
             <Button
                 android:id="@+id/requestRideButton"
@@ -109,7 +112,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:text="Request Ride" />
+                android:text="Request Ride"
+                android:background="@drawable/rounded_button_dark"
+                android:textColor="@color/qr_code_white"
+                android:layout_gravity="center"/>
 
             <Button
                 android:id="@+id/viewRideRequestButton"
@@ -118,7 +124,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:text="View Request" />
+                android:text="View Request"
+                android:background="@drawable/rounded_button_dark"
+                android:textColor="@color/qr_code_white"
+                android:layout_gravity="center"/>
 
             <Button
                 android:id="@+id/logoutButton"
@@ -127,7 +136,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:text="Log Out" />
+                android:text="Log Out"
+                android:background="@drawable/rounded_button_dark"
+                android:textColor="@color/qr_code_white"
+                android:layout_gravity="center"/>
         </LinearLayout>
 
     <LinearLayout

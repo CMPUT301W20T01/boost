@@ -2,43 +2,41 @@ package ca.ualberta.boost;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
+import ca.ualberta.boost.controllers.RideEventListener;
+import ca.ualberta.boost.controllers.RideTracker;
+import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.Ride;
-import ca.ualberta.boost.models.Rider;
 import ca.ualberta.boost.models.User;
+import ca.ualberta.boost.stores.RideStore;
 import ca.ualberta.boost.stores.UserStore;
 
 /**
@@ -46,22 +44,30 @@ import ca.ualberta.boost.stores.UserStore;
  * open ride requests, and displays these ride requests
  */
 
-public class ViewRideRequestsActivity extends MapActivity {
+public class ViewRideRequestsActivity extends MapActivity implements RequestDetailsFragment.OnFragmentInteractionListener, RideEventListener {
+
+    // constants
+    BitmapDescriptor SPECIAL = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
 
     // views
     private LinearLayout searchesLayout;
     private EditText searchStartText;
     private Button cancelButton;
-
-    // firebase
-    private FirebaseAuth auth;
-    private FirebaseFirestore db;
-    private CollectionReference handler;
+    private Button detailsButton;
 
     // attributes
     private LatLng startLocation;
     private ArrayList<Ride> rideList;
     private GoogleMap mMap;
+    private ArrayList<Marker> startMarkers;
+    private Marker endMarker;
+    private Ride chosenRide;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+
+    //RIDE EVENT LISTENER
+    RideTracker rideTracker;
+    private RideEventListener rideEventListener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,11 +77,10 @@ public class ViewRideRequestsActivity extends MapActivity {
         searchesLayout = findViewById(R.id.searchesLayout);
         searchStartText = findViewById(R.id.searchStartEditText);
         cancelButton = findViewById(R.id.cancelButton);
+        detailsButton = findViewById(R.id.detailsButton);
 
-        // firebase
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        handler = db.collection("rides");
+        //RIDE LISTENER
+        //rideTracker = new RideTracker(r,null);
     }
 
     @Override
@@ -90,14 +95,31 @@ public class ViewRideRequestsActivity extends MapActivity {
 
     @Override
     protected void init() {
-        rideList = new ArrayList<>();
+
         mMap = getMap();
+        startMarkers = new ArrayList<>();
+        endMarker = mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(0,0))
+                                .title("Destination")
+                                .visible(false));
 
         // cancel button
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 launchDriverMainPage();
+            }
+        });
+
+        // view ride details button
+        detailsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (chosenRide != null){
+                    String pickupAddress = reverseGeoLocate(chosenRide.getStartLocation());
+                    String destinationAddress = reverseGeoLocate(chosenRide.getEndLocation());
+                    new RequestDetailsFragment(chosenRide, pickupAddress, destinationAddress).show(getSupportFragmentManager(), "REQ_SUM");
+                }
             }
         });
 
@@ -115,7 +137,41 @@ public class ViewRideRequestsActivity extends MapActivity {
             }
         });
 
+        // on marker click
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+
+               // if the marker is a start location marker
+               if (startMarkers.contains(marker)){
+                   // make markers less opaque
+                   for (Marker m : startMarkers){
+                       m.setAlpha(0.5f);
+                   }
+                   int index = startMarkers.indexOf(marker);
+                   chosenRide = rideList.get(index);
+                   // highlight start marker
+                   marker.setAlpha(1.0f);
+                   // place end location marker
+                    endMarker.setPosition(chosenRide.getEndLocation());
+                    endMarker.setVisible(true);
+                   // zoom camera to both markers
+                   zoomToMarkers(marker, endMarker);
+                   // show button that says VIEW DETAILS
+                   detailsButton.setVisibility(View.VISIBLE);
+               }
+               // show both markers titles
+               marker.showInfoWindow();
+                return true;
+            }
+
+        });
+
+        //SET UP RIDE EVENT LISTENER
+        //rideTracker = new RideTracker(rideEventListener, null);
+
     }
+
 
     /**
      * Handles search bar for searching a start location
@@ -124,9 +180,14 @@ public class ViewRideRequestsActivity extends MapActivity {
      *      The EditText of the search bar
      */
     private void handleSearch(EditText searchEditText){
+        // hide VIEW DETAILS button
+        detailsButton.setVisibility(View.GONE);
+        // set end marker as invisible
+        endMarker.setVisible(false);
         String searchString = searchEditText.getText().toString();
         startLocation = geoLocate(searchString);
-        displayRequests();
+        moveCamera(startLocation, 15);
+        fillRideList();
     }
 
     /**
@@ -134,27 +195,21 @@ public class ViewRideRequestsActivity extends MapActivity {
      * of the Driver's specified start location
      */
     private void displayRequests(){
-        fillRideList();
+        // clear map of previously searched requests
+        for (int i = 0; i < startMarkers.size(); i++){
+            Marker m = startMarkers.get(i);
+            m.remove();
+        }
+        startMarkers.clear();
         // place markers for rides
         for (int i = 0; i < rideList.size(); i++){
-            float[] results = new float[1];
+            Log.d("TestingViewRide", "hi");
             Ride ride = rideList.get(i);
-            final LatLng rideStartLocation = ride.getStartLocation();
-            Location.distanceBetween(startLocation.latitude, startLocation.latitude,
-                    rideStartLocation.latitude, rideStartLocation.longitude, results);
-            // if distance is smaller than 5km
-            if (results[0] < 5000){
-                UserStore.getUser(ride.getRiderUsername()).addOnSuccessListener(new OnSuccessListener<User>() {
-                    @Override
-                    public void onSuccess(User user) {
-                        Rider rider = (Rider) user;
-                        mMap.addMarker(new MarkerOptions()
-                                .title(rider.getEmail())
-                                .position(rideStartLocation));
-                    }
-                });
+            Log.d("TestingViewRide", ride.getRiderUsername());
+            startMarkers.add(mMap.addMarker(new MarkerOptions()
+                    .position(ride.getStartLocation())
+                    .title("Pickup")));
             }
-        }
     }
 
 
@@ -163,31 +218,50 @@ public class ViewRideRequestsActivity extends MapActivity {
      * Fills the rideList with pending ride requests from the database
      */
     private void fillRideList(){
-        handler.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (document.get("status").toString().matches("Pending")) {
-                                    // TODO: get pending rides from firebase
-//                                    LatLng startLocation = (document.get("start_location"));
-//                                    LatLng endLocation = (document.get("end_location").toString());
-//                                    double fare = (document.get("fare"));
-//                                    String status = (document.get("status").toString());
-//                                    String riderUserName = (document.get("rider").toString());
-//                                    rideList.add(new Ride(riderUserName, startLocation, endLocation, fare));
-                                }
-                            }
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(ViewRideRequestsActivity.this, "Please contact your database administrator", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        rideList = new ArrayList<>();
+        Promise<Collection<Ride>> ridePromise = RideStore.getRequests();
+        ridePromise.addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
+            @Override
+            public void onSuccess(Collection<Ride> rides) {
+                Log.d("TestingViewRide", "success");
+                if (!rides.isEmpty()) {
+                    rideList.addAll(rides);
+                    displayRequests();
+                } else{
+                    Log.d("TestingViewRide", "rides is empty");
+                }
+            }
+        });
+        ridePromise.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("TestingViewRide", "failure");
+            }
+        });
+    }
+
+    /**
+     * Driver accepted ride, send new ride to database
+     * @param newRide
+     */
+    @Override
+    public void onAcceptPressed(Ride newRide) {
+
+        new RideTracker(newRide);
+
+        User activeUser = ActiveUser.getUser();
+
+        // update ride in database
+        newRide.setDriverUsername(activeUser.getUsername());
+        newRide.driverAccept();
+        RideStore.saveRide(newRide);
+
+        // set driver's current ride to this ride
+        activeUser.setActiveRide(newRide);
+        UserStore.saveUser(activeUser);
+      
+        new DriverAcceptedFragment(chosenRide).show(getSupportFragmentManager(), "Pending_Rider_Accept");
+
     }
 
     /**
@@ -199,4 +273,27 @@ public class ViewRideRequestsActivity extends MapActivity {
         finish();
     }
 
+    @Override
+    public void onDriverAccepted(Ride ride) {
+        Intent intent = new Intent(this, CurrentRideActivity.class);
+        startActivity(intent);
+    }
+
+
+    @Override
+    public void onRiderAccepted(Ride ride) {
+        Intent intent = new Intent(this, CurrentRideActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onCancelled(Ride ride) {
+
+    }
+
+    @Override
+    public void onFinished(Ride ride) {}//NULL
+
+    @Override
+    public void onLocationChanged() {}//NULL
 }

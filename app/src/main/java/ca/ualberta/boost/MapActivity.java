@@ -2,7 +2,9 @@ package ca.ualberta.boost;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -20,11 +22,13 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -80,6 +84,7 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
         }
     }
 
+
     public GoogleMap getMap(){
         return mMap;
     }
@@ -117,10 +122,68 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
         // successful results
         if (results.size() > 0){
             Address address = results.get(0);
-            //searchEditText.setText(address.getFeatureName());
             return new LatLng(address.getLatitude(), address.getLongitude());
         }
         return null;
+    }
+
+    /**
+     * Returns an address given a LatLng
+     * @param latLng
+     *      The LatLng of the address
+     * @return
+     *      Returns a String of the address
+     */
+    public String reverseGeoLocate(LatLng latLng){
+        Geocoder geocoder = new Geocoder(MapActivity.this);
+        List<Address> results = new ArrayList<>();
+        // get a list of results from the search location string
+        try{
+            results = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 20);
+        }catch (IOException e){
+            Toast.makeText(MapActivity.this,
+                    "unable to find location", Toast.LENGTH_SHORT).show();
+        }
+        // successful results
+        if (results.size() > 0){
+            Address address = results.get(0);
+            return address.getAddressLine(0);
+        }
+        return null;
+    }
+
+    /**
+     * Builds a url that is used to get the directions between two locations
+     * @param startLocation
+     *      LatLng of the start location
+     * @param endLocation
+     *      LatLng of the end location
+     * @return
+     *      A string of the url
+     */
+    public String buildUrl(LatLng startLocation, LatLng endLocation){
+        String start_str = "origin=" + startLocation.latitude + "," + startLocation.longitude;
+        String end_str = "destination=" + endLocation.latitude + "," + endLocation.longitude;
+        String url = "https://maps.googleapis.com/maps/api/directions/json?" + start_str + "&"
+                + end_str + "&key=" + getString(R.string.google_api_key);
+        return url;
+    }
+
+    /**
+     * Moves the map camera so that it shows all markers that are on the map
+     *
+     * This method uses code by andr https://stackoverflow.com/users/1820695/andr
+     * from an answer to the stack overflow post
+     * https://stackoverflow.com/questions/14828217/android-map-v2-zoom-to-show-all-the-markers
+     */
+    public void zoomToMarkers(Marker marker1, Marker marker2){
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(marker1.getPosition());
+        builder.include(marker2.getPosition());
+        LatLngBounds bounds = builder.build();
+        int padding = 100; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        mMap.animateCamera(cu);
     }
 
     /**
@@ -131,7 +194,6 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
      *      The zoom level of the camera
      */
     public void moveCamera(LatLng latLng, float zoom){
-
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 

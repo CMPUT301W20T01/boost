@@ -36,6 +36,17 @@
         app:layout_constraintTop_toTopOf="@+id/yellow_background_home_screen" />
 
     <TextView
+        android:id="@+id/userProfilePrivatePasswordText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="12dp"
+        android:text="Password:"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userProfilePrivateRatingText" />
+
+    <TextView
         android:id="@+id/userProfilePrivateRatingText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,10 +77,21 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userProfilePrivateNameText" />
+        app:layout_constraintTop_toBottomOf="@+id/userProfileFirstNameText" />
 
     <TextView
-        android:id="@+id/userProfilePrivateNameText"
+        android:id="@+id/userProfileUserNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Username:"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/yellow_background_home_screen" />
+
+    <TextView
+        android:id="@+id/userProfileFirstNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -77,7 +99,17 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/yellow_background_home_screen" />
+        app:layout_constraintTop_toBottomOf="@+id/userProfileUserNameText" />
+
+    <TextView
+        android:id="@+id/userProfileFirstName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="First Name"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/userProfileFirstNameText"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/userProfileFirstNameText" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -87,14 +119,14 @@
         app:layout_constraintGuide_percent="0.31" />
 
     <TextView
-        android:id="@+id/userProfilePrivateName"
+        android:id="@+id/userProfileUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name"
+        android:text="Username"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/userProfilePrivateNameText"
+        app:layout_constraintBottom_toBottomOf="@+id/userProfileUserNameText"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/userProfilePrivateNameText" />
+        app:layout_constraintTop_toTopOf="@+id/userProfileUserNameText" />
 
     <TextView
         android:id="@+id/userProfilePrivateEmail"
@@ -113,18 +145,33 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/userProfilePrivatePhoneText"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/userProfilePrivatePhoneText"
         tools:text=" 403 555 5555" />
+
+    <TextView
+        android:id="@+id/userProfilePassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="password"
+        android:textSize="24sp"
+        android:layout_marginLeft="15dp"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toEndOf="@+id/userProfilePrivatePasswordText"
+        app:layout_constraintTop_toBottomOf="@+id/userProfilePrivateRating" />
 
     <Button
         android:id="@+id/userProfilePrivateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="5dp"
         android:text="Make Changes"
         android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userProfilePrivateRating" />
+        app:layout_constraintTop_toBottomOf="@+id/userProfilePassword"
+        app:layout_constraintVertical_bias="0.174" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

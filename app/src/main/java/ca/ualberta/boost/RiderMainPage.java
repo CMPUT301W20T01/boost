@@ -1,6 +1,5 @@
 package ca.ualberta.boost;
 
-import androidx.annotation.NonNull;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,22 +17,15 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
-import ca.ualberta.boost.models.Rider;
-import ca.ualberta.boost.models.User;
-import ca.ualberta.boost.stores.UserStore;
+import ca.ualberta.boost.stores.RideStore;
 
 
 /**
@@ -43,17 +35,13 @@ import ca.ualberta.boost.stores.UserStore;
  * complete a ride.
  */
 
-public class RiderMainPage extends MapActivity implements RideRequestSummaryFragment.OnFragmentInteractionListener {
+public class RiderMainPage extends MapActivity implements RideRequestSummaryFragment.OnFragmentInteractionListener, RiderAcceptedFragment.OnFragmentInteractionListener {
 
     // constant values
     private static final String TAG = "RiderMainPage";
 
     //firebase
     private FirebaseAuth auth;
-    private FirebaseFirestore db;
-    private CollectionReference handler;
-    DocumentReference documentReference;
-    FirebaseUser user;
 
     // views
     private Button viewRequestButton;
@@ -79,10 +67,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
         super.onCreate(savedInstanceState);
 
         auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        handler = db.collection("rides");
-        documentReference = db.collection("rides").document(auth.getUid());
-        user = FirebaseAuth.getInstance().getCurrentUser();
+
         // get views
         searchPickupText = findViewById(R.id.searchPickupEditText);
         searchDestinationText = findViewById(R.id.searchDestinationEditText);
@@ -102,25 +87,15 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
      *  This method is run when "accept" is pressed from the RideRequestSummaryFragment
      */
     @Override
-    public void onAcceptPressed(Ride newRide) {
+    public void onAcceptPressed() {
         setRiderMainPageVisibility();
-        // TODO: Change so that firebase or ride controller handles this
-        ride = newRide;
-        ride.setPending();
-        Map<String, String> map = new HashMap<>();
-        map.put("driverEmail",null);
-        map.put("endLocation", ride.getEndLocation().toString());
-        map.put("fare", String.valueOf(ride.getFare()));
-        map.put("rider",user.getEmail());
-        map.put("riderId", auth.getUid());
-        map.put("startLocation",ride.getStartLocation().toString());
-        map.put("status","Pending");
-        handler.document(user.getEmail()).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(RiderMainPage.this, "Request Sent", Toast.LENGTH_SHORT).show();
-            }
-        });
+        // makes a ride with pending status and automatic date
+        ride = new Ride(ride.getStartLocation(), ride.getEndLocation(),
+                ride.getFare(), ride.getRiderUsername());
+        ActiveUser.setCurrentRide(ride);
+
+        //RUN PENDING FRAGMENT
+        new RiderAcceptedFragment(ride).show(getSupportFragmentManager(), "Pending_Driver_Accept");
 
     }
 
@@ -169,6 +144,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
             public void onMarkerDragEnd(Marker marker) {
                 updateRideLocation(marker);
                 // TODO: update the text in the search bar to match the marker's new position
+                updateSearchBar(marker);
 
             }
         });
@@ -226,10 +202,8 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
      * This function is run when the "Request Ride" button is clicked.
      */
     private void handleRequestRideClick() {
-        setRequestLocationPageVisibility();
         ride = new Ride(0.00, ActiveUser.getUser().getUsername());
-        /* TODO: set ride to current user, then send ride to database */
-        //ride.setRider();
+        setRequestLocationPageVisibility();
         // pickup search bar
         searchPickupText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -277,6 +251,10 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
                 moveMarker(destinationMarker, latLng);
                 updateRideLocation(destinationMarker);
             }
+            // if both markers are visible
+            if (pickupMarker.isVisible() && destinationMarker.isVisible()){
+                zoomToMarkers(pickupMarker, destinationMarker);
+            }
     }
 
     /**
@@ -295,12 +273,26 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     }
 
     /**
+     * Updates the search bar corresponding to the marker
+     * with the new address
+     * @param marker
+     *      Marker that has the new location
+     */
+    private void updateSearchBar(Marker marker){
+        if (marker.getTitle().equals(pickupMarker.getTitle())){
+            String address = reverseGeoLocate(marker.getPosition());
+            searchPickupText.setText(address);
+        } else {
+            String address = reverseGeoLocate(marker.getPosition());
+            searchDestinationText.setText(address);
+        }
+    }
+
+    /**
      * Hides views associated with ride requesting
      */
     private void handleCancelRideClick() {
         setRiderMainPageVisibility();
-        searchDestinationText.setText("");
-        searchPickupText.setText("");
     }
 
     /**
@@ -318,6 +310,8 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
      * and hides views associated with ride requesting
      */
     private void setRiderMainPageVisibility() {
+        searchDestinationText.setText("");
+        searchPickupText.setText("");
         viewRequestLayout.setVisibility(View.VISIBLE);
         confirmCancelLayout.setVisibility(View.GONE);
         searchesLayout.setVisibility(View.GONE);
@@ -337,8 +331,12 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     }
 
     private void launchProfileScreen() {
-        Intent intent = new Intent(this, PrivateUserProfileActivity.class);
+        Intent intent = new Intent(this, UserProfileActivity.class);
         startActivity(intent);
     }
 
+    @Override
+    public void onRiderAcceptPressed(Ride newRide) {
+        Log.d(TAG, "on rider accepted pressed");
+    }
 }

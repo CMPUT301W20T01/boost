@@ -35,8 +35,21 @@ public class QRActivity extends AppCompatActivity {
         setContentView(R.layout.activity_qr);
 
         generateButton = findViewById(R.id.generate_button);
+        scanButton = findViewById(R.id.scan_button);
 
+        //GENERATE BUTTON
         generateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                double fare = 20.0; //TO BE CHANGED WITH RIDE FARE
+                new QRCodeFragment(fare).show(getSupportFragmentManager(), "Generate QR");
+
+            }
+        });
+
+
+        //SCAN BUTTON
+        scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //CHECK FOR PERMISSION ON CAMERA AND STORAGE
@@ -53,17 +66,16 @@ public class QRActivity extends AppCompatActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         String LOGTAG = "ABC";
 
-        if(resultCode != Activity.RESULT_OK)
-        {
-            Log.d(LOGTAG,"COULD NOT GET A GOOD RESULT.");
-            if(data==null)
+        if (resultCode != Activity.RESULT_OK) {
+            Log.d(LOGTAG, "COULD NOT GET A GOOD RESULT.");
+            if (data == null)
                 return;
             //Getting the passed result
             String result = data.getStringExtra("com.blikoon.qrcodescanner.error_decoding_image");
-            if( result!=null)
-            {
+            if (result != null) {
                 AlertDialog alertDialog = new AlertDialog.Builder(QRActivity.this).create();
                 alertDialog.setTitle("Scan Error");
                 alertDialog.setMessage("QR Code could not be scanned");
@@ -78,13 +90,12 @@ public class QRActivity extends AppCompatActivity {
             return;
 
         }
-        if(requestCode == REQUEST_CODE_QR_SCAN)
-        {
-            if(data==null)
+        if (requestCode == REQUEST_CODE_QR_SCAN) {
+            if (data == null)
                 return;
             //Getting the passed result
             String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
-            Log.d(LOGTAG,"Have scan result in your app activity :"+ result);
+            Log.d(LOGTAG, "Have scan result in your app activity :" + result);
             AlertDialog alertDialog = new AlertDialog.Builder(QRActivity.this).create();
             alertDialog.setTitle("Scan result");
             alertDialog.setMessage(result);
@@ -111,7 +122,6 @@ public class QRActivity extends AppCompatActivity {
     }
 
     private void requestPermission() {
-
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.CAMERA},
                 PERMISSION_REQUEST_CODE);

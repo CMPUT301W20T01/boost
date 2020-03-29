@@ -51,22 +51,15 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
 
-    //Stores User's generated ID from firebase
-    String currentUserId;
-
     //check if user is already signed in
     @Override
     protected void onStart() {
         super.onStart();
-        if (currentUserId == null) {
-            Toast.makeText(this, "Not signed In", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        // put your code here...
         circleProgressBar.setAlpha(0);
     }
 
@@ -127,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
+                                    Log.d("Sign In", e.toString());
                                     Toast.makeText(MainActivity.this, "Incorrect username or password.", Toast.LENGTH_SHORT).show();
                                     circleProgressBar.setAlpha(0);
                                 }
@@ -151,11 +145,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent;
         if (type == UserType.RIDER) {
             intent = new Intent(this, RiderMainPage.class);
+//            intent = new Intent(this, OnCompleteActivity.class); // for testing on complete page
         } else { // type == UserType.DRIVER
             intent = new Intent(this, DriverMainPage.class);
         }
         startActivity(intent);
-        finish();
     }
 
     //method to open SignUp activity

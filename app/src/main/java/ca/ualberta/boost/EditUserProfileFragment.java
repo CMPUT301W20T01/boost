@@ -25,30 +25,26 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.models.User;
+
 /**TAKE NEW UPDATE ON USER CONTACT (EMAIL, PHONE NUMBER)
  * UPDATE TEXTVIEW AND SEND DATA TO PREVIOUS ACTIVITY TO UPDATE ON FIREBASE
  */
 public class EditUserProfileFragment extends DialogFragment {
-    private FirebaseAuth auth;
-    private FirebaseFirestore db;
-    //private DatabaseReference firebaseData;
-    private CollectionReference collection;
-    DocumentReference documentReference;
+//    FirebaseUser currentUser;
+    User user;
 
-    private String userID;
-    private FirebaseUser currentUser;
 
     private EditText email;
     private EditText phone;
+    private EditText name;
     private OnFragmentInteractionListener listener;
 
     EditUserProfileFragment(){}
-    EditUserProfileFragment(FirebaseUser currentUser){
-        this.currentUser = currentUser;
-    }
 
     public interface OnFragmentInteractionListener {
-        void onOkPressedEdit(String newEmail, String newPhone);
+        void onOkPressedEdit(String newEmail, String newPhone,String newName);
     }
 
     @Override
@@ -71,30 +67,14 @@ public class EditUserProfileFragment extends DialogFragment {
         //Initialize
         email = view.findViewById(R.id.email_input);
         phone = view.findViewById(R.id.phone_input);
+        name = view.findViewById(R.id.name_input);
 
-//        userID = auth.getUid();
-//        documentReference = db.collection("users").document(userID);
-
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        collection = db.collection("users");
+        user = ActiveUser.getUser();
 
         //retrieve current User profile info
-        collection.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for(QueryDocumentSnapshot document: task.getResult()){
-                                if((auth.getUid().matches(document.get("id").toString()))){
-                                    email.setText(document.get("Email").toString());
-                                    phone.setText(document.get("Phone").toString());
-                                }
-                            }
-                        }
-
-                    }
-                });
+        name.setText(user.getFirstName());
+        email.setText(user.getEmail());
+        phone.setText(user.getPhoneNumber());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
@@ -106,7 +86,8 @@ public class EditUserProfileFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         String email_input = email.getText().toString();
                         String phone_input  = phone.getText().toString();
-                        listener.onOkPressedEdit(email_input, phone_input);
+                        String name_input = name.getText().toString();
+                        listener.onOkPressedEdit(email_input, phone_input,name_input);
                     }
                 }).create();
 

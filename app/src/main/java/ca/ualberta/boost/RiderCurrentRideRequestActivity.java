@@ -2,6 +2,7 @@ package ca.ualberta.boost;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,8 +23,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+
+import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.models.Promise;
+import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.User;
+import ca.ualberta.boost.stores.RideStore;
 
 /**
  * RiderCurrentRideRequestActivity is responsible for displaying the current request of a rider
@@ -40,11 +51,8 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
     Button cancelButton;
 
     //firebase
-    private FirebaseAuth auth;
-    private FirebaseFirestore db;
-    private CollectionReference handler;
-    DocumentReference documentReference;
-    FirebaseUser user;
+    private Promise<Collection<Ride>> requests;
+    User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +66,14 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
         riderUserName = findViewById(R.id.usernameRideRequest);
         cancelButton = findViewById(R.id.cancelRideRequestButton);
 
+
         //firebase
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        handler = db.collection("rides");
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        documentReference = db.collection("rides").document(user.getEmail());
-        setRideRequest();
+        requests = RideStore.getRequests();
+        currentUser = ActiveUser.getUser();
+
+
+        setRideRequest2();
+        //setRideRequest();
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,52 +81,78 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
             }
         });
 
+        driverUserName.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(driverUserName.getText().toString().matches("")){
+                    Toast.makeText(RiderCurrentRideRequestActivity.this, "No Driver Yet", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    //Launch the profile page with the driver's information
+                    Bundle bundle = new Bundle();
+                    //send username to contact information fragment
+                    bundle.putString("username",driverUserName.getText().toString());
+                    UserContactInformationFragment userContactInformationFragment = new UserContactInformationFragment();
+                    userContactInformationFragment.setArguments(bundle);
+                    userContactInformationFragment.show(getSupportFragmentManager(), "my fragment");
+//                    FragmentManager manager = getSupportFragmentManager();
+
+                }
+                return false;
+            }
+        });
+
     }
 
     //function to retrieve the relevant information about a ride request for the current user
-    private void setRideRequest(){
-        handler.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for(QueryDocumentSnapshot document: task.getResult()){
-                                if((user.getEmail().matches(document.get("rider").toString()))&& document.get("status").toString().matches("Pending")){
-                                    startLocation.setText("Start Location: "+ document.get("start_location").toString());
-                                    endLocation.setText("End Location: "+ document.get("end_location").toString());
-                                    fare.setText("Fare: "+ document.get("fare").toString());
-                                    status.setText("Status: "+ document.get("status").toString());
-//                                    driverUserName.setText(document.get("driver").toString());
-                                    Log.i("testValue",document.get("rider").toString());
-                                    Log.i("testValue",user.getEmail());
-                                    riderUserName.setText("Username: "+document.get("rider").toString());
-                                }
-
-                            }
-                        }
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(RiderCurrentRideRequestActivity.this, "Currently no active request", Toast.LENGTH_SHORT).show();
-                    }
-                });
+    private void setRideRequest2(){
+        Log.i("RESULT","Attempt to retrieve requests");
+        requests.addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
+            @Override
+            public void onSuccess(Collection<Ride> rides) {
+                Log.i("RESULT","onSuccess to retrieve requests");
+                Log.i("RESULT","rides numbers: "+rides.size());
+                for (Ride currentRide : rides) {
+                    if (currentRide.getRiderUsername().equals(currentUser.getUsername())){
+                        startLocation.setText("Start Location: "+currentRide.getStartLocation().toString());
+                        endLocation.setText("End Location: "+currentRide.getEndLocation().toString());
+                        fare.setText("Fare: "+Double.toString(currentRide.getFare()) + "QR Bucks");
+                        status.setText("Status: "+currentRide.getRideStatus().toString());
+                        driverUserName.setText(currentRide.getDriverUsername());
+                        Log.i("testValue",currentRide.getRiderUsername());
+                        Log.i("testValue",currentUser.getUsername());
+                        riderUserName.setText("Rider: "+currentRide.getRiderUsername());
+                }
+            }
+        }
+        });
+        requests.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.i("RESULT","onFailure to retrieve requests");
+                Toast.makeText(RiderCurrentRideRequestActivity.this, "Currently no active request", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-
     //function to cancel a ride request
-    private void cancelRideRequest(){
-        Map<String, Object> map = new HashMap<>();
-        map.put("status","Cancelled");
-        documentReference.update(map)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(RiderCurrentRideRequestActivity.this, "Ride Request Cancelled", Toast.LENGTH_LONG).show();
+    private void cancelRideRequest() {
+        Log.i("TAG","..........cancelling ride.......");
+        Promise<Collection<Ride>> requests = RideStore.getRequests();
+        requests.addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
+            @Override
+            public void onSuccess(Collection<Ride> rides) {
+                for (Ride currentRide : rides) {
+                    if (currentRide.getRiderUsername().equals(currentUser.getUsername())) {
+                        Log.i("TEST","Cancelling "+currentRide.getRiderUsername());
+                        currentRide.cancel();
+                        RideStore.saveRide(currentRide);
+                        ActiveUser.cancelRide();
                     }
-                });
+                }
+            }
+        });
+
         clear();
     }
 
@@ -128,6 +163,7 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
         fare.setText("");
         status.setText("");
         riderUserName.setText("");
+        driverUserName.setText("");
     }
 }
 
