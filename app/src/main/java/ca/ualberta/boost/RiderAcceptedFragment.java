@@ -106,14 +106,18 @@ public class RiderAcceptedFragment extends DialogFragment {
                         public void onSuccess(Ride ride) {
                             Log.i("rideListener","onSuccess RideStore get driver:" + ride.getDriverUsername());
                             driver =ride.getRiderUsername();
+
+                            Log.i("rideListener","got driver:" + driver);
+
+                            if (ride.getRiderUsername() !=null){
+                                Toast.makeText(getContext(), "Driver: "+driver+" has accepted.", Toast.LENGTH_SHORT).show();
+
+                                driverText.setText(driver);
+
+                            }
                         }
                     });
-                    Log.i("rideListener","got driver:" + driver);
-
-                    Toast.makeText(getContext(), "Driver: "+driver+" has accepted.", Toast.LENGTH_SHORT).show();
-
-                    //driverText.setText(ride.getDriverUsername());
-
+                    
                     //WHEN DRIVER ACCEPTED, TEXTVIEW WILL SHOW UP DRIVER NAME
                     //CLICK ON THE NAME WILL POP UP PROFILE INFO FRAGMENT
                     //DOES NOT WORK???
