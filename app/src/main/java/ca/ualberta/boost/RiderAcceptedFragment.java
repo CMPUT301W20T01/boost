@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
@@ -29,6 +31,7 @@ import ca.ualberta.boost.controllers.RideTracker;
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.RideStatus;
+
 import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.stores.RideStore;
 import ca.ualberta.boost.stores.UserStore;
@@ -52,6 +55,7 @@ public class RiderAcceptedFragment extends DialogFragment {
 
     RiderAcceptedFragment(Ride ride){
         this.ride = ride;
+
     }
 
     /**
@@ -84,7 +88,6 @@ public class RiderAcceptedFragment extends DialogFragment {
 
         driverText = view.findViewById(R.id.driverText);
 
-
         Log.d("rideListener","add listener");
         new RideTracker(this.ride).addListener(new RideEventListener() {
             @Override
@@ -105,15 +108,24 @@ public class RiderAcceptedFragment extends DialogFragment {
                         @Override
                         public void onSuccess(Ride ride) {
                             Log.i("rideListener","onSuccess RideStore get driver:" + ride.getDriverUsername());
-                            driver =ride.getRiderUsername();
+                            driver =ride.getDriverUsername();
 
                             Log.i("rideListener","got driver:" + driver);
 
-                            if (ride.getRiderUsername() !=null){
-                                Toast.makeText(getContext(), "Driver: "+driver+" has accepted.", Toast.LENGTH_SHORT).show();
+                            if (ride.getRiderUsername() !=null) {
+                                Toast.makeText(getContext(), "Driver: " + driver + " has accepted.", Toast.LENGTH_SHORT).show();
 
                                 driverText.setText(driver);
 
+                                driverText.setOnLongClickListener(new View.OnLongClickListener() {
+                                    @Override
+                                    public boolean onLongClick(View v) {
+                                        Intent intent = new Intent(getContext(), UserProfileActivity.class);
+                                        intent.putExtra("someUsername",driverText.getText().toString());
+                                        startActivity(intent);
+                                        return true;
+                                    }
+                                });
                             }
                         }
                     });
@@ -153,6 +165,7 @@ public class RiderAcceptedFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //CANCEL THE RIDE OFFER
+
                         // update ride in database
                         ride.cancel();
                         RideStore.saveRide(ride);
@@ -164,6 +177,7 @@ public class RiderAcceptedFragment extends DialogFragment {
 
         AlertDialog alert = builder.create();
         alert.setCanceledOnTouchOutside(false);
+
         return alert;
     }
 }
