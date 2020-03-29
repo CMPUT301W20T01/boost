@@ -17,6 +17,9 @@ public class Driver extends User {
     private double rating = 0.00;
     private int numRates;
 
+    private int positveRating = 0;
+    private int negativeRating = 0;
+
     /**
      * Driver constructor
      * @param firstName
@@ -29,9 +32,10 @@ public class Driver extends User {
         super(UserType.DRIVER, firstName, username, password, email, phoneNumber);
     }
 
-    public double getRating() {
-        return rating;
-    }
+
+    public int getPositveRating() {return positveRating; }
+
+    public int getNegativeRating() {return negativeRating; }
 
     /**
      * @return
@@ -66,8 +70,8 @@ public class Driver extends User {
         map.put("password", this.getPassword());
         map.put("email", this.getEmail());
         map.put("phoneNumber", this.getPhoneNumber());
-        map.put("rating", this.rating);
-        map.put("rates", this.numRates);
+        map.put("positiveRating", positveRating);
+        map.put("negativeRating", negativeRating);
         return map;
     }
 
@@ -85,6 +89,7 @@ public class Driver extends User {
                 (String) data.get("password"),
                 (String) data.get("email"),
                 (String) data.get("phoneNumber"));
+
     }
 
 }
