@@ -34,6 +34,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -76,6 +77,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
     //RIDE EVENT LISTENER
     RideTracker rideTracker;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +87,6 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         searchStartText = findViewById(R.id.searchStartEditText);
         cancelButton = findViewById(R.id.cancelButton);
         detailsButton = findViewById(R.id.detailsButton);
-
 
     }
 
@@ -173,6 +174,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
             }
 
         });
+
     }
 
 
@@ -249,6 +251,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
      */
     @Override
     public void onAcceptPressed(Ride newRide) {
+
         User activeUser = ActiveUser.getUser();
 
         // update ride in database
@@ -261,6 +264,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         UserStore.saveUser(activeUser);
 
         new DriverAcceptedFragment(newRide).show(getSupportFragmentManager(), "Pending_Rider_Accept");
+
 
     }
 
@@ -282,6 +286,5 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         startActivity(intent);
         finish();
     }
-
 
 }

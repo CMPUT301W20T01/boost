@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -75,12 +76,16 @@ public class RequestDetailsFragment extends DialogFragment {
         riderText.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Bundle bundle = new Bundle();
-                //send username to contact information fragment
-                bundle.putString("username",riderText.getText().toString());
-                UserContactInformationFragment userContactInformationFragment = new UserContactInformationFragment();
-                userContactInformationFragment.setArguments(bundle);
-                userContactInformationFragment.show(getFragmentManager(), "my fragment");
+//                Bundle bundle = new Bundle();
+//                //send username to contact information fragment
+//                bundle.putString("username",riderText.getText().toString());
+//                UserContactInformationFragment userContactInformationFragment = new UserContactInformationFragment();
+//                userContactInformationFragment.setArguments(bundle);
+//                userContactInformationFragment.show(getFragmentManager(), "my fragment");
+//                return true;
+                Intent intent = new Intent(getContext(), UserProfileActivity.class);
+                intent.putExtra("someUsername",riderText.getText().toString());
+                startActivity(intent);
                 return true;
             }
         });
