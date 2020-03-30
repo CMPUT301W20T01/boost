@@ -85,9 +85,8 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     public void onAcceptPressed() {
         setRiderMainPageVisibility();
         // makes a ride with pending status and automatic date
-        ride = new Ride(ride.getStartLocation(), ride.getEndLocation(),
-                ride.getFare(), ride.getRiderUsername());
         ActiveUser.setCurrentRide(ride);
+        Log.d("RiderMainPage", "ride id: " + ride.id());
         RideStore.saveRide(ride);
 
         //RUN PENDING FRAGMENT

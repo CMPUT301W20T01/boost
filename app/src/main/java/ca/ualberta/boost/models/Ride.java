@@ -7,6 +7,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -39,15 +41,14 @@ public class Ride {
         this.rider_username = rider;
         this.status = status;
         this.requestTime = requestTime;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Log.d("Ride", dateFormat.format(requestTime));
+        Log.d("Ride", "creating new ride with id: " + this.id());
+
     }
 
     public Ride(LatLng startLocation, LatLng endLocation, double fare, String rider) {
-        this.startLocation = startLocation;
-        this.endLocation = endLocation;
-        this.fare = fare;
-        this.rider_username = rider;
-        this.status = RideStatus.PENDING;
-        this.requestTime = new Date(); // assigned when ride is requested
+        this(startLocation, endLocation, fare, null, rider, RideStatus.PENDING, new Date());
     }
 
     /**
@@ -56,8 +57,7 @@ public class Ride {
      * @param rider
      */
     public Ride(double fare, String rider) {
-        this.fare = fare;
-        this.rider_username = rider;
+        this(null, null, fare, rider);
     }
 
     /**

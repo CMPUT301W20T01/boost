@@ -85,7 +85,7 @@ public class DriverAcceptedFragment extends DialogFragment {
             public void onStatusChange(@Nonnull Ride ride) {
                 if (ride.getRideStatus() == RideStatus.RIDERACCEPTED) {
                     Log.i("rideListener","status changed to RIDERACCEPTED");
-                    ActiveUser.getUser().setActiveRide(ride);
+                    ActiveUser.setCurrentRide(ride);
                     Intent intent = new Intent(mContext, CurrentRideActivity.class);
                     mContext.startActivity(intent);
 
