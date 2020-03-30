@@ -73,13 +73,6 @@ public class RequestDetailsFragment extends DialogFragment {
         riderText.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-//                Bundle bundle = new Bundle();
-//                //send username to contact information fragment
-//                bundle.putString("username",riderText.getText().toString());
-//                UserContactInformationFragment userContactInformationFragment = new UserContactInformationFragment();
-//                userContactInformationFragment.setArguments(bundle);
-//                userContactInformationFragment.show(getFragmentManager(), "my fragment");
-//                return true;
                 Intent intent = new Intent(getContext(), UserProfileActivity.class);
                 intent.putExtra("someUsername",riderText.getText().toString());
                 startActivity(intent);

@@ -79,6 +79,16 @@ public class DriverAcceptedFragment extends DialogFragment {
         riderText = view.findViewById(R.id.riderText);
         riderText.setText(activeRide.getRiderUsername());
 
+        riderText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent(getContext(), UserProfileActivity.class);
+                intent.putExtra("someUsername",riderText.getText().toString());
+                startActivity(intent);
+                return true;
+            }
+        });
+
         new RideTracker(activeRide).addListener(new RideEventListener() {
             @Override
             public void onStatusChange(@Nonnull Ride ride) {
