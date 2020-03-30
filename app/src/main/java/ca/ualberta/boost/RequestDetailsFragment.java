@@ -62,7 +62,6 @@ public class RequestDetailsFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_ride_request, null);
-        View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_ride_summary, null);
         fareText = view.findViewById(R.id.fareText);
         riderText = view.findViewById(R.id.riderText);
         startText = view.findViewById(R.id.startText);
@@ -96,7 +95,6 @@ public class RequestDetailsFragment extends DialogFragment {
         // building the dialog
         return builder
                 .setView(view)
-                .setCustomTitle(titleView)
                 .setNegativeButton("Cancel", null) // null -> does nothing
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     @Override
