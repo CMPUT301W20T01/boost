@@ -24,7 +24,7 @@ import ca.ualberta.boost.models.RideStatus;
 import ca.ualberta.boost.models.UserType;
 import ca.ualberta.boost.stores.RideStore;
 
-public class CurrentRideActivity extends MapActivity implements RideEventListener {
+public class CurrentRideActivity extends MapActivity implements RideEventListener, View.OnClickListener {
     // attributes
     private Button finishRideButton;
     public Marker pickupMarker;
@@ -45,35 +45,9 @@ public class CurrentRideActivity extends MapActivity implements RideEventListene
             finishRideButton.setVisibility(View.GONE);
             Log.d("CurrentRideActivity", "User is a driver");
 
-//            new RideTracker(ride).addListener(new RideEventListener() {
-//                @Override
-//                public void onStatusChange(@NonNull Ride ride) {
-//                    Log.d("CurrentRideActivity", "Status changed to: " + ride.getRideStatus().toString());
-//                    if (ride.getRideStatus() == RideStatus.FINISHED && ActiveUser.getUser().getType() == UserType.DRIVER) {
-//                        Log.d("CurrentRideActivity", "RideStatus == FINISHED");
-//                        Intent intent = new Intent(CurrentRideActivity.this, ScannerActivity.class);
-//                        startActivity(intent);
-//                    }
-//                }
-//
-//                @Override
-//                public void onLocationChanged() { }
-//            });
-
         } else {
-            Log.d("CurrentRideActivity", "User is a rider");
-            finishRideButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Ride ride = ActiveUser.getCurrentRide();
-                    ride.finish();
-                    RideStore.saveRide(ride);
-                    if (ActiveUser.getUser().getType() == UserType.RIDER) {
-                        Intent intent = new Intent(CurrentRideActivity.this, OnCompleteActivity.class);
-                        startActivity(intent);
-                    }
-                }
-            });
+//            Log.d("CurrentRideActivity", "User is a rider");
+            finishRideButton.setOnClickListener(this);
         }
     }
 
@@ -107,6 +81,19 @@ public class CurrentRideActivity extends MapActivity implements RideEventListene
     }
 
     @Override
+    public void onClick(View v) {
+        Log.d("CurrentRideActivity", "FinishedPressed");
+        if (ActiveUser.getUser().getType() == UserType.RIDER && v.getId() == R.id.finish_ride_button) {
+            Log.d("CurrentRideActivity", "User is a Rider");
+            Ride ride = ActiveUser.getCurrentRide();
+            ride.finish();
+            RideStore.saveRide(ride);
+//            Intent intent = new Intent(this, OnCompleteActivity.class);
+//            startActivity(intent);
+        }
+    }
+
+    @Override
     public void onStatusChange(@Nonnull Ride ride) {
         Log.d("CurrentRideActivity", "Status changed to: " + ride.getRideStatus().toString());
         if (ride.getRideStatus() == RideStatus.FINISHED && ActiveUser.getUser().getType() == UserType.DRIVER) {
@@ -114,6 +101,12 @@ public class CurrentRideActivity extends MapActivity implements RideEventListene
             Intent intent = new Intent(this, ScannerActivity.class);
             startActivity(intent);
         }
+        if (ride.getRideStatus() == RideStatus.FINISHED && ActiveUser.getUser().getType() == UserType.RIDER) {
+            Log.d("CurrentRideActivity", "Rider OnStatusChanged");
+            Intent intent = new Intent(this, OnCompleteActivity.class);
+            startActivity(intent);
+        }
+
     }
 
     @Override

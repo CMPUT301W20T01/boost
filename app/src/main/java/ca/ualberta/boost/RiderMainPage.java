@@ -239,7 +239,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     private void handleSearch(EditText searchEditText, String markerTitle) {
         String searchString = searchEditText.getText().toString();
         LatLng latLng = geoLocate(searchString);
-            if (markerTitle.equals("Pickup")){
+            if (markerTitle.equals("Pickup")) {
                 moveMarker(pickupMarker, latLng);
                 updateRideLocation(pickupMarker);
             } else {
