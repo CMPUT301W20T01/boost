@@ -29,7 +29,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="178dp"
                 android:background="@drawable/rounded_button_dark"
-                android:text="Home"
+                android:text="Back"
                 android:textAllCaps="false"
                 android:textColor="@color/colourGray"
                 android:textSize="12sp" />
