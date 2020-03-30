@@ -1,7 +1,9 @@
 package ca.ualberta.boost;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 
@@ -65,6 +67,10 @@ public class DriverMainPage extends MapActivity {
             @Override
             public void onClick(View v) {
                 auth.signOut();
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.clear();
+                editor.commit();
                 launchHomeScreen();
             }
         });
