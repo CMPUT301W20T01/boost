@@ -28,7 +28,6 @@ public class RideRequestSummaryFragment extends DialogFragment{
     private OnFragmentInteractionListener listener;
     private Ride ride;
     private TextView fareText;
-    private EditText tipText;
 
 
     RideRequestSummaryFragment(Ride ride){
@@ -59,26 +58,22 @@ public class RideRequestSummaryFragment extends DialogFragment{
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_ride_request_summary, null);
-        View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_ride_summary, null);
         fareText = view.findViewById(R.id.fareText);
 
-        fareText.setText(Double.toString(ride.getFare()));
+        String amount = "$" + ride.getFare();
+        fareText.setText(amount);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         // building the dialog
         return builder
                 .setView(view)
-                .setCustomTitle(titleView)
                 .setNegativeButton("Cancel", null) // null -> does nothing
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // send ride request in parent activity
                         listener.onAcceptPressed();
-                        Log.i("testValue","here");
-//                        Intent intent = new Intent(getContext(), RiderCurrentRideRequestActivity.class);
-//                        startActivity(intent);
                     }
                 }).create();
     }

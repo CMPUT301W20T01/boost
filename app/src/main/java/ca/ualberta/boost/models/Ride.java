@@ -27,7 +27,7 @@ public class Ride {
     private LatLng startLocation;
     private LatLng endLocation;
     private double fare;
-    private @Nullable String driver_username = null;
+    private @Nullable String driver_username;
     private String rider_username;
     private RideStatus status;
     private Date requestTime;
