@@ -20,13 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
-
 
 import ca.ualberta.boost.controllers.RideEventListener;
 import ca.ualberta.boost.controllers.RideTracker;
@@ -75,7 +73,6 @@ public class RiderAcceptedFragment extends DialogFragment {
         if (context instanceof RiderAcceptedFragment.OnFragmentInteractionListener){
             listener = (RiderAcceptedFragment.OnFragmentInteractionListener) context;
             this.mContext = context;
-
         } else {
             throw new RuntimeException(context.toString()
                     + "must implement OnFragmentInteractionListener");
@@ -90,6 +87,7 @@ public class RiderAcceptedFragment extends DialogFragment {
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_pending, null);
 
         driverText = view.findViewById(R.id.driverText);
+
         Log.d("rideListener","add listener");
         new RideTracker(this.ride).addListener(new RideEventListener() {
             @Override
@@ -110,19 +108,28 @@ public class RiderAcceptedFragment extends DialogFragment {
                         @Override
                         public void onSuccess(Ride ride) {
                             Log.i("rideListener","onSuccess RideStore get driver:" + ride.getDriverUsername());
-                            driver =ride.getRiderUsername();
+                            driver =ride.getDriverUsername();
 
                             Log.i("rideListener","got driver:" + driver);
 
-                            if (ride.getRiderUsername() !=null){
-                                Toast.makeText(getContext(), "Driver: "+driver+" has accepted.", Toast.LENGTH_SHORT).show();
+                            if (ride.getRiderUsername() !=null) {
+                                Toast.makeText(getContext(), "Driver: " + driver + " has accepted.", Toast.LENGTH_SHORT).show();
 
                                 driverText.setText(driver);
 
+                                driverText.setOnLongClickListener(new View.OnLongClickListener() {
+                                    @Override
+                                    public boolean onLongClick(View v) {
+                                        Intent intent = new Intent(getContext(), UserProfileActivity.class);
+                                        intent.putExtra("someUsername",driverText.getText().toString());
+                                        startActivity(intent);
+                                        return true;
+                                    }
+                                });
                             }
                         }
                     });
-                    
+
                     //WHEN DRIVER ACCEPTED, TEXTVIEW WILL SHOW UP DRIVER NAME
                     //CLICK ON THE NAME WILL POP UP PROFILE INFO FRAGMENT
                     //DOES NOT WORK???

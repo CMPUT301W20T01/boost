@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,17 +22,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
-
 import ca.ualberta.boost.controllers.RideEventListener;
 import ca.ualberta.boost.controllers.RideTracker;
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.RideStatus;
-
-import ca.ualberta.boost.controllers.RideTracker;
-import ca.ualberta.boost.models.ActiveUser;
-import ca.ualberta.boost.models.Ride;
-
 import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.stores.RideStore;
 import ca.ualberta.boost.stores.UserStore;
@@ -57,6 +50,7 @@ public class DriverAcceptedFragment extends DialogFragment {
     DriverAcceptedFragment(Ride ride){
         this.ride = ride;
 
+
     }
 
     /**
@@ -74,7 +68,6 @@ public class DriverAcceptedFragment extends DialogFragment {
         if (context instanceof DriverAcceptedFragment.OnFragmentInteractionListener){
             listener = (DriverAcceptedFragment.OnFragmentInteractionListener) context;
             mContext = context;
-
         } else {
             throw new RuntimeException(context.toString()
                     + "must implement OnFragmentInteractionListener");
@@ -120,6 +113,9 @@ public class DriverAcceptedFragment extends DialogFragment {
             }
         });
         Log.i("rideListener","called ride Listener for: "+ride.id());
+
+
+
 
 
 
