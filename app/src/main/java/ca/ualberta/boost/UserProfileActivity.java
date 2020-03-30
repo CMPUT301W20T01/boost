@@ -25,8 +25,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firestore.v1.WriteResult;
 
+import ca.ualberta.boost.models.Driver;
 import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.models.UserType;
 import ca.ualberta.boost.stores.UserStore;
 
 /**RETRIEVE USER PROFILE AND DISPLAY IT
@@ -34,8 +36,7 @@ import ca.ualberta.boost.stores.UserStore;
  */
 public class UserProfileActivity extends AppCompatActivity implements EditUserProfileFragment.OnFragmentInteractionListener {
 
-    //    FirebaseUser currentUser;
-    User user;
+//    FirebaseUser currentUser;
     User user1;
     TextView userName;
     TextView userFirstName;
@@ -46,6 +47,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
     ImageView emailIcon;
     ImageView callIcon;
     TextView userRating;
+    String test;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,15 +66,15 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         callIcon = findViewById(R.id.call_icon_private);
 
         // currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        user = ActiveUser.getUser();
+//        user = ActiveUser.getUser();
 
         //retrieve current User profile info
-        userName.setText(user.getUsername());
-        userFirstName.setText(user.getFirstName());
-        userEmail.setText(user.getEmail());
-        userPhoneNum.setText(user.getPhoneNumber());
+//        userName.setText(user.getUsername());
+//        userFirstName.setText(user.getFirstName());
+//        userEmail.setText(user.getEmail());
+//        userPhoneNum.setText(user.getPhoneNumber());
 
-
+     
 
         Intent i = getIntent();
         if(i.getStringExtra("someUsername")==null){
@@ -81,6 +83,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
             userFirstName.setText(user1.getFirstName());
             userEmail.setText(user1.getEmail());
             userPhoneNum.setText(user1.getPhoneNumber());
+//            userPassword.setText(user1.getPassword());
 
         } else {
             test = i.getStringExtra("someUsername");
@@ -93,7 +96,11 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                             userFirstName.setText(user1.getFirstName());
                             userEmail.setText(user1.getEmail());
                             userPhoneNum.setText(user1.getPhoneNumber());
-                            editButton.setAlpha(0);
+                            editButton.setVisibility(View.INVISIBLE);
+                            if(user1.getType() == UserType.DRIVER){
+                                Toast.makeText(UserProfileActivity.this, "Driver", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -103,7 +110,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                         }
                     });
         }
-
+      
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,33 +127,33 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
             }
         });
 
-        userEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openEmailActivity();
-            }
-        });
+       userEmail.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               openEmailActivity();
+           }
+       });
 
-        userPhoneNum.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openCallActivity();
-            }
-        });
+       userPhoneNum.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+              openCallActivity();
+           }
+       });
 
-        emailIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openEmailActivity();
-            }
-        });
+       emailIcon.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               openEmailActivity();
+           }
+       });
 
-        callIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openCallActivity();
-            }
-        });
+       callIcon.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               openCallActivity();
+           }
+       });
 
     }
 
@@ -183,3 +190,5 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
     }
 
 }
+
+
