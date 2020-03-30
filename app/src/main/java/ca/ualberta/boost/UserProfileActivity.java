@@ -48,6 +48,8 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
     ImageView callIcon;
     TextView userRating;
     String test;
+    FirebaseFirestore db;
+    CollectionReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,17 +66,8 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         homeButton = findViewById(R.id.go_home_button);
         emailIcon = findViewById(R.id.email_icon_private);
         callIcon = findViewById(R.id.call_icon_private);
-
-        // currentUser = FirebaseAuth.getInstance().getCurrentUser();
-//        user = ActiveUser.getUser();
-
-        //retrieve current User profile info
-//        userName.setText(user.getUsername());
-//        userFirstName.setText(user.getFirstName());
-//        userEmail.setText(user.getEmail());
-//        userPhoneNum.setText(user.getPhoneNumber());
-
-     
+        db = FirebaseFirestore.getInstance();
+        reference = db.collection("users");
 
         Intent i = getIntent();
         if(i.getStringExtra("someUsername")==null){
@@ -97,8 +90,30 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                             userEmail.setText(user1.getEmail());
                             userPhoneNum.setText(user1.getPhoneNumber());
                             editButton.setVisibility(View.INVISIBLE);
-                            if(user1.getType() == UserType.DRIVER){
-                                Toast.makeText(UserProfileActivity.this, "Driver", Toast.LENGTH_SHORT).show();
+                            if(user1.getType() != UserType.RIDER){
+                                reference.get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if(task.isSuccessful()){
+                                                    for(QueryDocumentSnapshot document: task.getResult()){
+                                                        if(user1.getUsername().matches(document.get("username").toString())){
+                                                            String positiveRating = document.get("positiveRating").toString();
+                                                            String negativeRating = document.get("negativeRating").toString();
+                                                            String rating = positiveRating + "\uD83D\uDC4D  " +  negativeRating + "  \uD83D\uDC4E";
+                                                            userRating.setText(rating);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(UserProfileActivity.this, "didn't work", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+
                             }
 
                         }
