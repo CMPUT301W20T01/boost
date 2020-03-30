@@ -191,17 +191,19 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     public void uniqueUsername(String username) {
-        UserStore.getUser(username).addOnSuccessListener(new OnSuccessListener<User>() {
-            @Override
-            public void onSuccess(User user) {
-                Toast.makeText(getApplicationContext(), "Username is taken", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                addUser();
-            }
-        });
+        if (!username.equals("")) {
+            UserStore.getUser(username).addOnSuccessListener(new OnSuccessListener<User>() {
+                @Override
+                public void onSuccess(User user) {
+                    Toast.makeText(getApplicationContext(), "Username is taken", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    addUser();
+                }
+            });
 
+        }
     }
 }
