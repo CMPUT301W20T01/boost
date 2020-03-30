@@ -203,7 +203,6 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                     addUser();
                 }
             });
-
         }
     }
 }
