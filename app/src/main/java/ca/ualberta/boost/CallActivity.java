@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -28,7 +29,7 @@ import android.widget.Toast;
 
 public class CallActivity extends AppCompatActivity {
     private static final int REQUEST_CALL =1;
-    private EditText editTextNumber;
+    private TextView editTextNumber;
     private String driverNumberFromProfile;
 
     @Override
@@ -42,15 +43,6 @@ public class CallActivity extends AppCompatActivity {
         //get driver's number from UserProfileActivity and set it as number to call
         driverNumberFromProfile = getIntent().getExtras().getString("call");
         editTextNumber.setText(driverNumberFromProfile);
-
-        //go back to previous page once the back button is clicked
-        ImageView backButton = findViewById(R.id.call_activity_back_button);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         //call driver once the call button is clicked
         ImageView imageCall = findViewById(R.id.image_call);

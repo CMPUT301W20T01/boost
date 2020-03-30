@@ -2,11 +2,24 @@ package ca.ualberta.boost;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Collection;
+
+import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.models.Promise;
+import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.User;
+import ca.ualberta.boost.stores.RideStore;
 
 /**
  * DriverMainPage is responsible for displaying all options that the driver has
@@ -14,7 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
  * the respective activity is launched
  */
 
-public class DriverMainPage extends MapActivity {
+public class DriverMainPage extends MapActivity implements DriverAcceptedFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "DriverMainPage";
 
@@ -34,7 +47,6 @@ public class DriverMainPage extends MapActivity {
         viewProfileButton = findViewById(R.id.viewProfileButton);
         viewRequestsButton = findViewById(R.id.viewRequestsButton);
         logoutButton = findViewById(R.id.logoutButton);
-
     }
 
     @Override
@@ -49,6 +61,8 @@ public class DriverMainPage extends MapActivity {
 
     @Override
     protected void init() {
+        checkForActiveRequest();
+        checkForPendingDriverAcceptedRequest();
         viewRequestsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +83,6 @@ public class DriverMainPage extends MapActivity {
                 launchHomeScreen();
             }
         });
-
     }
 
     //function to launch the ViewRideRequests Activity
@@ -91,5 +104,83 @@ public class DriverMainPage extends MapActivity {
         startActivity(intent);
     }
 
+    // method to check if user is involved in an active request
+    private void checkForActiveRequest(){
+        final User user = ActiveUser.getUser();
+        Promise<Collection<Ride>> ridePromise = RideStore.getActiveRides();
+        ridePromise.addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
+            @Override
+            public void onSuccess(Collection<Ride> rides) {
+                if (!rides.isEmpty()) {
+                    for (Ride ride : rides){
+                        // user is driver for the active ride
+                        if (ride.getDriverUsername().equals(user.getUsername())){
+                            ActiveUser.setCurrentRide(ride);
+                            launchCurrentRequestActivity();
+                        }
+                    }
+                } else {
+                    Log.d("TestingViewRide", "rides is empty");
+                }
+            }
+        });
+        ridePromise.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("TestingViewRide", "failure");
+            }
+        });
+    }
+
+    // method to check if user is involved in a driver accepted request
+    private void checkForPendingDriverAcceptedRequest(){
+        final User user = ActiveUser.getUser();
+        Promise<Collection<Ride>> ridePromise = RideStore.getDriverAcceptedRequests();
+        ridePromise.addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
+            @Override
+            public void onSuccess(Collection<Ride> rides) {
+                Log.d("TestingViewRide", "success");
+                if (!rides.isEmpty()) {
+                    for (Ride ride : rides){
+                        // user is rider for the pending ride request
+                        if (ride.getDriverUsername().equals(user.getUsername())){
+                            ActiveUser.setCurrentRide(ride);
+                            new DriverAcceptedFragment().show(getSupportFragmentManager(), "Pending_Driver_Accept");
+                            //Toast.makeText(RiderMainPage.this, "Driver accepted", Toast.LENGTH_LONG).show();
+
+                        }
+                    }
+                } else {
+                    Log.d("TestingViewRide", "rides is empty");
+                }
+            }
+        });
+        ridePromise.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("TestingViewRide", "failure");
+            }
+        });
+    }
+
+    /**
+     * Driver accepted ride, send new ride to database
+     * @param newRide
+     */
+    @Override
+    public void onAcceptPressed(Ride newRide) {
+        // update ride in database
+        newRide.setDriverUsername(ActiveUser.getUser().getUsername());
+        newRide.driverAccept();
+        RideStore.saveRide(newRide);
+        ActiveUser.setCurrentRide(newRide);
+
+        new DriverAcceptedFragment().show(getSupportFragmentManager(), "Pending_Rider_Accept");
+    }
+
+    private void launchCurrentRequestActivity(){
+        Intent intent = new Intent(this, CurrentRideActivity.class);
+        startActivity(intent);
+    }
 }
 

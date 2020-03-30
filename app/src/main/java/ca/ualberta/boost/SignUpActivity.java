@@ -3,6 +3,7 @@ package ca.ualberta.boost;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -54,6 +55,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_up);
 
+
         //get references to fireStore
         auth = FirebaseAuth.getInstance();
 
@@ -96,7 +98,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            Toast.makeText(SignUpActivity.this, "user account created", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUpActivity.this, "User account created", Toast.LENGTH_SHORT).show();
                             finish();
                             storeUser();
                             signInUser();
@@ -139,13 +141,12 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                        password.getText().toString(), email.getText().toString(),
                        phoneNumber.getText().toString());
         }
-
         UserStore.saveUser(user);
+        ActiveUser.login(user);
     }
 
     //signs in user and launches the home activity
     private void signInUser () {
-        //uniqueUserName(userName.getText().toString());
         if (isValidInput()) {
             auth.signInWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim())
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
@@ -163,10 +164,23 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
     //Return true if fields have values and password is longer than 6 characters
     private boolean isValidInput() {
+        if(firstName.getText().toString().matches("")){
+            Toast.makeText(this, "Enter a First Name", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(userName.getText().toString().matches("")){
+            Toast.makeText(this, "Enter a username", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         if(email.getText().toString().matches("")){
             Toast.makeText(this, "Enter a Email", Toast.LENGTH_SHORT).show();
             return false;
         }
+        if(phoneNumber.getText().toString().matches("")){
+            Toast.makeText(this, "Enter a phone number", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         if(password.getText().toString().matches("")){
             Toast.makeText(this, "Enter a password", Toast.LENGTH_SHORT).show();
             return false;
@@ -192,21 +206,18 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     public void uniqueUsername(String username) {
-       // final PromiseImpl<Boolean> isUnique = new PromiseImpl<>();
-        UserStore.getUser(username).addOnSuccessListener(new OnSuccessListener<User>() {
-            @Override
-            public void onSuccess(User user) {
-               // isUnique.resolve(false);
-                Toast.makeText(getApplicationContext(), "Username is taken", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                //isUnique.resolve(true);
-                addUser();
-            }
-        });
-
-      //  return isUnique;
+        if (!username.equals("")) {
+            UserStore.getUser(username).addOnSuccessListener(new OnSuccessListener<User>() {
+                @Override
+                public void onSuccess(User user) {
+                    Toast.makeText(getApplicationContext(), "Username is taken", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    addUser();
+                }
+            });
+        }
     }
 }

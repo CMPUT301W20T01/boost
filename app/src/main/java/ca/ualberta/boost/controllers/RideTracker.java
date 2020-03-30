@@ -22,7 +22,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import ca.ualberta.boost.RiderMainPage;
 import ca.ualberta.boost.models.ActiveUser;
-
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.RideStatus;
 import ca.ualberta.boost.stores.RideStore;
@@ -33,12 +32,10 @@ public class RideTracker {
     DocumentReference docRef = null;
     boolean checkDriver = false;
 
-
-    public static final String TAG1 = "rides/";
-    public static final String TAG2 = "status";
     //constructor
     public RideTracker(Ride ride) {
         this.ride = ride;
+//        Log.d("RideTracker", "creating RideTracker for ride: " + ride.id());
 
         docRef = FirebaseFirestore.getInstance().collection("rides").document(ride.id());
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -65,26 +62,33 @@ public class RideTracker {
             return;
         }
 
-        if (documentSnapshot != null && documentSnapshot.exists()){
-            Log.i("rideListener","Current data: " + documentSnapshot.getData().get("status"));
+        if (documentSnapshot != null && documentSnapshot.exists()) {
+            Ride newRide = Ride.build(documentSnapshot.getData());
+            Log.d("RideTracker", "OnEvent");
+//            if (newRide.getRideStatus() != ride.getRideStatus()) {
+                rideEventListener.onStatusChange(newRide);
+//            }
 
+//            ActiveUser.setCurrentRide(newRide);
+//            ride = newRide;
+            ride.setStatus(newRide.getRideStatus());
+            ride.setDriverUsername(newRide.getDriverUsername());
 
-            if ("DRIVERACCEPTED".equals(documentSnapshot.getData().get("status").toString())){
-                Log.i("rideListener","tracking status driver");
-                checkDriver = true;
-                ride.driverAccept();
-                ActiveUser.setCurrentRide(ride);
-                rideEventListener.onStatusChange(ride);
-            }
-
-
-            if ("RIDERACCEPTED".equals(documentSnapshot.getData().get("status").toString())){
-                Log.i("rideListener","tracking status rider");
-                checkDriver = false;
-                ride.riderAccept();
-                ActiveUser.setCurrentRide(ride);
-                rideEventListener.onStatusChange(ride);
-            }
+//            if ("DRIVERACCEPTED".equals(documentSnapshot.getData().get("status").toString())){
+//                Log.i("rideListener","tracking status driver");
+//                checkDriver = true;
+//                ride.driverAccept();
+//                ActiveUser.setCurrentRide(ride);
+//                rideEventListener.onStatusChange(ride);
+//            }
+//
+//            if ("RIDERACCEPTED".equals(documentSnapshot.getData().get("status").toString())){
+//                Log.i("rideListener","tracking status rider");
+//                checkDriver = false;
+//                ride.riderAccept();
+//                ActiveUser.setCurrentRide(ride);
+//                rideEventListener.onStatusChange(ride);
+//            }
 
         } else {
             Log.i("rideListener","null");

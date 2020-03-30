@@ -1,14 +1,17 @@
 package ca.ualberta.boost;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -16,16 +19,18 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 
+import ca.ualberta.boost.controllers.RideEventListener;
+import ca.ualberta.boost.controllers.RideTracker;
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Driver;
+import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.RideStatus;
 import ca.ualberta.boost.models.User;
+import ca.ualberta.boost.models.UserType;
 import ca.ualberta.boost.stores.UserStore;
 
-public class OnCompleteActivity extends AppCompatActivity implements View.OnClickListener {
-
-    private Ride ride;
-    private Driver driver;
+public class OnCompleteActivity extends AppCompatActivity implements View.OnClickListener, RideEventListener {
 
     private ImageButton thumbsUpButton;
     private ImageButton thumbsDownButton;
@@ -40,6 +45,8 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
     private BigDecimal tipAmount = new BigDecimal(0).setScale(2, BigDecimal.ROUND_FLOOR);
     private static final BigDecimal TIP_RATE = new BigDecimal(1.00);
 
+    private RideTracker tracker;
+
     private Button qrCodeButton;
 
     @Override
@@ -48,13 +55,8 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.ride_complete_page);
         getSupportFragmentManager();
 
-//        ride = ActiveUser.getCurrentRide();
-//        UserStore.getUser(ride.getDriverUsername()).addOnSuccessListener(new OnSuccessListener<User>() {
-//            @Override
-//            public void onSuccess(User user) {
-//                driver = (Driver) user;
-//            }
-//        });
+        tracker = new RideTracker(ActiveUser.getCurrentRide());
+        tracker.addListener(this);
 
         thumbsUpButton = findViewById(R.id.thumbs_up_button);
         thumbsDownButton = findViewById(R.id.thumbs_down_button);
@@ -90,10 +92,10 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.subtract_tip_button:
                 if (tipAmount.compareTo(TIP_RATE) >= 0) {
-                    // if tipamount > tip rate -> subtract tip rate
+                    // if tipamount > tip rate -> subtract tip rate from tipamount
                     changeTipText(tipAmount.subtract(TIP_RATE));
                 } else if (tipAmount.compareTo(TIP_RATE) < 0 && tipAmount.compareTo(BigDecimal.ZERO) > 0){
-                    // if tipamount < tip rate and tipamount > 0 -> make 0
+                    // if tipamount < tip rate and tipamount > 0 -> make tipamount 0
                     changeTipText(BigDecimal.ZERO);
                 }
                 break;
@@ -101,9 +103,7 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
                 changeTipText(tipAmount.add(TIP_RATE));
                 break;
             case R.id.purchase_code_button:
-                // Bring up QR code fragment
-                QRCodeFragment fragment = new QRCodeFragment(totalAmount.doubleValue());
-                fragment.show(getSupportFragmentManager(),"QRCode");
+                launchQrCode();
                 break;
             default:
                 break;
@@ -111,8 +111,8 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void changeTotal() {
-//        totalAmount = ride.getFare() + tipAmount;
-        totalAmount = new BigDecimal(10.00).add(tipAmount);
+        totalAmount = new BigDecimal(ActiveUser.getCurrentRide().baseFare()).add(tipAmount).setScale(2, BigDecimal.ROUND_FLOOR);
+        Log.d("OnComplete fare amount", totalAmount.toString());
         String totalFormatted = String.format("$%s", totalAmount.toString());
         totalAmountView.setText(totalFormatted);
     }
@@ -122,10 +122,37 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void launchQrCode() {
-        //go to QR fragment
+        QRCodeFragment fragment = new QRCodeFragment(totalAmount.doubleValue());
+        fragment.show(getSupportFragmentManager(),"QRCode");
         //if thumbsUpButton.isSelected, add to driver's ratings, vice versa for thumbs down,
-        // don't change driver's rating otherwise
+        //don't change driver's rating otherwise
     }
+
+    @Override
+    public void onStatusChange(@NonNull Ride ride) {
+        if (ride.getRideStatus() == RideStatus.PAID && ActiveUser.getUser().getType() == UserType.RIDER) {
+            Log.d("OnCompleteActivity", "RideStatus == FINISHED");
+            Intent intent = new Intent(this, RiderMainPage.class);
+            startActivity(intent);
+            changeDriver(ride);
+        }
+    }
+
+    private void changeDriver(Ride ride) {
+        String driverUsername = ride.getDriverUsername();
+        UserStore.getUser(driverUsername).addOnSuccessListener(new OnSuccessListener<User>() {
+            @Override
+            public void onSuccess(User user) {
+                Driver driver = (Driver) user;
+                if (thumbsUpButton.isSelected()) { driver.giveThumbsUp(); }
+                else if (thumbsDownButton.isSelected()) { driver.giveThumbsDown(); }
+                UserStore.saveUser(driver);
+            }
+        });
+    }
+
+    @Override
+    public void onLocationChanged() { }
 
     private class MoneyTextWatcher implements TextWatcher {
         @Override
