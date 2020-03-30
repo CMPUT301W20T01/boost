@@ -98,7 +98,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            Toast.makeText(SignUpActivity.this, "user account created", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUpActivity.this, "User account created", Toast.LENGTH_SHORT).show();
                             finish();
                             storeUser();
                             signInUser();
@@ -141,13 +141,12 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                        password.getText().toString(), email.getText().toString(),
                        phoneNumber.getText().toString());
         }
-
         UserStore.saveUser(user);
+        ActiveUser.login(user);
     }
 
     //signs in user and launches the home activity
     private void signInUser () {
-        //uniqueUserName(userName.getText().toString());
         if (isValidInput()) {
             auth.signInWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim())
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
@@ -207,21 +206,18 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     public void uniqueUsername(String username) {
-       // final PromiseImpl<Boolean> isUnique = new PromiseImpl<>();
-        UserStore.getUser(username).addOnSuccessListener(new OnSuccessListener<User>() {
-            @Override
-            public void onSuccess(User user) {
-               // isUnique.resolve(false);
-                Toast.makeText(getApplicationContext(), "Username is taken", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                //isUnique.resolve(true);
-                addUser();
-            }
-        });
-
-      //  return isUnique;
+        if (!username.equals("")) {
+            UserStore.getUser(username).addOnSuccessListener(new OnSuccessListener<User>() {
+                @Override
+                public void onSuccess(User user) {
+                    Toast.makeText(getApplicationContext(), "Username is taken", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    addUser();
+                }
+            });
+        }
     }
 }

@@ -1,5 +1,6 @@
 package ca.ualberta.boost.models;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,8 +15,9 @@ import static ca.ualberta.boost.models.UserType.DRIVER;
 
 public class Driver extends User {
 
-    private double rating = 0.00;
-    private int numRates;
+    private int thumbsUp = 0;
+    private int thumbsDown = 0;
+    private double balance = 0.00;
 
     /**
      * Driver constructor
@@ -29,27 +31,39 @@ public class Driver extends User {
         super(UserType.DRIVER, firstName, username, password, email, phoneNumber);
     }
 
-    public double getRating() {
-        return rating;
+    private Driver(String firstName, String username, String password, String email, String phoneNumber, int thumbsUp, int thumbsDown, double balance) {
+        super(UserType.DRIVER, firstName, username, password, email, phoneNumber);
+        this.thumbsUp = thumbsUp;
+        this.thumbsDown = thumbsDown;
+        this.balance = balance;
     }
 
     /**
      * @return
-     *      Returns the number of times the driver has been rated
+     *      Returns the number of thumbs up ratings the driver has
      */
-    public int getNumRates() {
-        return numRates;
+    public double getPositiveRating() {
+        return thumbsUp;
     }
 
     /**
-     * Updates the driver's rating based on an additional rating and
-     * increments the number of ratings the driver has
-     * @param newRating
+     * @return
+     *      Returns the number of thumbs down ratings the driver has
      */
-    public void updateRating(int newRating) {
-        // rating = old + (1 / (num + 1)) * (new - old)
-        numRates++;
-        rating += ((1.0 / (double) numRates) * (newRating - rating));
+    public int getNegativeRating() {
+        return thumbsDown;
+    }
+
+    public void giveThumbsUp() {
+        thumbsUp++;
+    }
+
+    public void giveThumbsDown() {
+        thumbsDown++;
+    }
+
+    public void addToBalance(double payment) {
+        balance += payment;
     }
 
     /**
@@ -66,8 +80,9 @@ public class Driver extends User {
         map.put("password", this.getPassword());
         map.put("email", this.getEmail());
         map.put("phoneNumber", this.getPhoneNumber());
-        map.put("positiveRating", 0);
-        map.put("negativeRating", 0);
+        map.put("thumbsUp", this.thumbsUp);
+        map.put("thumbsDown", this.thumbsDown);
+        map.put("balance", this.balance);
         return map;
     }
 
@@ -79,12 +94,17 @@ public class Driver extends User {
      *      A new Driver object
      */
     public static Driver build(Map<String, Object> data) {
+        Long positive = (Long) data.get("thumbsUp");
+        Long negative = (Long) data.get("thumbsDown");
         return new Driver(
                 (String) data.get("firstName"),
                 (String) data.get("username"),
                 (String) data.get("password"),
                 (String) data.get("email"),
-                (String) data.get("phoneNumber"));
+                (String) data.get("phoneNumber"),
+                positive.intValue(),
+                negative.intValue(),
+                (double) data.get("balance"));
     }
 
 }

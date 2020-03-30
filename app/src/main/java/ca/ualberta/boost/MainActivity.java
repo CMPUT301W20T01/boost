@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //method to check if user to login has signed up already
-    private boolean isValidInput(String username, String password) {
+    private boolean isValidInput(String username, String password) { //testable
         if(username.isEmpty()) {
             Toast.makeText(this, "Username required", Toast.LENGTH_SHORT).show();
             return false;

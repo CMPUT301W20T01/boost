@@ -62,13 +62,14 @@ public class RideStore {
      * @see Ride
      */
     public static void saveRide(Ride ride) {
+//        Log.d("saveRide", ride.getDriverUsername());
         RideStore store = getInstance();
 
         Map<String, Object> data = ride.data();
 
         store.rideCollection
                 .document(ride.id())
-                .set(ride.data())
+                .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -168,7 +169,7 @@ public class RideStore {
 
         final PromiseImpl<Collection<Ride>> ridesPromise = new PromiseImpl<>();
         store.rideCollection
-                .whereEqualTo("status", RideStatus.PENDING)
+                .whereEqualTo("status", RideStatus.PENDING.getValue())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

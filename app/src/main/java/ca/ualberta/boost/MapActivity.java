@@ -96,7 +96,7 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
      * @param latLng
      *      the new LatLng position for the marker
      */
-    public void moveMarker(Marker marker, LatLng latLng){
+    public void moveMarker(Marker marker, LatLng latLng) {
         marker.setPosition(latLng);
         marker.setVisible(true);
         moveCamera(latLng, DEFAULT_ZOOM);
@@ -117,7 +117,7 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
             results = geocoder.getFromLocationName(name, 20);
         }catch (IOException e){
             Toast.makeText(MapActivity.this,
-                    "unable to find location", Toast.LENGTH_SHORT).show();
+                    "Unable to find location", Toast.LENGTH_SHORT).show();
         }
         // successful results
         if (results.size() > 0){

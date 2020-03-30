@@ -230,7 +230,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
                 if (!rides.isEmpty()) {
                     rideList.addAll(rides);
                     displayRequests();
-                } else{
+                } else {
                     Log.d("TestingViewRide", "rides is empty");
                 }
             }
@@ -249,19 +249,13 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
      */
     @Override
     public void onAcceptPressed(Ride newRide) {
-        User activeUser = ActiveUser.getUser();
-
         // update ride in database
-        newRide.setDriverUsername(activeUser.getUsername());
+        newRide.setDriverUsername(ActiveUser.getUser().getUsername());
         newRide.driverAccept();
         RideStore.saveRide(newRide);
+        ActiveUser.setCurrentRide(newRide);
 
-        // set driver's current ride to this ride
-        activeUser.setActiveRide(newRide);
-        UserStore.saveUser(activeUser);
-
-        new DriverAcceptedFragment(newRide).show(getSupportFragmentManager(), "Pending_Rider_Accept");
-
+        new DriverAcceptedFragment().show(getSupportFragmentManager(), "Pending_Rider_Accept");
     }
 
 //    /**

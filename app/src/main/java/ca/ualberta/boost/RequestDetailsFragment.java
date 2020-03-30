@@ -32,8 +32,6 @@ public class RequestDetailsFragment extends DialogFragment {
     private TextView endText;
     private TextView fareText;
 
-
-
     RequestDetailsFragment(Ride ride, String pickup, String destination){
         this.ride = ride;
         this.startAddress = pickup;
@@ -64,7 +62,6 @@ public class RequestDetailsFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_ride_request, null);
-        View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_ride_summary, null);
         fareText = view.findViewById(R.id.fareText);
         riderText = view.findViewById(R.id.riderText);
         startText = view.findViewById(R.id.startText);
@@ -97,17 +94,13 @@ public class RequestDetailsFragment extends DialogFragment {
 
         // building the dialog
         return builder
-
                 .setView(view)
-                .setCustomTitle(titleView)
                 .setNegativeButton("Cancel", null) // null -> does nothing
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // send ride to parent activity
                         listener.onAcceptPressed(ride);
-
-
                     }
                 }).create();
     }
