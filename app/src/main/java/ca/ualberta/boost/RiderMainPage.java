@@ -1,7 +1,9 @@
 package ca.ualberta.boost;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -159,6 +161,11 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
             @Override
             public void onClick(View v) {
                 auth.signOut();
+                ActiveUser.logout();
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.clear();
+                editor.commit();
                 launchHomeScreen();
             }
         });
