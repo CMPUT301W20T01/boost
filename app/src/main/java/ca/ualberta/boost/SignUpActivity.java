@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -99,6 +101,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                             Toast.makeText(SignUpActivity.this, "User account created", Toast.LENGTH_SHORT).show();
                             finish();
                             storeUser();
+                            saveSharedPreference();
                             signInUser();
                         }
                     })
@@ -115,12 +118,14 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     //launches the home activity for a rider
     private void launchHomeRider(){
         Intent intent = new Intent(this, RiderMainPage.class);
+        finish();
         startActivity(intent);
     }
 
     //launches the home activity for a driver
     private void launchHomeDriver(){
         Intent intent = new Intent(this, DriverMainPage.class);
+        finish();
         startActivity(intent);
     }
 
@@ -151,8 +156,10 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             if (typeSwitch.isChecked()) {
+                                finish();
                                 launchHomeDriver();
                             } else {
+                                finish();
                                 launchHomeRider();
                             }
                         }
@@ -207,5 +214,16 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         });
 
       //  return isUnique;
+    }
+
+    public void saveSharedPreference(){
+        String username = email.getText().toString();
+        String pwd = password.getText().toString();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("User",username);
+        editor.putString("pwd",pwd);
+        editor.apply();
+        editor.commit();
     }
 }
