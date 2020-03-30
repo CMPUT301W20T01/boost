@@ -164,6 +164,7 @@ public class RideStore {
         return ridesPromise;
     }
 
+
     public static Promise<Collection<Ride>> getRequests() {
         RideStore store = getInstance();
 
@@ -176,6 +177,80 @@ public class RideStore {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (!task.isSuccessful()) {
                             ridesPromise.reject(new Exception("No pending rides"));
+                            return;
+                        }
+
+                        QuerySnapshot result = task.getResult();
+                        if (result == null) {
+                            ridesPromise.reject(new Exception("Something went wrong"));
+                            return;
+                        }
+
+                        Collection<Ride> requests = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            requests.add(Ride.build(document.getData()));
+                        }
+
+                        ridesPromise.resolve(requests);
+                    }
+                });
+
+        return ridesPromise;
+    }
+
+    /**
+     * Get requests that have a driver who has accepted the request
+     * @return
+     */
+    public static Promise<Collection<Ride>> getDriverAcceptedRequests() {
+        RideStore store = getInstance();
+
+        final PromiseImpl<Collection<Ride>> ridesPromise = new PromiseImpl<>();
+        store.rideCollection
+                .whereEqualTo("status", RideStatus.DRIVERACCEPTED.getValue())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            ridesPromise.reject(new Exception("No active rides"));
+                            return;
+                        }
+
+                        QuerySnapshot result = task.getResult();
+                        if (result == null) {
+                            ridesPromise.reject(new Exception("Something went wrong"));
+                            return;
+                        }
+
+                        Collection<Ride> requests = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            requests.add(Ride.build(document.getData()));
+                        }
+
+                        ridesPromise.resolve(requests);
+                    }
+                });
+
+        return ridesPromise;
+    }
+
+    /**
+     * Get requests that are currently in progress (rider and driver have accepted)
+     * @return
+     */
+    public static Promise<Collection<Ride>> getActiveRides() {
+        RideStore store = getInstance();
+
+        final PromiseImpl<Collection<Ride>> ridesPromise = new PromiseImpl<>();
+        store.rideCollection
+                .whereEqualTo("status", RideStatus.RIDERACCEPTED.getValue())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            ridesPromise.reject(new Exception("No active rides"));
                             return;
                         }
 

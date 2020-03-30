@@ -90,9 +90,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="50dp"
-            android:backgroundTint="@color/colourPrimaryDark">
+            android:backgroundTint="@color/colourPrimaryDark"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -104,9 +104,9 @@
                     android:id="@+id/email_icon_private"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:background="@drawable/ic_email"
                     android:layout_gravity="center"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/ic_email" />
 
                 <TextView
                     android:id="@+id/userProfilePrivateEmail"
@@ -114,8 +114,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="email@email.com"
-                    android:textSize="24sp"
-                    android:textColor="@color/colourPrimaryDark" />
+                    android:textColor="@color/colourPrimaryDark"
+                    android:textSize="24sp" />
 
             </LinearLayout>
 
@@ -129,34 +129,49 @@
                     android:id="@+id/call_icon_private"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:background="@drawable/ic_phone"
                     android:layout_gravity="center"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/ic_phone" />
 
                 <TextView
                     android:id="@+id/userProfilePrivatePhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    tools:text=" 403 555 5555"
+                    android:textColor="@color/colourPrimaryDark"
                     android:textSize="24sp"
-                    android:textColor="@color/colourPrimaryDark" />
+                    tools:text=" 403 555 5555" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="👍/👎    "
+                    android:textSize="30dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_gravity="bottom">
+                </TextView>
 
 
             <TextView
                 android:id="@+id/userProfilePrivateRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colourPrimaryDark"
                 android:layout_marginLeft="20dp"
-                android:text="24 👍 8  👎"
-                android:textSize="24sp" />
+                android:text=""
+                android:textColor="@color/colourPrimaryDark"
+                android:textSize="30dp" />
+
+            </LinearLayout>
 
 
         </LinearLayout>
-
 
 
     </LinearLayout>
