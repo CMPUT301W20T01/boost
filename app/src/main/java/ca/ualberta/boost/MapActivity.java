@@ -78,6 +78,7 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
             mMap.setMyLocationEnabled(true);
             // get rid of top right corner button to center location
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            mMap.getUiSettings().setMapToolbarEnabled(false);
             // enable all zoom, rotate, tilt, etc gesture
             // mMap.getUiSettings().setAllGesturesEnabled(true);
             init();
