@@ -6,172 +6,160 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <View
-        android:id="@+id/yellow_background_home_screen"
-        android:layout_width="0dp"
-        android:layout_height="218dp"
-        android:background="#FFAA1D"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/userProfilePrivateRating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="24 👍 8  👎"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/userProfilePrivateRatingText" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="218dp"
+            android:background="@color/colourPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/userProfilePrivateRating2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="User Profile"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/yellow_background_home_screen"
-        app:layout_constraintEnd_toEndOf="@+id/yellow_background_home_screen"
-        app:layout_constraintStart_toStartOf="@+id/yellow_background_home_screen"
-        app:layout_constraintTop_toTopOf="@+id/yellow_background_home_screen" />
+            <Button
+                android:id="@+id/go_home_button"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="178dp"
+                android:background="@drawable/rounded_button_dark"
+                android:text="Home"
+                android:textAllCaps="false"
+                android:textColor="@color/colourGray"
+                android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/userProfilePrivatePasswordText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="12dp"
-        android:text="Password:"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userProfilePrivateRatingText" />
+            <Button
+                android:id="@+id/userProfilePrivateButton"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="178dp"
+                android:background="@drawable/rounded_button_dark"
+                android:text="Edit"
+                android:textAllCaps="false"
+                android:textColor="@color/colourGray"
+                android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/userProfilePrivateRatingText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Rating:"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userProfilePrivatePhoneText" />
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="110dp"
+                android:layout_marginEnd="110dp"
+                android:layout_marginBottom="44dp"
+                android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/userProfilePrivatePhoneText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Phone:"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userProfilePrivateEmailText" />
+                <TextView
+                    android:id="@+id/userProfileFirstName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="First Name"
+                    android:textSize="24sp"
+                    android:textColor="@color/colourPrimaryDark"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"/>
 
-    <TextView
-        android:id="@+id/userProfilePrivateEmailText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Email: "
-        android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userProfileFirstNameText" />
+                <TextView
+                    android:id="@+id/userProfileUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Username"
+                    android:textSize="24sp"
+                    android:textColor="@color/colourPrimaryDark"
 
-    <TextView
-        android:id="@+id/userProfileUserNameText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Username:"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/yellow_background_home_screen" />
+                    android:textStyle="bold"
+                    android:layout_gravity="center"/>
 
-    <TextView
-        android:id="@+id/userProfileFirstNameText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Name:"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userProfileUserNameText" />
+            </LinearLayout>
 
-    <TextView
-        android:id="@+id/userProfileFirstName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="First Name"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/userProfileFirstNameText"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/userProfileFirstNameText" />
+        </RelativeLayout>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.31" />
 
-    <TextView
-        android:id="@+id/userProfileUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Username"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/userProfileUserNameText"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/userProfileUserNameText" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="50dp"
+            android:backgroundTint="@color/colourPrimaryDark">
 
-    <TextView
-        android:id="@+id/userProfilePrivateEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:text="email@email.com"
-        app:layout_constraintBottom_toBottomOf="@+id/userProfilePrivateEmailText"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/userProfilePrivateEmailText" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="40dp">
 
-    <TextView
-        android:id="@+id/userProfilePrivatePhone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/userProfilePrivatePhoneText"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        tools:text=" 403 555 5555" />
+                <ImageView
+                    android:id="@+id/email_icon_private"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_email"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="20dp"/>
 
-    <TextView
-        android:id="@+id/userProfilePassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="password"
-        android:textSize="24sp"
-        android:layout_marginLeft="15dp"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toEndOf="@+id/userProfilePrivatePasswordText"
-        app:layout_constraintTop_toBottomOf="@+id/userProfilePrivateRating" />
+                <TextView
+                    android:id="@+id/userProfilePrivateEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="email@email.com"
+                    android:textSize="24sp"
+                    android:textColor="@color/colourPrimaryDark" />
 
-    <Button
-        android:id="@+id/userProfilePrivateButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="Make Changes"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userProfilePassword"
-        app:layout_constraintVertical_bias="0.174" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="40dp">
+
+                <ImageView
+                    android:id="@+id/call_icon_private"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_phone"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="20dp"/>
+
+                <TextView
+                    android:id="@+id/userProfilePrivatePhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    tools:text=" 403 555 5555"
+                    android:textSize="24sp"
+                    android:textColor="@color/colourPrimaryDark" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/userProfilePrivateRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colourPrimaryDark"
+                android:layout_marginLeft="20dp"
+                android:text="24 👍 8  👎"
+                android:textSize="24sp" />
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,30 +20,16 @@
 
 
     <Button
-        android:id="@+id/acceptPaymentButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="76dp"
-        android:background="@drawable/rounded_button_dark"
-        android:paddingHorizontal="40dp"
-        android:text="Accept payment "
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        android:layout_marginHorizontal="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/generatePaymentButton"
+        android:id="@+id/finish_ride_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:fontFamily="@font/lato_black"
         android:background="@drawable/rounded_button_dark"
+        android:textColor="@android:color/white"
         android:paddingHorizontal="40dp"
-        android:text="generate payment"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
+        android:text="Finish Ride"
+        android:textSize="18sp"
         android:layout_marginHorizontal="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

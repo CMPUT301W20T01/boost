@@ -1,5 +1,8 @@
 package ca.ualberta.boost.models;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This enum represents the Ride Status for a Ride, which can be
  * PENDING (at the ride request stage), ACCEPTED (once accepted by a Driver),
@@ -7,11 +10,33 @@ package ca.ualberta.boost.models;
  */
 
 public enum RideStatus {
-    PENDING,
-    DRIVERACCEPTED,
-    RIDERACCEPTED,
-    FINISHED,
-    CANCELLED;
+    PENDING(0),
+    DRIVERACCEPTED(1),
+    RIDERACCEPTED(2),
+    FINISHED(3),
+    PAID(4),
+    CANCELLED(5);
+
+    private final int value;
+    private static Map<Integer, RideStatus> map = new HashMap<>();
+
+    RideStatus(int value) {
+        this.value = value;
+    }
+
+    static {
+        for (RideStatus rideStatus : RideStatus.values()) {
+            map.put(rideStatus.value, rideStatus);
+        }
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public static RideStatus valueOf(int rideStatus) {
+        return map.get(rideStatus);
+    }
 
     /**
      * Returns a string of the status given an enum
@@ -30,6 +55,8 @@ public enum RideStatus {
                 return "rider accepted";
             case FINISHED:
                 return "finished";
+            case PAID:
+                return "paid";
             case CANCELLED:
                 return "cancelled";
             default:

@@ -1,9 +1,11 @@
 package ca.ualberta.boost;
 
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,9 +23,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import javax.annotation.Nonnull;
+
+import ca.ualberta.boost.controllers.RideEventListener;
 import ca.ualberta.boost.controllers.RideTracker;
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.RideStatus;
 import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.stores.RideStore;
 import ca.ualberta.boost.stores.UserStore;
@@ -38,15 +44,10 @@ import static com.firebase.ui.auth.AuthUI.TAG;
  * if no, move driver back to ViewRideRequest
  */
 public class DriverAcceptedFragment extends DialogFragment {
-    private RequestDetailsFragment.OnFragmentInteractionListener listener;
-    private Ride ride;
+    private DriverAcceptedFragment.OnFragmentInteractionListener listener;
     private TextView riderText;
-    RideTracker rideTracker;
-
-    DriverAcceptedFragment(Ride ride){
-        this.ride = ride;
-        new RideTracker(this.ride);
-    }
+    private RideTracker rideTracker;
+    private Context mContext;
 
     /**
      * Interface that enforces the implementing class to handle
@@ -60,13 +61,12 @@ public class DriverAcceptedFragment extends DialogFragment {
     @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
-        if (context instanceof RequestDetailsFragment.OnFragmentInteractionListener){
-            listener = (RequestDetailsFragment.OnFragmentInteractionListener) context;
+        if (context instanceof DriverAcceptedFragment.OnFragmentInteractionListener){
+            listener = (DriverAcceptedFragment.OnFragmentInteractionListener) context;
+            mContext = context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + "must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + "must implement OnFragmentInteractionListener");
         }
-
     }
 
     @NonNull
@@ -75,37 +75,56 @@ public class DriverAcceptedFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_driver_pending_rider_request, null);
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_pending, null);
 
-        riderText = view.findViewById(R.id.riderText);
-        riderText.setText(ride.getRiderUsername());
+        Ride activeRide = ActiveUser.getCurrentRide();
 
-        riderText.setOnClickListener(new View.OnClickListener() {
+        riderText = view.findViewById(R.id.riderText);
+        riderText.setText(activeRide.getRiderUsername());
+
+        new RideTracker(activeRide).addListener(new RideEventListener() {
             @Override
-            public void onClick(View v) {
-                new UserContactInformationFragment();
+            public void onStatusChange(@Nonnull Ride ride) {
+                if (ride.getRideStatus() == RideStatus.RIDERACCEPTED) {
+                    Log.i("rideListener","status changed to RIDERACCEPTED");
+                    ActiveUser.setCurrentRide(ride);
+                    Intent intent = new Intent(mContext, CurrentRideActivity.class);
+                    mContext.startActivity(intent);
+
+                } else if (ride.getRideStatus() == RideStatus.PENDING) {
+                    Toast.makeText(mContext, "Ride offer rejected", Toast.LENGTH_LONG).show();
+
+                    Ride currentRide = ActiveUser.getCurrentRide();
+                    currentRide.cancel();
+                    RideStore.saveRide(ride);
+                    ActiveUser.cancelRide();
+
+                    Intent intent = new Intent(mContext, ViewRideRequestsActivity.class);
+                    startActivity(intent);
+                }
+                // TODO: Ride status is CANCELLED
             }
+
+            @Override
+            public void onLocationChanged() { }
         });
-        //MAKING PENDING CONFIRMATION
+
+        Log.i("rideListener","called ride Listener for: " + activeRide.id());
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                 .setCustomTitle(titleView)
                 .setView(view)
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //CANCEL THE RIDE OFFER
-                        //-set driver to null
-                        //-set status to pending
-                        User activeUser = ActiveUser.getUser();
-
                         // update ride in database
+                        Ride ride = ActiveUser.getCurrentRide();
                         ride.setDriverUsername(null);
                         ride.setPending();
                         RideStore.saveRide(ride);
 
-                        // set driver's current ride to this ride
-                        activeUser.setActiveRide(null);
+                        ActiveUser.cancelRide();
                     }
                 });
-        //NEED TO IMPLEMENT CHANGE RIDE STATUS TO PENDING AGAIN;
+        //TODO:NEED TO IMPLEMENT CHANGE RIDE STATUS TO PENDING AGAIN;
 
         AlertDialog alert = builder.create();
         alert.setCanceledOnTouchOutside(false);

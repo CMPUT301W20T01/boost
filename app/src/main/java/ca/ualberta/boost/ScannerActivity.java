@@ -18,12 +18,19 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.blikoon.qrcodescanner.QrCodeActivity;
+
+import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.models.Driver;
+import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.stores.RideStore;
+import ca.ualberta.boost.stores.UserStore;
+
 /**
  * QRActivity is responsible for
  * by making sure the username and password correspond to user information in firestore
  * the class also will launch the sign up page if that button is clicked
  */
-public class QRActivity extends AppCompatActivity {
+public class ScannerActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int REQUEST_CODE_QR_SCAN = 101;
     private static final int PERMISSION_REQUEST_CODE = 1;
     private Button scanButton;
@@ -32,51 +39,25 @@ public class QRActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_qr);
+        setContentView(R.layout.activity_scanner);
 
-        generateButton = findViewById(R.id.generate_button);
         scanButton = findViewById(R.id.scan_button);
-
-        //GENERATE BUTTON
-        generateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                double fare = 20.0; //TO BE CHANGED WITH RIDE FARE
-                new QRCodeFragment(fare).show(getSupportFragmentManager(), "Generate QR");
-
-            }
-        });
-
-
-        //SCAN BUTTON
-        scanButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //CHECK FOR PERMISSION ON CAMERA AND STORAGE
-                if (checkPermission()){
-                    Intent i = new Intent(QRActivity.this, QrCodeActivity.class);
-                    startActivityForResult( i,REQUEST_CODE_QR_SCAN);
-                } else {
-                    // Permission has already been granted
-                   requestPermission();
-                }
-
-            }
-        });
+        scanButton.setOnClickListener(this);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String LOGTAG = "ABC";
+        String TAG = "ScannerActivity";
+        Log.d(TAG, "onActivityResult");
 
         if (resultCode != Activity.RESULT_OK) {
-            Log.d(LOGTAG, "COULD NOT GET A GOOD RESULT.");
+            Log.d(TAG, "Could not get a good result");
             if (data == null)
                 return;
             //Getting the passed result
             String result = data.getStringExtra("com.blikoon.qrcodescanner.error_decoding_image");
             if (result != null) {
-                AlertDialog alertDialog = new AlertDialog.Builder(QRActivity.this).create();
+                AlertDialog alertDialog = new AlertDialog.Builder(ScannerActivity.this).create();
                 alertDialog.setTitle("Scan Error");
                 alertDialog.setMessage("QR Code could not be scanned");
                 alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
@@ -94,22 +75,32 @@ public class QRActivity extends AppCompatActivity {
             if (data == null)
                 return;
             //Getting the passed result
-            String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
-            Log.d(LOGTAG, "Have scan result in your app activity :" + result);
-            AlertDialog alertDialog = new AlertDialog.Builder(QRActivity.this).create();
-            alertDialog.setTitle("Scan result");
+            final String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
+            Log.d(TAG, "Have scan result in your app activity :" + result);
+            AlertDialog alertDialog = new AlertDialog.Builder(ScannerActivity.this).create();
+            alertDialog.setTitle("You got paid:");
             alertDialog.setMessage(result);
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+                            payDriver(Double.valueOf(result));
+                            Intent intent = new Intent(ScannerActivity.this, DriverMainPage.class);
+                            startActivity(intent);
                         }
                     });
             alertDialog.show();
-
         }
     }
 
+    private void payDriver(double payment) {
+        Driver driver = (Driver) ActiveUser.getUser();
+        driver.addToBalance(payment);
+        UserStore.saveUser(driver);
+
+        Ride currentRide = ActiveUser.getCurrentRide();
+        currentRide.payDriver();
+        RideStore.saveRide(currentRide);
+    }
 
     //FUNCTIONS FOR PROMPTING PERMISSIONS
     private boolean checkPermission() {
@@ -157,12 +148,25 @@ public class QRActivity extends AppCompatActivity {
     }
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(QRActivity.this)
+        new AlertDialog.Builder(ScannerActivity.this)
                 .setMessage(message)
                 .setPositiveButton("OK", okListener)
                 .setNegativeButton("Cancel", null)
                 .create()
                 .show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.scan_button) {
+            if (checkPermission()) {
+                Intent i = new Intent(ScannerActivity.this, QrCodeActivity.class);
+                startActivityForResult(i, REQUEST_CODE_QR_SCAN);
+            } else {
+                // Permission has already been granted
+                requestPermission();
+            }
+        }
     }
 }
 
