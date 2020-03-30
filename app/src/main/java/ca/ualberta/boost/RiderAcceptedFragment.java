@@ -123,6 +123,24 @@ public class RiderAcceptedFragment extends DialogFragment implements RideEventLi
 
         AlertDialog alert = builder.create();
 
+        alert.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button neutButton = ((AlertDialog ) dialog).getButton(AlertDialog.BUTTON_NEUTRAL);
+                neutButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("RiderAcceptedFragment", "Reject Driver Clicked");
+                        Ride ride = ActiveUser.getCurrentRide();
+                        ride.setPending();
+                        RideStore.saveRide(ride);
+                        driverText.setText("");
+                    }
+                });
+
+            }
+        });
+
         return alert;
     }
 

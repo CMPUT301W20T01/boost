@@ -78,6 +78,7 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
             mMap.setMyLocationEnabled(true);
             // get rid of top right corner button to center location
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            mMap.getUiSettings().setMapToolbarEnabled(false);
             // enable all zoom, rotate, tilt, etc gesture
             // mMap.getUiSettings().setAllGesturesEnabled(true);
             init();
@@ -117,7 +118,7 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
             results = geocoder.getFromLocationName(name, 20);
         }catch (IOException e){
             Toast.makeText(MapActivity.this,
-                    "unable to find location", Toast.LENGTH_SHORT).show();
+                    "Unable to find location", Toast.LENGTH_SHORT).show();
         }
         // successful results
         if (results.size() > 0){

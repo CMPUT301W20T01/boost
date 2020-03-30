@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +52,8 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     private EditText searchDestinationText;
     private LinearLayout searchesLayout;
     private LinearLayout confirmCancelLayout;
-    private LinearLayout viewRequestLayout;
+    private RelativeLayout viewRequestLayout;
+    private RelativeLayout topButtonsLayout;
 
     // attributes
     private Ride ride;
@@ -76,7 +78,8 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
         viewRequestLayout = findViewById(R.id.viewRequestLayout);
         confirmRequestButton = findViewById(R.id.confirmRequestButton);
         cancelRequestButton = findViewById(R.id.cancelRequestButton);
-        viewRequestButton = findViewById(R.id.viewRideRequestButton);
+        topButtonsLayout = findViewById(R.id.topButtonsLayout);
+
     }
 
     /**
@@ -153,12 +156,6 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
             }
         });
 
-        viewRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchCurrentRequestActivity();
-            }
-        });
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -245,6 +242,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     private void handleSearch(EditText searchEditText, String markerTitle) {
         String searchString = searchEditText.getText().toString();
         LatLng latLng = geoLocate(searchString);
+        if (latLng != null) {
             if (markerTitle.equals("Pickup")) {
                 moveMarker(pickupMarker, latLng);
                 updateRideLocation(pickupMarker);
@@ -253,9 +251,12 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
                 updateRideLocation(destinationMarker);
             }
             // if both markers are visible
-            if (pickupMarker.isVisible() && destinationMarker.isVisible()){
+            if (pickupMarker.isVisible() && destinationMarker.isVisible()) {
                 zoomToMarkers(pickupMarker, destinationMarker);
             }
+        } else {
+            Toast.makeText(RiderMainPage.this, "Cannot find the location. Please enter an address.", Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
@@ -302,6 +303,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
      */
     private void setRequestLocationPageVisibility() {
         viewRequestLayout.setVisibility(View.GONE);
+        topButtonsLayout.setVisibility(View.GONE);
         confirmCancelLayout.setVisibility(View.VISIBLE);
         searchesLayout.setVisibility(View.VISIBLE);
     }
@@ -314,6 +316,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
         searchDestinationText.setText("");
         searchPickupText.setText("");
         viewRequestLayout.setVisibility(View.VISIBLE);
+        topButtonsLayout.setVisibility(View.VISIBLE);
         confirmCancelLayout.setVisibility(View.GONE);
         searchesLayout.setVisibility(View.GONE);
         pickupMarker.setVisible(false);
