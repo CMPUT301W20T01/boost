@@ -51,6 +51,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     private LinearLayout searchesLayout;
     private LinearLayout confirmCancelLayout;
     private RelativeLayout viewRequestLayout;
+    private RelativeLayout topButtonsLayout;
 
     // attributes
     private Ride ride;
@@ -75,7 +76,8 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
         viewRequestLayout = findViewById(R.id.viewRequestLayout);
         confirmRequestButton = findViewById(R.id.confirmRequestButton);
         cancelRequestButton = findViewById(R.id.cancelRequestButton);
- //       viewRequestButton = findViewById(R.id.viewRideRequestButton);
+        topButtonsLayout = findViewById(R.id.topButtonsLayout);
+
     }
 
     /**
@@ -152,12 +154,6 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
             }
         });
 
-//        viewRequestButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                launchCurrentRequestActivity();
-//            }
-//        });
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -300,6 +296,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
      */
     private void setRequestLocationPageVisibility() {
         viewRequestLayout.setVisibility(View.GONE);
+        topButtonsLayout.setVisibility(View.GONE);
         confirmCancelLayout.setVisibility(View.VISIBLE);
         searchesLayout.setVisibility(View.VISIBLE);
     }
@@ -312,6 +309,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
         searchDestinationText.setText("");
         searchPickupText.setText("");
         viewRequestLayout.setVisibility(View.VISIBLE);
+        topButtonsLayout.setVisibility(View.VISIBLE);
         confirmCancelLayout.setVisibility(View.GONE);
         searchesLayout.setVisibility(View.GONE);
         pickupMarker.setVisible(false);
