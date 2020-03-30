@@ -5,25 +5,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.User;
@@ -61,7 +49,7 @@ public class EditUserProfileFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstantState) {
         //Inflate the layout for this fragment
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.edit_user_profile,null);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_edit_profile,null);
 
         //Initialize
         email = view.findViewById(R.id.email_input);
@@ -78,7 +66,6 @@ public class EditUserProfileFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
-                .setTitle("Edit Profile Contact")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Update", new DialogInterface.OnClickListener() {
                     @Override
