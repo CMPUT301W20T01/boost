@@ -1,5 +1,6 @@
 package ca.ualberta.boost;
 
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -22,6 +23,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import javax.annotation.Nonnull;
+
 import ca.ualberta.boost.controllers.RideEventListener;
 import ca.ualberta.boost.controllers.RideTracker;
 import ca.ualberta.boost.models.ActiveUser;
@@ -42,16 +45,18 @@ import static com.firebase.ui.auth.AuthUI.TAG;
  */
 public class DriverAcceptedFragment extends DialogFragment {
     private DriverAcceptedFragment.OnFragmentInteractionListener listener;
-    private Ride ride;
     private TextView riderText;
-    RideTracker rideTracker;
+    private Ride ride;
+    private RideTracker rideTracker;
     private Context mContext;
+
 
     DriverAcceptedFragment(Ride ride){
         this.ride = ride;
-
-
     }
+
+    DriverAcceptedFragment(){}
+
 
     /**
      * Interface that enforces the implementing class to handle
@@ -69,10 +74,8 @@ public class DriverAcceptedFragment extends DialogFragment {
             listener = (DriverAcceptedFragment.OnFragmentInteractionListener) context;
             mContext = context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + "must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + "must implement OnFragmentInteractionListener");
         }
-
     }
 
     @NonNull
@@ -81,66 +84,65 @@ public class DriverAcceptedFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_driver_pending_rider_request, null);
         View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_pending, null);
 
+        Ride activeRide = ActiveUser.getCurrentRide();
+
         riderText = view.findViewById(R.id.riderText);
-        riderText.setText(ride.getRiderUsername());
+        riderText.setText(activeRide.getRiderUsername());
 
-        new RideTracker(ride).addListener(new RideEventListener() {
+        new RideTracker(activeRide).addListener(new RideEventListener() {
             @Override
-            public void onStatusChange(Ride changedRide) {
-
-                if (changedRide.getRideStatus()==RideStatus.RIDERACCEPTED){
-                    //START INTENT
+            public void onStatusChange(@Nonnull Ride ride) {
+                if (ride.getRideStatus() == RideStatus.RIDERACCEPTED) {
                     Log.i("rideListener","status changed to RIDERACCEPTED");
+                    ActiveUser.setCurrentRide(ride);
                     Intent intent = new Intent(mContext, CurrentRideActivity.class);
                     mContext.startActivity(intent);
 
+                } else if (ride.getRideStatus() == RideStatus.PENDING) {
+                    Toast.makeText(mContext, "Ride offer rejected", Toast.LENGTH_LONG).show();
+
+                    Ride currentRide = ActiveUser.getCurrentRide();
+                    currentRide.cancel();
+                    RideStore.saveRide(ride);
+                    ActiveUser.cancelRide();
+
+                    Intent intent = new Intent(mContext, ViewRideRequestsActivity.class);
+                    startActivity(intent);
+                }  else if (ride.getRideStatus() == RideStatus.CANCELLED) { // TODO: Ride status is CANCELLED ??
+                    Toast.makeText(mContext, "Sorry, the ride request got cancelled by the rider", Toast.LENGTH_LONG).show();
+
+                    Ride currentRide = ActiveUser.getCurrentRide();
+                    currentRide.cancel();
+                    RideStore.saveRide(ride);
+                    ActiveUser.cancelRide();
+
+                    Intent intent = new Intent(mContext, ViewRideRequestsActivity.class);
+                    startActivity(intent);
                 }
-
-                if (changedRide.getRideStatus()==RideStatus.DRIVERACCEPTED){
-                    Log.i("rideListener","status changed to DRIVERACCEPTED");
-
-                }
-
-                if (changedRide.getRideStatus()==RideStatus.PENDING){
-                    Log.i("rideListener","status changed to PENDING");
-                }
-
             }
 
             @Override
-            public void onLocationChanged() {
-                //NOTHING YET
-            }
+            public void onLocationChanged() { }
         });
-        Log.i("rideListener","called ride Listener for: "+ride.id());
 
+        Log.i("rideListener","called ride Listener for: " + activeRide.id());
 
-
-
-
-
-        //MAKING PENDING CONFIRMATION
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                 .setCustomTitle(titleView)
                 .setView(view)
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //CANCEL THE RIDE OFFER
-                        //-set driver to null
-                        //-set status to pending
-                        User activeUser = ActiveUser.getUser();
-
                         // update ride in database
+                        Ride ride = ActiveUser.getCurrentRide();
                         ride.setDriverUsername(null);
                         ride.setPending();
                         RideStore.saveRide(ride);
 
-                        // set driver's current ride to this ride
-                        activeUser.setActiveRide(null);
+                        ActiveUser.cancelRide();
                     }
                 });
-        //NEED TO IMPLEMENT CHANGE RIDE STATUS TO PENDING AGAIN;
+        //TODO:NEED TO IMPLEMENT CHANGE RIDE STATUS TO PENDING AGAIN;
 
         AlertDialog alert = builder.create();
         alert.setCanceledOnTouchOutside(false);

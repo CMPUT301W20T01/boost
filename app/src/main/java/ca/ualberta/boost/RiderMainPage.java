@@ -18,15 +18,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.stores.RideStore;
-
 
 /**
  * RiderMainPage defines the Home Page activity for Riders
@@ -90,12 +85,12 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     public void onAcceptPressed() {
         setRiderMainPageVisibility();
         // makes a ride with pending status and automatic date
-        ride = new Ride(ride.getStartLocation(), ride.getEndLocation(),
-                ride.getFare(), ride.getRiderUsername());
         ActiveUser.setCurrentRide(ride);
+        Log.d("RiderMainPage", "ride id: " + ride.id());
+        RideStore.saveRide(ride);
 
         //RUN PENDING FRAGMENT
-        new RiderAcceptedFragment(ride).show(getSupportFragmentManager(), "Pending_Driver_Accept");
+        new RiderAcceptedFragment().show(getSupportFragmentManager(), "Pending_Driver_Accept");
 
     }
 
@@ -244,7 +239,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     private void handleSearch(EditText searchEditText, String markerTitle) {
         String searchString = searchEditText.getText().toString();
         LatLng latLng = geoLocate(searchString);
-            if (markerTitle.equals("Pickup")){
+            if (markerTitle.equals("Pickup")) {
                 moveMarker(pickupMarker, latLng);
                 updateRideLocation(pickupMarker);
             } else {

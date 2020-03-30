@@ -66,7 +66,7 @@ public class UserStore {
 
         store.userCollection
                 .document(user.getUsername())
-                .set(user.data())
+                .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

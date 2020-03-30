@@ -34,7 +34,6 @@ public class DriverMainPage extends MapActivity {
         viewProfileButton = findViewById(R.id.viewProfileButton);
         viewRequestsButton = findViewById(R.id.viewRequestsButton);
         logoutButton = findViewById(R.id.logoutButton);
-
     }
 
     @Override
@@ -69,7 +68,6 @@ public class DriverMainPage extends MapActivity {
                 launchHomeScreen();
             }
         });
-
     }
 
     //function to launch the ViewRideRequests Activity
