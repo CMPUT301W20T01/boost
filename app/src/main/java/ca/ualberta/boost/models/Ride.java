@@ -153,6 +153,10 @@ public class Ride {
         this.status = RideStatus.CANCELLED;
     }
 
+    public void payDriver() {
+        this.status = RideStatus.PAID;
+    }
+
     /**
      * Calculates the base fare based on the Manhattan distance of
      * the start and end locations of the ride
@@ -189,27 +193,6 @@ public class Ride {
     public void setStatus(RideStatus status) {
         this.status = status;
     }
-
-    /**
-     * Converts String to RideStatus
-     */
-//    private static RideStatus toEnum(Long status){
-//
-//        switch(status){
-//            case RideStatus.PENDING:
-//                return RideStatus.PENDING;
-//            case "DRIVERACCEPTED":
-//                return RideStatus.DRIVERACCEPTED;
-//            case "RIDERACCEPTED":
-//                return RideStatus.RIDERACCEPTED;
-//            case "FINISHED":
-//                return RideStatus.FINISHED;
-//            case "CANCELLED":
-//                return RideStatus.CANCELLED;
-//            default:
-//                throw new IllegalArgumentException("Bad status");
-//        }
-//    }
 
     /**
      * Creates a Ride object from a Map of string, object pairs

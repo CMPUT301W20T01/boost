@@ -21,6 +21,8 @@ import com.blikoon.qrcodescanner.QrCodeActivity;
 
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Driver;
+import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.stores.RideStore;
 import ca.ualberta.boost.stores.UserStore;
 
 /**
@@ -81,16 +83,23 @@ public class ScannerActivity extends AppCompatActivity implements View.OnClickLi
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            double payment = Double.valueOf(result);
-                            Driver driver = (Driver) ActiveUser.getUser();
-                            driver.addToBalance(payment);
-                            UserStore.saveUser(driver);
+                            payDriver(Double.valueOf(result));
                             Intent intent = new Intent(ScannerActivity.this, DriverMainPage.class);
                             startActivity(intent);
                         }
                     });
             alertDialog.show();
         }
+    }
+
+    private void payDriver(double payment) {
+        Driver driver = (Driver) ActiveUser.getUser();
+        driver.addToBalance(payment);
+        UserStore.saveUser(driver);
+
+        Ride currentRide = ActiveUser.getCurrentRide();
+        currentRide.payDriver();
+        RideStore.saveRide(currentRide);
     }
 
     //FUNCTIONS FOR PROMPTING PERMISSIONS

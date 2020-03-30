@@ -14,7 +14,8 @@ public enum RideStatus {
     DRIVERACCEPTED(1),
     RIDERACCEPTED(2),
     FINISHED(3),
-    CANCELLED(4);
+    PAID(4),
+    CANCELLED(5);
 
     private final int value;
     private static Map<Integer, RideStatus> map = new HashMap<>();
@@ -54,6 +55,8 @@ public enum RideStatus {
                 return "rider accepted";
             case FINISHED:
                 return "finished";
+            case PAID:
+                return "paid";
             case CANCELLED:
                 return "cancelled";
             default:

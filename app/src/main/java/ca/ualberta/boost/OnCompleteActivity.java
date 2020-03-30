@@ -130,7 +130,7 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onStatusChange(@NonNull Ride ride) {
-        if (ride.getRideStatus() == RideStatus.FINISHED && ActiveUser.getUser().getType() == UserType.RIDER) {
+        if (ride.getRideStatus() == RideStatus.PAID && ActiveUser.getUser().getType() == UserType.RIDER) {
             Log.d("OnCompleteActivity", "RideStatus == FINISHED");
             Intent intent = new Intent(this, RiderMainPage.class);
             startActivity(intent);
