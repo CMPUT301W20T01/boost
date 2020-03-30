@@ -29,11 +29,16 @@ import com.google.firebase.firestore.QuerySnapshot;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Collection;
+
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.PromiseImpl;
+import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.RideStatus;
 import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.models.UserType;
+import ca.ualberta.boost.stores.RideStore;
 import ca.ualberta.boost.stores.UserStore;
 
 /**
@@ -237,7 +242,6 @@ public class MainActivity extends AppCompatActivity {
         if (type == UserType.RIDER) {
             finish();
             intent = new Intent(this, RiderMainPage.class);
-//            intent = new Intent(this, OnCompleteActivity.class); // for testing on complete page
         } else { // type == UserType.DRIVER
             finish();
             intent = new Intent(this, DriverMainPage.class);
@@ -263,6 +267,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
+
 
 //    @Override
 //    public void run() {
