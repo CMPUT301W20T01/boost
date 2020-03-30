@@ -57,7 +57,11 @@
         android:orientation="horizontal">
 
         <Button
+
             android:id="@+id/cancelButton"
+            android:background="@drawable/rounded_button_dark"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_margin="10dp"
@@ -66,6 +70,9 @@
 
         <Button
             android:id="@+id/detailsButton"
+            android:background="@drawable/rounded_button_dark"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_margin="10dp"
