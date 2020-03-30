@@ -316,11 +316,6 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
         destinationMarker.setVisible(false);
     }
 
-    private void launchCurrentRequestActivity(){
-        Intent intent = new Intent(this, RiderCurrentRideRequestActivity.class);
-        startActivity(intent);
-    }
-
     private void launchHomeScreen(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

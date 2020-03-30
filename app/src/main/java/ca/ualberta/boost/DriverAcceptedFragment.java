@@ -73,7 +73,6 @@ public class DriverAcceptedFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_driver_pending_rider_request, null);
-        View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_pending, null);
 
         Ride activeRide = ActiveUser.getCurrentRide();
 
@@ -110,7 +109,6 @@ public class DriverAcceptedFragment extends DialogFragment {
         Log.i("rideListener","called ride Listener for: " + activeRide.id());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                .setCustomTitle(titleView)
                 .setView(view)
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
