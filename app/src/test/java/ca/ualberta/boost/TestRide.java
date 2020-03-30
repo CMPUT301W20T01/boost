@@ -37,4 +37,6 @@ public class TestRide {
         assertEquals(13.83, ride.baseFare());
         
     }
+
+
 }

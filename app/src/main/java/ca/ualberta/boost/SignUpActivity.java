@@ -139,8 +139,8 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                        password.getText().toString(), email.getText().toString(),
                        phoneNumber.getText().toString());
         }
-        ActiveUser.login(user);
         UserStore.saveUser(user);
+        ActiveUser.login(user);
     }
 
     //signs in user and launches the home activity
@@ -191,21 +191,17 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     public void uniqueUsername(String username) {
-       // final PromiseImpl<Boolean> isUnique = new PromiseImpl<>();
         UserStore.getUser(username).addOnSuccessListener(new OnSuccessListener<User>() {
             @Override
             public void onSuccess(User user) {
-               // isUnique.resolve(false);
                 Toast.makeText(getApplicationContext(), "Username is taken", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                //isUnique.resolve(true);
                 addUser();
             }
         });
 
-      //  return isUnique;
     }
 }
