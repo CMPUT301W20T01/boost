@@ -74,12 +74,12 @@ public class TestUser {
     }
 
 
-    @Test
-    void testRating() {
-        Driver driver = mockDriver();
-        driver.updateRating(50);
-        driver.updateRating(100);
-        assertEquals(2, driver.getNumRates());
-        assertEquals(75, driver.getRating());
-    }
+//    @Test
+//    void testRating() {
+//        Driver driver = mockDriver();
+//        driver.updateRating(50);
+//        driver.updateRating(100);
+//        assertEquals(2, driver.getNumRates());
+//        assertEquals(75, driver.getRating());
+//    }
 }

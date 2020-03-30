@@ -96,7 +96,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            Toast.makeText(SignUpActivity.this, "user account created", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUpActivity.this, "User account created", Toast.LENGTH_SHORT).show();
                             finish();
                             storeUser();
                             signInUser();
@@ -139,13 +139,12 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                        password.getText().toString(), email.getText().toString(),
                        phoneNumber.getText().toString());
         }
-
+        ActiveUser.login(user);
         UserStore.saveUser(user);
     }
 
     //signs in user and launches the home activity
     private void signInUser () {
-        //uniqueUserName(userName.getText().toString());
         if (isValidInput()) {
             auth.signInWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim())
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
