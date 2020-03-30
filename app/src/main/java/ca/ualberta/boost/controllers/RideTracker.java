@@ -35,7 +35,7 @@ public class RideTracker {
     //constructor
     public RideTracker(Ride ride) {
         this.ride = ride;
-        Log.d("RideTracker", "creating RideTracker for ride: " + ride.id());
+//        Log.d("RideTracker", "creating RideTracker for ride: " + ride.id());
 
         docRef = FirebaseFirestore.getInstance().collection("rides").document(ride.id());
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
