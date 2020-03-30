@@ -61,27 +61,33 @@ public class RideTracker {
             return;
         }
 
-        if (documentSnapshot != null && documentSnapshot.exists()){
-            Log.i("rideListener","Current data: " + documentSnapshot.getData().get("status"));
+        if (documentSnapshot != null && documentSnapshot.exists()) {
+            Ride newRide = Ride.build(documentSnapshot.getData());
 
-
-            if ("DRIVERACCEPTED".equals(documentSnapshot.getData().get("status").toString())){
-                Log.i("rideListener","tracking status driver");
-                checkDriver = true;
-                ride.driverAccept();
-                ActiveUser.setCurrentRide(ride);
-                rideEventListener.onStatusChange(ride);
+            if (newRide.getRideStatus() != ride.getRideStatus()) {
+                rideEventListener.onStatusChange(newRide);
             }
 
+//            ActiveUser.setCurrentRide(newRide);
+//            ride = newRide;
+            ride.setStatus(newRide.getRideStatus());
+            ride.setDriverUsername(newRide.getDriverUsername());
 
-            if ("RIDERACCEPTED".equals(documentSnapshot.getData().get("status").toString())){
-                Log.i("rideListener","tracking status rider");
-                checkDriver = false;
-                ride.riderAccept();
-                ActiveUser.setCurrentRide(ride);
-                rideEventListener.onStatusChange(ride);
-            }
-
+//            if ("DRIVERACCEPTED".equals(documentSnapshot.getData().get("status").toString())){
+//                Log.i("rideListener","tracking status driver");
+//                checkDriver = true;
+//                ride.driverAccept();
+//                ActiveUser.setCurrentRide(ride);
+//                rideEventListener.onStatusChange(ride);
+//            }
+//
+//            if ("RIDERACCEPTED".equals(documentSnapshot.getData().get("status").toString())){
+//                Log.i("rideListener","tracking status rider");
+//                checkDriver = false;
+//                ride.riderAccept();
+//                ActiveUser.setCurrentRide(ride);
+//                rideEventListener.onStatusChange(ride);
+//            }
 
         } else {
             Log.i("rideListener","null");

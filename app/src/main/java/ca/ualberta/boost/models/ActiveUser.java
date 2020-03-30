@@ -35,7 +35,6 @@ public class ActiveUser {
     public static boolean setCurrentRide(Ride ride) {
         if (currentRide == null) {
             currentRide = ride;
-            RideStore.saveRide(ride);
             return true;
         }
         return false;

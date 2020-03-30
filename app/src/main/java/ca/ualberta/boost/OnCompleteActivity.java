@@ -25,9 +25,6 @@ import ca.ualberta.boost.stores.UserStore;
 
 public class OnCompleteActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Ride ride;
-    private Driver driver;
-
     private ImageButton thumbsUpButton;
     private ImageButton thumbsDownButton;
 
@@ -48,14 +45,6 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ride_complete_page);
         getSupportFragmentManager();
-
-//        ride = ActiveUser.getCurrentRide();
-//        UserStore.getUser(ride.getDriverUsername()).addOnSuccessListener(new OnSuccessListener<User>() {
-//            @Override
-//            public void onSuccess(User user) {
-//                driver = (Driver) user;
-//            }
-//        });
 
         thumbsUpButton = findViewById(R.id.thumbs_up_button);
         thumbsDownButton = findViewById(R.id.thumbs_down_button);
@@ -112,8 +101,7 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void changeTotal() {
-//        totalAmount = ride.getFare() + tipAmount;
-        totalAmount = new BigDecimal(10.00).add(tipAmount);
+        totalAmount = new BigDecimal(ActiveUser.getCurrentRide().baseFare()).add(tipAmount);
         String totalFormatted = String.format("$%s", totalAmount.toString());
         totalAmountView.setText(totalFormatted);
     }

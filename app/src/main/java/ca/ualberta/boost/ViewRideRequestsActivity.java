@@ -230,7 +230,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
                 if (!rides.isEmpty()) {
                     rideList.addAll(rides);
                     displayRequests();
-                } else{
+                } else {
                     Log.d("TestingViewRide", "rides is empty");
                 }
             }

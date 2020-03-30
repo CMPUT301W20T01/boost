@@ -1,34 +1,57 @@
 package ca.ualberta.boost;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import javax.annotation.Nonnull;
+
+import ca.ualberta.boost.controllers.RideEventListener;
+import ca.ualberta.boost.controllers.RideTracker;
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.RideStatus;
+import ca.ualberta.boost.models.UserType;
+import ca.ualberta.boost.stores.RideStore;
 
 // TODO: Rename class to RideActivity because this class will be called by both Drivers and Riders
-public class CurrentRideActivity extends MapActivity {
+public class CurrentRideActivity extends MapActivity implements RideEventListener {
     // attributes
-    private Ride ride;
+    private Button finishRideButton;
     public Marker pickupMarker;
     public Marker destinationMarker;
+    private RideTracker tracker;
+    private Ride ride;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tracker = new RideTracker(ActiveUser.getCurrentRide());
+        tracker.addListener(this);
 
+        ride = ActiveUser.getCurrentRide();
+
+        finishRideButton = findViewById(R.id.finish_ride_button);
+        finishRideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Ride ride = ActiveUser.getCurrentRide();
+                ride.finish();
+                RideStore.saveRide(ride);
+                if (ActiveUser.getUser().getType() == UserType.RIDER) {
+                    Intent intent = new Intent(CurrentRideActivity.this, OnCompleteActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     @Override
@@ -43,9 +66,7 @@ public class CurrentRideActivity extends MapActivity {
 
     @Override
     protected void init() {
-        ride = ActiveUser.getCurrentRide();
         GoogleMap mMap = getMap();
-
 
         Toast.makeText(CurrentRideActivity.this, "Successfully transferred to CurrentRideActivity", Toast.LENGTH_SHORT).show();
         Log.i("rideListener","CurrentRideActivity started");
@@ -60,7 +81,17 @@ public class CurrentRideActivity extends MapActivity {
                 .title("Destination")
                 .position(ride.getEndLocation())
         );
-        // move camera to show both markers
-      //  zoomToMarkers(pickupMarker, destinationMarker);
     }
+
+    @Override
+    public void onStatusChange(@Nonnull Ride ride) {
+        if (ride.getRideStatus() == RideStatus.FINISHED && ActiveUser.getUser().getType() == UserType.DRIVER) {
+            Log.i("CurrentRideActivity", "RideStatus == FINISHED");
+            Intent intent = new Intent(this, ScannerActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onLocationChanged() { }
 }

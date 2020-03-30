@@ -22,6 +22,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import javax.annotation.Nonnull;
+
 import ca.ualberta.boost.controllers.RideEventListener;
 import ca.ualberta.boost.controllers.RideTracker;
 import ca.ualberta.boost.models.ActiveUser;
@@ -49,8 +51,6 @@ public class DriverAcceptedFragment extends DialogFragment {
 
     DriverAcceptedFragment(Ride ride){
         this.ride = ride;
-
-
     }
 
     /**
@@ -86,22 +86,20 @@ public class DriverAcceptedFragment extends DialogFragment {
 
         new RideTracker(ride).addListener(new RideEventListener() {
             @Override
-            public void onStatusChange(Ride changedRide) {
-
-                if (changedRide.getRideStatus()==RideStatus.RIDERACCEPTED){
+            public void onStatusChange(@Nonnull Ride changedRide) {
+                if (changedRide.getRideStatus() == RideStatus.RIDERACCEPTED){
                     //START INTENT
                     Log.i("rideListener","status changed to RIDERACCEPTED");
                     Intent intent = new Intent(mContext, CurrentRideActivity.class);
                     mContext.startActivity(intent);
-
                 }
 
-                if (changedRide.getRideStatus()==RideStatus.DRIVERACCEPTED){
+                if (changedRide.getRideStatus() == RideStatus.DRIVERACCEPTED){
                     Log.i("rideListener","status changed to DRIVERACCEPTED");
 
                 }
 
-                if (changedRide.getRideStatus()==RideStatus.PENDING){
+                if (changedRide.getRideStatus() == RideStatus.PENDING){
                     Log.i("rideListener","status changed to PENDING");
                 }
 

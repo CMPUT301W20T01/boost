@@ -1,6 +1,8 @@
 package ca.ualberta.boost.models;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
@@ -11,6 +13,7 @@ import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -27,7 +30,7 @@ public class Ride {
     private RideStatus status;
     private Date requestTime;
 
-    private Ride(LatLng startLocation, LatLng endLocation, double fare, String driver, String rider,
+    private Ride(LatLng startLocation, LatLng endLocation, double fare, @Nonnull String driver, String rider,
                  RideStatus status, Date requestTime) {
         this.startLocation = startLocation;
         this.endLocation = endLocation;
@@ -70,7 +73,7 @@ public class Ride {
         map.put("fare", this.fare);
         map.put("driver", this.driver_username);
         map.put("rider", this.rider_username);
-        map.put("status", this.status.toString());
+        map.put("status", this.status.getValue());
         map.put("request_time", this.requestTime);
         return map;
     }
@@ -183,26 +186,30 @@ public class Ride {
         return new LatLng(point.getLatitude(), point.getLongitude());
     }
 
+    public void setStatus(RideStatus status) {
+        this.status = status;
+    }
+
     /**
      * Converts String to RideStatus
      */
-    private static RideStatus toEnum(String string){
-
-        switch(string){
-            case "PENDING":
-                return RideStatus.PENDING;
-            case "DRIVERACCEPTED":
-                return RideStatus.DRIVERACCEPTED;
-            case "RIDERACCEPTED":
-                return RideStatus.RIDERACCEPTED;
-            case "FINISHED":
-                return RideStatus.FINISHED;
-            case "CANCELLED":
-                return RideStatus.CANCELLED;
-            default:
-                throw new IllegalArgumentException("Bad status");
-        }
-    }
+//    private static RideStatus toEnum(Long status){
+//
+//        switch(status){
+//            case RideStatus.PENDING:
+//                return RideStatus.PENDING;
+//            case "DRIVERACCEPTED":
+//                return RideStatus.DRIVERACCEPTED;
+//            case "RIDERACCEPTED":
+//                return RideStatus.RIDERACCEPTED;
+//            case "FINISHED":
+//                return RideStatus.FINISHED;
+//            case "CANCELLED":
+//                return RideStatus.CANCELLED;
+//            default:
+//                throw new IllegalArgumentException("Bad status");
+//        }
+//    }
 
     /**
      * Creates a Ride object from a Map of string, object pairs
@@ -213,6 +220,8 @@ public class Ride {
      */
     public static Ride build(Map<String, Object> data) {
         Timestamp timestamp = (Timestamp) data.get("request_time");
+        Long status = (Long) data.get("status");
+        Log.d("Ride", data.get("status").toString());
         return new Ride(
                 // convert GeoPoints to LatLng
                 toLatLng((GeoPoint) data.get("start_location")),
@@ -220,7 +229,7 @@ public class Ride {
                 (double) data.get("fare"),
                 (String) data.get("driver"),
                 (String) data.get("rider"),
-                toEnum(data.get("status").toString()),
+                RideStatus.valueOf(status.intValue()),
                 timestamp.toDate());
     }
 }

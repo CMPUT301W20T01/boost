@@ -32,8 +32,6 @@ public class RequestDetailsFragment extends DialogFragment {
     private TextView endText;
     private TextView fareText;
 
-
-
     RequestDetailsFragment(Ride ride, String pickup, String destination){
         this.ride = ride;
         this.startAddress = pickup;

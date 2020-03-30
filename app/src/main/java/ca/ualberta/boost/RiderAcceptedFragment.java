@@ -47,16 +47,10 @@ import static com.firebase.ui.auth.AuthUI.TAG;
  */
 public class RiderAcceptedFragment extends DialogFragment {
     private RiderAcceptedFragment.OnFragmentInteractionListener listener;
-    private Ride ride;
     private TextView driverText;
     private Context mContext;
     Button positiveButton;
     private String driver;
-
-    RiderAcceptedFragment(Ride ride){
-        this.ride = ride;
-
-    }
 
     /**
      * Interface that enforces the implementing class to handle
@@ -89,30 +83,30 @@ public class RiderAcceptedFragment extends DialogFragment {
         driverText = view.findViewById(R.id.driverText);
 
         Log.d("rideListener","add listener");
-        new RideTracker(this.ride).addListener(new RideEventListener() {
+        Ride currentRide = ActiveUser.getCurrentRide();
+        new RideTracker(currentRide).addListener(new RideEventListener() {
             @Override
-            public void onStatusChange( Ride ride) {
+            public void onStatusChange(Ride ride) {
                 if (ride.getRideStatus()== RideStatus.RIDERACCEPTED){
                     //START INTENT
                     Log.i("rideListener","status changed to RIDERACCEPTED");
                     Intent intent = new Intent(mContext, CurrentRideActivity.class);
 
                     mContext.startActivity(intent);
-
                 }
 
-                if (ride.getRideStatus()==RideStatus.DRIVERACCEPTED){
+                if (ride.getRideStatus() == RideStatus.DRIVERACCEPTED){
                     Log.i("rideListener","status changed to DRIVERACCEPTED");
 
                     RideStore.getRide(ride.id()).addOnSuccessListener(new OnSuccessListener<Ride>() {
                         @Override
                         public void onSuccess(Ride ride) {
                             Log.i("rideListener","onSuccess RideStore get driver:" + ride.getDriverUsername());
-                            driver =ride.getDriverUsername();
+                            driver = ride.getDriverUsername();
 
                             Log.i("rideListener","got driver:" + driver);
 
-                            if (ride.getRiderUsername() !=null) {
+                            if (ride.getRiderUsername() != null) {
                                 Toast.makeText(getContext(), "Driver: " + driver + " has accepted.", Toast.LENGTH_SHORT).show();
 
                                 driverText.setText(driver);
@@ -156,21 +150,20 @@ public class RiderAcceptedFragment extends DialogFragment {
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        Ride ride = ActiveUser.getCurrentRide();
                         ride.riderAccept();
                         RideStore.saveRide(ride);
+                        Intent intent = new Intent(mContext, CurrentRideActivity.class);
+                        mContext.startActivity(intent);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //CANCEL THE RIDE OFFER
-
-                        // update ride in database
+                        Ride ride = ActiveUser.getCurrentRide();
                         ride.cancel();
                         RideStore.saveRide(ride);
                         ActiveUser.cancelRide();
-
                     }
                 });
         //NEED TO IMPLEMENT CHANGE RIDE STATUS TO PENDING AGAIN;

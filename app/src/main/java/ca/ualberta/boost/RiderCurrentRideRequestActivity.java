@@ -50,9 +50,7 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
     TextView riderUserName;
     Button cancelButton;
 
-    //firebase
     private Promise<Collection<Ride>> requests;
-    User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,14 +64,9 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
         riderUserName = findViewById(R.id.usernameRideRequest);
         cancelButton = findViewById(R.id.cancelRideRequestButton);
 
-
-        //firebase
         requests = RideStore.getRequests();
-        currentUser = ActiveUser.getUser();
 
-
-        setRideRequest2();
-        //setRideRequest();
+        setRideRequest();
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,35 +89,34 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
                     userContactInformationFragment.setArguments(bundle);
                     userContactInformationFragment.show(getSupportFragmentManager(), "my fragment");
 //                    FragmentManager manager = getSupportFragmentManager();
-
                 }
                 return false;
             }
         });
-
     }
 
     //function to retrieve the relevant information about a ride request for the current user
-    private void setRideRequest2(){
+    private void setRideRequest(){
         Log.i("RESULT","Attempt to retrieve requests");
         requests.addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
             @Override
             public void onSuccess(Collection<Ride> rides) {
                 Log.i("RESULT","onSuccess to retrieve requests");
-                Log.i("RESULT","rides numbers: "+rides.size());
+                Log.i("RESULT","rides numbers: " + rides.size());
+                String currentUsername = ActiveUser.getUser().getUsername();
                 for (Ride currentRide : rides) {
-                    if (currentRide.getRiderUsername().equals(currentUser.getUsername())){
-                        startLocation.setText("Start Location: "+currentRide.getStartLocation().toString());
-                        endLocation.setText("End Location: "+currentRide.getEndLocation().toString());
-                        fare.setText("Fare: "+Double.toString(currentRide.getFare()) + "QR Bucks");
-                        status.setText("Status: "+currentRide.getRideStatus().toString());
+                    if (currentRide.getRiderUsername().equals(currentUsername)) {
+                        startLocation.setText("Start Location: " + currentRide.getStartLocation().toString());
+                        endLocation.setText("End Location: " + currentRide.getEndLocation().toString());
+                        fare.setText("Fare: " + Double.toString(currentRide.getFare()) + "QR Bucks");
+                        status.setText("Status: " + currentRide.getRideStatus().toString());
                         driverUserName.setText(currentRide.getDriverUsername());
                         Log.i("testValue",currentRide.getRiderUsername());
-                        Log.i("testValue",currentUser.getUsername());
-                        riderUserName.setText("Rider: "+currentRide.getRiderUsername());
+                        Log.i("testValue",ActiveUser.getUser().getUsername());
+                        riderUserName.setText("Rider: " + currentRide.getRiderUsername());
+                    }
                 }
             }
-        }
         });
         requests.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -143,7 +135,7 @@ public class RiderCurrentRideRequestActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Collection<Ride> rides) {
                 for (Ride currentRide : rides) {
-                    if (currentRide.getRiderUsername().equals(currentUser.getUsername())) {
+                    if (currentRide.getRiderUsername().equals(ActiveUser.getUser().getUsername())) {
                         Log.i("TEST","Cancelling "+currentRide.getRiderUsername());
                         currentRide.cancel();
                         RideStore.saveRide(currentRide);
