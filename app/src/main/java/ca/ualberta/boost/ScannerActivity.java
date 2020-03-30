@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -17,12 +18,17 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.blikoon.qrcodescanner.QrCodeActivity;
+
+import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.models.Driver;
+import ca.ualberta.boost.stores.UserStore;
+
 /**
  * QRActivity is responsible for
  * by making sure the username and password correspond to user information in firestore
  * the class also will launch the sign up page if that button is clicked
  */
-public class ScannerActivity extends AppCompatActivity {
+public class ScannerActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int REQUEST_CODE_QR_SCAN = 101;
     private static final int PERMISSION_REQUEST_CODE = 1;
     private Button scanButton;
@@ -34,24 +40,13 @@ public class ScannerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scanner);
 
         scanButton = findViewById(R.id.scan_button);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        //CHECK FOR PERMISSION ON CAMERA AND STORAGE
-        if (checkPermission()) {
-            Intent i = new Intent(ScannerActivity.this, QrCodeActivity.class);
-            startActivityForResult(i, REQUEST_CODE_QR_SCAN);
-        } else {
-            // Permission has already been granted
-            requestPermission();
-        }
+        scanButton.setOnClickListener(this);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String TAG = "Scanner";
+        String TAG = "ScannerActivity";
+        Log.d(TAG, "onActivityResult");
 
         if (resultCode != Activity.RESULT_OK) {
             Log.d(TAG, "Could not get a good result");
@@ -78,22 +73,25 @@ public class ScannerActivity extends AppCompatActivity {
             if (data == null)
                 return;
             //Getting the passed result
-            String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
+            final String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
             Log.d(TAG, "Have scan result in your app activity :" + result);
             AlertDialog alertDialog = new AlertDialog.Builder(ScannerActivity.this).create();
-            alertDialog.setTitle("Scan result");
+            alertDialog.setTitle("You got paid:");
             alertDialog.setMessage(result);
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+                            double payment = Double.valueOf(result);
+                            Driver driver = (Driver) ActiveUser.getUser();
+                            driver.addToBalance(payment);
+                            UserStore.saveUser(driver);
+                            Intent intent = new Intent(ScannerActivity.this, DriverMainPage.class);
+                            startActivity(intent);
                         }
                     });
             alertDialog.show();
-
         }
     }
-
 
     //FUNCTIONS FOR PROMPTING PERMISSIONS
     private boolean checkPermission() {
@@ -147,6 +145,19 @@ public class ScannerActivity extends AppCompatActivity {
                 .setNegativeButton("Cancel", null)
                 .create()
                 .show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.scan_button) {
+            if (checkPermission()) {
+                Intent i = new Intent(ScannerActivity.this, QrCodeActivity.class);
+                startActivityForResult(i, REQUEST_CODE_QR_SCAN);
+            } else {
+                // Permission has already been granted
+                requestPermission();
+            }
+        }
     }
 }
 

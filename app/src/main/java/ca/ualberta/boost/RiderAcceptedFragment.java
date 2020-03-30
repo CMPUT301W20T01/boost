@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import android.nfc.Tag;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -71,7 +72,6 @@ public class RiderAcceptedFragment extends DialogFragment {
             throw new RuntimeException(context.toString()
                     + "must implement OnFragmentInteractionListener");
         }
-
     }
 
     @NonNull
@@ -86,7 +86,7 @@ public class RiderAcceptedFragment extends DialogFragment {
         Ride currentRide = ActiveUser.getCurrentRide();
         new RideTracker(currentRide).addListener(new RideEventListener() {
             @Override
-            public void onStatusChange(Ride ride) {
+            public void onStatusChange(@NonNull Ride ride) {
                 if (ride.getRideStatus()== RideStatus.RIDERACCEPTED){
                     //START INTENT
                     Log.i("rideListener","status changed to RIDERACCEPTED");
@@ -124,9 +124,6 @@ public class RiderAcceptedFragment extends DialogFragment {
                         }
                     });
 
-                    //WHEN DRIVER ACCEPTED, TEXTVIEW WILL SHOW UP DRIVER NAME
-                    //CLICK ON THE NAME WILL POP UP PROFILE INFO FRAGMENT
-                    //DOES NOT WORK???
                     driverText.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -142,22 +139,35 @@ public class RiderAcceptedFragment extends DialogFragment {
             }
         });
 
-
         //MAKING PENDING CONFIRMATION
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                 .setCustomTitle(titleView)
                 .setView(view)
-                .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Accept Driver", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Ride ride = ActiveUser.getCurrentRide();
-                        ride.riderAccept();
-                        RideStore.saveRide(ride);
-                        Intent intent = new Intent(mContext, CurrentRideActivity.class);
-                        mContext.startActivity(intent);
+                        Log.d("RiderAcceptedFragment", "Accept Driver Clicked");
+                        if (ActiveUser.getCurrentRide().getRideStatus() == RideStatus.DRIVERACCEPTED) {
+                            Ride ride = ActiveUser.getCurrentRide();
+                            ride.riderAccept();
+                            RideStore.saveRide(ride);
+                            Intent intent = new Intent(mContext, CurrentRideActivity.class);
+                            mContext.startActivity(intent);
+                        }
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNeutralButton("Reject Driver", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (ActiveUser.getCurrentRide().getRideStatus() == RideStatus.DRIVERACCEPTED) {
+                            Ride ride = ActiveUser.getCurrentRide();
+                            ride.setPending();
+                            RideStore.saveRide(ride);
+                            driverText.setText("");
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel Request", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Ride ride = ActiveUser.getCurrentRide();
@@ -166,7 +176,6 @@ public class RiderAcceptedFragment extends DialogFragment {
                         ActiveUser.cancelRide();
                     }
                 });
-        //NEED TO IMPLEMENT CHANGE RIDE STATUS TO PENDING AGAIN;
 
         AlertDialog alert = builder.create();
         alert.setCanceledOnTouchOutside(false);

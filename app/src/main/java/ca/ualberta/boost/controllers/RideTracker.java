@@ -63,10 +63,10 @@ public class RideTracker {
 
         if (documentSnapshot != null && documentSnapshot.exists()) {
             Ride newRide = Ride.build(documentSnapshot.getData());
-
-            if (newRide.getRideStatus() != ride.getRideStatus()) {
+            Log.d("RideTracker", "OnEvent");
+//            if (newRide.getRideStatus() != ride.getRideStatus()) {
                 rideEventListener.onStatusChange(newRide);
-            }
+//            }
 
 //            ActiveUser.setCurrentRide(newRide);
 //            ride = newRide;

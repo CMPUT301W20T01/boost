@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.Marker;
@@ -22,7 +24,6 @@ import ca.ualberta.boost.models.RideStatus;
 import ca.ualberta.boost.models.UserType;
 import ca.ualberta.boost.stores.RideStore;
 
-// TODO: Rename class to RideActivity because this class will be called by both Drivers and Riders
 public class CurrentRideActivity extends MapActivity implements RideEventListener {
     // attributes
     private Button finishRideButton;
@@ -34,24 +35,46 @@ public class CurrentRideActivity extends MapActivity implements RideEventListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("CurrentRideActivity", "inside OnCreate");
         tracker = new RideTracker(ActiveUser.getCurrentRide());
         tracker.addListener(this);
-
         ride = ActiveUser.getCurrentRide();
-
         finishRideButton = findViewById(R.id.finish_ride_button);
-        finishRideButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Ride ride = ActiveUser.getCurrentRide();
-                ride.finish();
-                RideStore.saveRide(ride);
-                if (ActiveUser.getUser().getType() == UserType.RIDER) {
-                    Intent intent = new Intent(CurrentRideActivity.this, OnCompleteActivity.class);
-                    startActivity(intent);
+
+        if (ActiveUser.getUser().getType() == UserType.DRIVER) {
+            finishRideButton.setVisibility(View.GONE);
+            Log.d("CurrentRideActivity", "User is a driver");
+
+//            new RideTracker(ride).addListener(new RideEventListener() {
+//                @Override
+//                public void onStatusChange(@NonNull Ride ride) {
+//                    Log.d("CurrentRideActivity", "Status changed to: " + ride.getRideStatus().toString());
+//                    if (ride.getRideStatus() == RideStatus.FINISHED && ActiveUser.getUser().getType() == UserType.DRIVER) {
+//                        Log.d("CurrentRideActivity", "RideStatus == FINISHED");
+//                        Intent intent = new Intent(CurrentRideActivity.this, ScannerActivity.class);
+//                        startActivity(intent);
+//                    }
+//                }
+//
+//                @Override
+//                public void onLocationChanged() { }
+//            });
+
+        } else {
+            Log.d("CurrentRideActivity", "User is a rider");
+            finishRideButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Ride ride = ActiveUser.getCurrentRide();
+                    ride.finish();
+                    RideStore.saveRide(ride);
+                    if (ActiveUser.getUser().getType() == UserType.RIDER) {
+                        Intent intent = new Intent(CurrentRideActivity.this, OnCompleteActivity.class);
+                        startActivity(intent);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -85,8 +108,9 @@ public class CurrentRideActivity extends MapActivity implements RideEventListene
 
     @Override
     public void onStatusChange(@Nonnull Ride ride) {
+        Log.d("CurrentRideActivity", "Status changed to: " + ride.getRideStatus().toString());
         if (ride.getRideStatus() == RideStatus.FINISHED && ActiveUser.getUser().getType() == UserType.DRIVER) {
-            Log.i("CurrentRideActivity", "RideStatus == FINISHED");
+            Log.d("CurrentRideActivity", "RideStatus == FINISHED");
             Intent intent = new Intent(this, ScannerActivity.class);
             startActivity(intent);
         }

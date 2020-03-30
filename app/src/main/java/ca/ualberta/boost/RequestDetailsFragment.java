@@ -95,7 +95,6 @@ public class RequestDetailsFragment extends DialogFragment {
 
         // building the dialog
         return builder
-
                 .setView(view)
                 .setCustomTitle(titleView)
                 .setNegativeButton("Cancel", null) // null -> does nothing
@@ -104,8 +103,6 @@ public class RequestDetailsFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         // send ride to parent activity
                         listener.onAcceptPressed(ride);
-
-
                     }
                 }).create();
     }
