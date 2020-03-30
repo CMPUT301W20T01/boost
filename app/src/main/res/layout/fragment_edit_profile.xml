@@ -5,7 +5,7 @@
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditProfileActivity">
+    tools:context=".EditUserProfileFragment">
 
     <TextView
         android:id="@+id/edit_profile_title"
@@ -22,14 +22,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/old_edit_email"
+        android:id="@+id/name_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:fontFamily="@font/lato"
-        android:hint="current email"
+        android:hint="name"
         android:inputType="textEmailAddress"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,64 +37,33 @@
         app:layout_constraintTop_toBottomOf="@+id/edit_profile_title" />
 
     <EditText
-        android:id="@+id/old_edit_password"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="24dp"
-        android:fontFamily="@font/lato"
-        android:hint="current password"
-        android:inputType="textPassword"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/old_edit_email"/>
-
-    <EditText
-        android:id="@+id/new_edit_email"
+        android:id="@+id/email_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
         android:fontFamily="@font/lato"
-        android:hint="new email"
+        android:hint="email"
         android:inputType="textEmailAddress"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/old_edit_password"/>
+        app:layout_constraintTop_toBottomOf="@+id/name_input" />
 
     <EditText
-        android:id="@+id/new_edit_password"
+        android:id="@+id/phone_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
         android:fontFamily="@font/lato"
-        android:hint="new password"
-        android:inputType="textPassword"
+        android:hint="phone number"
+        android:inputType="phone"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_edit_email"/>
-
-    <Button
-        android:id="@+id/edit_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="80dp"
-        android:background="@drawable/rounded_button_dark"
-        android:paddingHorizontal="50dp"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:text="Confirm"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_edit_password"/>
+        app:layout_constraintTop_toBottomOf="@+id/email_input"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

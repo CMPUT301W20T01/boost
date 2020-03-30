@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 /* Reference
          =>YouTube tutorial by 'Android Coding' on 'How to Send Email in Android Studio | SendEmail | Android Coding'
@@ -35,22 +34,12 @@ public class EmailActivity extends AppCompatActivity {
 
         //initialize EditTexts
         emailTo = findViewById(R.id.editText_to);
-        emailSubject = findViewById(R.id.editText_subject);
-        emailMessage = findViewById(R.id.editText_Message);
+        emailSubject = findViewById(R.id.subject_field);
+        emailMessage = findViewById(R.id.message_field);
 
         //get email from UserProfileActivity and set emailTo
         receiver = getIntent().getExtras().getString("to");
         emailTo.setText(receiver);
-
-        //go back to previous activity when the ack button is clicked
-        ImageView backButton = findViewById(R.id.email_activity_back_button);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
 
         // open email client when sendButton is clicked
         Button sendButton = findViewById(R.id.send_message_button);
@@ -64,8 +53,5 @@ public class EmailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-
     }
 }
