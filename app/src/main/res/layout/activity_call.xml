@@ -11,7 +11,7 @@
         android:id="@+id/call_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="@font/lato_black"
         android:text="@string/call_user_title"
         android:textAlignment="center"
@@ -42,5 +42,15 @@
         app:layout_constraintBottom_toBottomOf="@+id/edit_text_number"
         app:layout_constraintStart_toEndOf="@+id/edit_text_number"
         app:layout_constraintTop_toTopOf="@+id/edit_text_number" />
+
+    <ImageButton
+        android:id="@+id/call_go_back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@color/fui_transparent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_left_black" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

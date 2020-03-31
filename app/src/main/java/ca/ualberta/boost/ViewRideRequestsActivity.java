@@ -86,7 +86,6 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         cancelButton = findViewById(R.id.cancelButton);
         detailsButton = findViewById(R.id.detailsButton);
 
-
     }
 
     @Override
