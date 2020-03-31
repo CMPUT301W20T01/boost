@@ -11,7 +11,7 @@
         android:id="@+id/send_message_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="@font/lato_black"
         android:text="@string/send_message_button"
         android:textColor="@color/colourPrimaryDark"
@@ -22,14 +22,14 @@
 
     <TextView
         android:id="@+id/to_text"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="64dp"
         android:fontFamily="@font/lato"
         android:gravity="start"
         android:text="@string/to"
-        android:textSize="18sp"
+        android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/send_message_title" />
 
@@ -37,24 +37,28 @@
         android:id="@+id/editText_to"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/lato"
-        android:textSize="18sp"
+        android:layout_marginStart="16dp"
         android:background="@android:color/transparent"
+        android:fontFamily="@font/lato"
+        android:text="user email"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/to_text"
         app:layout_constraintStart_toEndOf="@+id/to_text"
-        app:layout_constraintTop_toTopOf="@+id/to_text" />
+        app:layout_constraintTop_toTopOf="@+id/to_text"
+        app:layout_constraintBaseline_toBaselineOf="@+id/to_text" />
 
     <Button
         android:id="@+id/send_message_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="150dp"
         android:layout_marginEnd="20dp"
+        android:fontFamily="@font/lato_black"
         android:background="@drawable/rounded_button_dark"
         android:text="@string/send_button_text"
         android:textColor="@android:color/white"
-        android:textSize="20sp"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/message_field" />
@@ -64,12 +68,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="20dp"
         android:background="@android:color/transparent"
         android:gravity="top"
         android:hint="@string/enter_message_hint"
+        android:textSize="20sp"
         android:padding="10dp"
+        android:fontFamily="@font/lato"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/subject_field" />
@@ -79,14 +85,26 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/round_rectangle"
         android:hint="@string/subject_hint"
         android:padding="10dp"
+        android:textSize="20sp"
+        android:fontFamily="@font/lato"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/to_text" />
+
+    <ImageButton
+        android:id="@+id/message_go_back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@color/fui_transparent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_left_black" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

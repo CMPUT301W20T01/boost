@@ -16,7 +16,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import ca.ualberta.boost.models.Driver;
-import ca.ualberta.boost.models.Rider;
 import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.UserType;
@@ -55,7 +54,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         userDownRating = findViewById(R.id.thumbs_down_text);
         thumbsDownIcon = findViewById(R.id.thumbs_down_image);
         thumbsUpIcon = findViewById(R.id.thumbs_up_image);
-        backButton = findViewById(R.id.go_home_button);
+        backButton = findViewById(R.id.profile_go_back_button);
         emailIcon = findViewById(R.id.email_icon_private);
         callIcon = findViewById(R.id.call_icon_private);
 
@@ -115,51 +114,6 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                             Toast.makeText(UserProfileActivity.this, "Cannot show profile", Toast.LENGTH_SHORT).show();
                 }
             });
-//            test = i.getStringExtra("someUsername");
-//            UserStore.getUser(test)
-//                    .addOnSuccessListener(new OnSuccessListener<User>() {
-//                        @Override
-//                        public void onSuccess(User user) {
-//                            user1 = user;
-//                            userName.setText(user1.getUsername());
-//                            userFirstName.setText(user1.getFirstName());
-//                            userEmail.setText(user1.getEmail());
-//                            userPhoneNumber.setText(user1.getPhoneNumber());
-//                            editButton.setVisibility(View.INVISIBLE);
-//                            if(user1.getType() != UserType.RIDER) {
-//                                reference.get()
-//                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                                            @Override
-//                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                                if(task.isSuccessful()){
-//                                                    for(QueryDocumentSnapshot document: task.getResult()) {
-//                                                        if(user1.getUsername().matches(document.get("username").toString())) {
-//                                                            String positiveRating = document.get("positiveRating").toString();
-//                                                            String negativeRating = document.get("negativeRating").toString();
-//                                                            userUpRating.setText(positiveRating);
-//                                                            userDownRating.setText(negativeRating);
-//                                                        }
-//                                                    }
-//                                                }
-//                                            }
-//                                        })
-//                                        .addOnFailureListener(new OnFailureListener() {
-//                                            @Override
-//                                            public void onFailure(@NonNull Exception e) {
-//                                                Toast.makeText(UserProfileActivity.this, "Cannot show profile", Toast.LENGTH_SHORT).show();
-//                                            }
-//                                        });
-//
-//                            }
-//
-//                        }
-//                    })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            Toast.makeText(UserProfileActivity.this, "Cannot show profile", Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
         }
       
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -168,8 +122,6 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                 finish();
             }
         });
-
-
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -101,10 +101,10 @@
         app:layout_constraintTop_toTopOf="@+id/call_icon_private" />
 
     <ImageButton
-        android:id="@+id/go_home_button"
+        android:id="@+id/profile_go_back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:background="@color/fui_transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
