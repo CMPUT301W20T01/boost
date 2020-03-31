@@ -78,6 +78,13 @@ public class CurrentRideActivity extends MapActivity implements RideEventListene
                 .position(ride.getEndLocation())
         );
 
+        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                zoomToMarkers(pickupMarker, destinationMarker);
+            }
+        });
+
         viewProfileButton = findViewById(R.id.viewProfileButton);
 
         if (isDriver){ // user is driver
