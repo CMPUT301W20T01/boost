@@ -162,6 +162,7 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
      * https://stackoverflow.com/questions/14828217/android-map-v2-zoom-to-show-all-the-markers
      */
     public void zoomToMarkers(Marker marker1, Marker marker2){
+
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         builder.include(marker1.getPosition());
         builder.include(marker2.getPosition());
