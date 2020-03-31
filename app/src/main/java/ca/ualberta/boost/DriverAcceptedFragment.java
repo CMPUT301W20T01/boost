@@ -46,8 +46,17 @@ import static com.firebase.ui.auth.AuthUI.TAG;
 public class DriverAcceptedFragment extends DialogFragment {
     private DriverAcceptedFragment.OnFragmentInteractionListener listener;
     private TextView riderText;
+    private Ride ride;
     private RideTracker rideTracker;
     private Context mContext;
+
+
+    DriverAcceptedFragment(Ride ride){
+        this.ride = ride;
+    }
+
+    DriverAcceptedFragment(){}
+
 
     /**
      * Interface that enforces the implementing class to handle
@@ -79,11 +88,22 @@ public class DriverAcceptedFragment extends DialogFragment {
         riderText = view.findViewById(R.id.riderText);
         riderText.setText(activeRide.getRiderUsername());
 
+        riderText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent(getContext(), UserProfileActivity.class);
+                intent.putExtra("someUsername",riderText.getText().toString());
+                startActivity(intent);
+                return true;
+            }
+        });
+
         new RideTracker(activeRide).addListener(new RideEventListener() {
             @Override
             public void onStatusChange(@Nonnull Ride ride) {
                 if (ride.getRideStatus() == RideStatus.RIDERACCEPTED) {
                     Log.i("rideListener","status changed to RIDERACCEPTED");
+                    Toast.makeText(mContext, "Rider accepted your offer. Moving to Current Ride Page", Toast.LENGTH_LONG).show();
                     ActiveUser.setCurrentRide(ride);
                     Intent intent = new Intent(mContext, CurrentRideActivity.class);
                     mContext.startActivity(intent);
@@ -98,8 +118,17 @@ public class DriverAcceptedFragment extends DialogFragment {
 
                     Intent intent = new Intent(mContext, ViewRideRequestsActivity.class);
                     startActivity(intent);
+                }  else if (ride.getRideStatus() == RideStatus.CANCELLED) { // TODO: Ride status is CANCELLED ??
+                    Toast.makeText(mContext, "Sorry, the ride request got cancelled by the rider", Toast.LENGTH_LONG).show();
+
+                    Ride currentRide = ActiveUser.getCurrentRide();
+                    currentRide.cancel();
+                    RideStore.saveRide(ride);
+                    ActiveUser.cancelRide();
+
+                    Intent intent = new Intent(mContext, ViewRideRequestsActivity.class);
+                    startActivity(intent);
                 }
-                // TODO: Ride status is CANCELLED
             }
 
             @Override

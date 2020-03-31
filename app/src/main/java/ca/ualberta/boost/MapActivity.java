@@ -153,22 +153,6 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
         return null;
     }
 
-    /**
-     * Builds a url that is used to get the directions between two locations
-     * @param startLocation
-     *      LatLng of the start location
-     * @param endLocation
-     *      LatLng of the end location
-     * @return
-     *      A string of the url
-     */
-    public String buildUrl(LatLng startLocation, LatLng endLocation){
-        String start_str = "origin=" + startLocation.latitude + "," + startLocation.longitude;
-        String end_str = "destination=" + endLocation.latitude + "," + endLocation.longitude;
-        String url = "https://maps.googleapis.com/maps/api/directions/json?" + start_str + "&"
-                + end_str + "&key=" + getString(R.string.google_api_key);
-        return url;
-    }
 
     /**
      * Moves the map camera so that it shows all markers that are on the map
@@ -178,6 +162,7 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
      * https://stackoverflow.com/questions/14828217/android-map-v2-zoom-to-show-all-the-markers
      */
     public void zoomToMarkers(Marker marker1, Marker marker2){
+
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         builder.include(marker1.getPosition());
         builder.include(marker2.getPosition());

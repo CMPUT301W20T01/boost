@@ -153,8 +153,10 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             if (typeSwitch.isChecked()) {
+                                finish();
                                 launchHomeDriver();
                             } else {
+                                finish();
                                 launchHomeRider();
                             }
                         }
