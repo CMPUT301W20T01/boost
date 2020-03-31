@@ -125,11 +125,15 @@ public class CurrentRideActivity extends MapActivity implements RideEventListene
         Log.d("CurrentRideActivity", "Status changed to: " + ride.getRideStatus().toString());
         if (ride.getRideStatus() == RideStatus.FINISHED && ActiveUser.getUser().getType() == UserType.DRIVER) {
             Log.d("CurrentRideActivity", "RideStatus == FINISHED");
+            Toast.makeText(this, "Ride completed. Transferring to payment", Toast.LENGTH_LONG).show();
+
             Intent intent = new Intent(this, ScannerActivity.class);
             startActivity(intent);
         }
         if (ride.getRideStatus() == RideStatus.FINISHED && ActiveUser.getUser().getType() == UserType.RIDER) {
             Log.d("CurrentRideActivity", "Rider OnStatusChanged");
+            Toast.makeText(this, "Ride completed. Transferring to payment", Toast.LENGTH_LONG).show();
+
             Intent intent = new Intent(this, OnCompleteActivity.class);
             startActivity(intent);
         }

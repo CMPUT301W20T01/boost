@@ -52,11 +52,18 @@ import static com.firebase.ui.auth.AuthUI.TAG;
 public class RiderAcceptedFragment extends DialogFragment implements RideEventListener {
     private RiderAcceptedFragment.OnFragmentInteractionListener listener;
     private TextView driverText;
+    private Ride ride;
+
     private TextView message;
     private Context mContext;
     Button positiveButton;
     private String driver;
     private ProgressBar progressBar;
+
+    RiderAcceptedFragment(Ride ride){
+        this.ride = ride;
+    }
+    RiderAcceptedFragment(){}
 
     /**
      * Interface that enforces the implementing class to handle

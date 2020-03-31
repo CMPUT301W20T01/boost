@@ -90,6 +90,7 @@ public class RideTracker {
 //                rideEventListener.onStatusChange(ride);
 //            }
 
+
         } else {
             Log.i("rideListener","null");
         }
