@@ -41,10 +41,28 @@
         android:textColor="@android:color/white"
         android:paddingHorizontal="40dp"
         android:text="Finish Ride"
+        android:textAllCaps="false"
         android:textSize="18sp"
         android:layout_marginHorizontal="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/cancel_ride_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="100dp"
+        android:background="@drawable/rounded_button_dark"
+        android:fontFamily="@font/lato_black"
+        android:paddingHorizontal="40dp"
+        android:text="Cancel Ride"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/finish_ride_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.605"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
