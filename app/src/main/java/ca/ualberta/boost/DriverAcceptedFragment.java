@@ -103,6 +103,7 @@ public class DriverAcceptedFragment extends DialogFragment {
             public void onStatusChange(@Nonnull Ride ride) {
                 if (ride.getRideStatus() == RideStatus.RIDERACCEPTED) {
                     Log.i("rideListener","status changed to RIDERACCEPTED");
+                    Toast.makeText(mContext, "Rider accepted your offer. Moving to Current Ride Page", Toast.LENGTH_LONG).show();
                     ActiveUser.setCurrentRide(ride);
                     Intent intent = new Intent(mContext, CurrentRideActivity.class);
                     mContext.startActivity(intent);
