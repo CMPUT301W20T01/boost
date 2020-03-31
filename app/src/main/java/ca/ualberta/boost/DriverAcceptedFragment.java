@@ -82,12 +82,21 @@ public class DriverAcceptedFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_driver_pending_rider_request, null);
-        View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_pending, null);
 
         Ride activeRide = ActiveUser.getCurrentRide();
 
         riderText = view.findViewById(R.id.riderText);
         riderText.setText(activeRide.getRiderUsername());
+
+        riderText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent(getContext(), UserProfileActivity.class);
+                intent.putExtra("someUsername",riderText.getText().toString());
+                startActivity(intent);
+                return true;
+            }
+        });
 
         new RideTracker(activeRide).addListener(new RideEventListener() {
             @Override
@@ -128,7 +137,6 @@ public class DriverAcceptedFragment extends DialogFragment {
         Log.i("rideListener","called ride Listener for: " + activeRide.id());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                .setCustomTitle(titleView)
                 .setView(view)
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override

@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +58,7 @@ public class RiderAcceptedFragment extends DialogFragment implements RideEventLi
     private Context mContext;
     Button positiveButton;
     private String driver;
+    private ProgressBar progressBar;
 
     RiderAcceptedFragment(Ride ride){
         this.ride = ride;
@@ -88,14 +90,13 @@ public class RiderAcceptedFragment extends DialogFragment implements RideEventLi
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_rider_pending_driver_request, null);
-        View titleView = LayoutInflater.from(getActivity()).inflate(R.layout.title_pending, null);
 
         driverText = view.findViewById(R.id.driverText);
         message = view.findViewById(R.id.riderDesc);
+        progressBar = view.findViewById(R.id.request_progressbar);
 
         //MAKING PENDING CONFIRMATION
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                .setCustomTitle(titleView)
                 .setView(view)
                 .setPositiveButton("Accept Driver", new DialogInterface.OnClickListener() {
                     @Override
@@ -114,6 +115,7 @@ public class RiderAcceptedFragment extends DialogFragment implements RideEventLi
                         Log.d("RiderAcceptedFragment", "Reject Driver Clicked");
                         Ride ride = ActiveUser.getCurrentRide();
                         ride.setPending();
+                        ride.setDriverUsername("");
                         RideStore.saveRide(ride);
                         driverText.setText("");
                     }
@@ -129,6 +131,24 @@ public class RiderAcceptedFragment extends DialogFragment implements RideEventLi
                 });
 
         AlertDialog alert = builder.create();
+
+        alert.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button neutButton = ((AlertDialog ) dialog).getButton(AlertDialog.BUTTON_NEUTRAL);
+                neutButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("RiderAcceptedFragment", "Reject Driver Clicked");
+                        Ride ride = ActiveUser.getCurrentRide();
+                        ride.setPending();
+                        RideStore.saveRide(ride);
+                        driverText.setText("");
+                    }
+                });
+
+            }
+        });
 
         return alert;
     }
@@ -159,12 +179,12 @@ public class RiderAcceptedFragment extends DialogFragment implements RideEventLi
 
         if (ride.getRideStatus() == RideStatus.PENDING) {
             Log.d("RideAcceptedFragment", "status changed to PENDING");
-
             AlertDialog dialog = (AlertDialog) getDialog();
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setVisibility(View.GONE);
             dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setVisibility(View.GONE);
             driverText.setText("");
             message.setText("Waiting for a driver...");
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         if (ride.getRideStatus() == RideStatus.DRIVERACCEPTED) {
@@ -173,6 +193,7 @@ public class RiderAcceptedFragment extends DialogFragment implements RideEventLi
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
             dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setVisibility(View.VISIBLE);
             message.setText("Driver found: ");
+            progressBar.setVisibility(View.GONE);
 
             RideStore.getRide(ride.id()).addOnSuccessListener(new OnSuccessListener<Ride>() {
                 @Override

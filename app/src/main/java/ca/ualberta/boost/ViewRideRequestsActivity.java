@@ -167,6 +167,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
                    detailsButton.setVisibility(View.VISIBLE);
                }
                // show both markers titles
+
                marker.showInfoWindow();
                 return true;
             }

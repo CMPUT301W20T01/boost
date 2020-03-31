@@ -1,7 +1,9 @@
 package ca.ualberta.boost;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,15 +15,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Collection;
+
 import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.RideStatus;
+import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.stores.RideStore;
 
 /**
@@ -110,6 +121,9 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     @Override
     protected void init() {
         GoogleMap mMap = getMap();
+        checkForActiveRequest();
+        checkForPendingDriverAcceptedRequest();
+        checkForPendingRequest();
 
         // init markers and make them invisible
         pickupMarker = mMap.addMarker(new  MarkerOptions()
@@ -159,6 +173,11 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
             @Override
             public void onClick(View v) {
                 auth.signOut();
+                ActiveUser.logout();
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.clear();
+                editor.commit();
                 launchHomeScreen();
             }
         });
@@ -283,6 +302,96 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
         }
     }
 
+    // method to check if user is involved in a pending request
+    private void checkForPendingRequest(){
+        final User user = ActiveUser.getUser();
+        Promise<Collection<Ride>> ridePromise = RideStore.getRequests();
+        ridePromise.addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
+            @Override
+            public void onSuccess(Collection<Ride> rides) {
+                Log.d("TestingViewRide", "success");
+                if (!rides.isEmpty()) {
+                    for (Ride ride : rides){
+                        // user is rider for the pending ride request
+                        if (ride.getRiderUsername().equals(user.getUsername())){
+                            ActiveUser.setCurrentRide(ride);
+                            new RiderAcceptedFragment().show(getSupportFragmentManager(), "Pending_Driver_Accept");
+                        }
+                    }
+                } else {
+                    Log.d("TestingViewRide", "rides is empty");
+                }
+            }
+        });
+        ridePromise.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("TestingViewRide", "failure");
+            }
+        });
+    }
+
+    // method to check if user is involved in an active request
+    private void checkForActiveRequest(){
+        final User user = ActiveUser.getUser();
+        Promise<Collection<Ride>> ridePromise = RideStore.getActiveRides();
+        ridePromise.addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
+            @Override
+            public void onSuccess(Collection<Ride> rides) {
+                if (!rides.isEmpty()) {
+                    for (Ride ride : rides){
+                        // user is rider for the pending ride request
+                        if (ride.getRiderUsername().equals(user.getUsername())){
+                            ActiveUser.setCurrentRide(ride);
+                            launchCurrentRequestActivity();
+                        }
+                    }
+                } else {
+                    Log.d("TestingViewRide", "rides is empty");
+                }
+            }
+        });
+        ridePromise.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("TestingViewRide", "failure");
+            }
+        });
+    }
+
+    // method to check if user is involved in a driver accepted request
+    private void checkForPendingDriverAcceptedRequest(){
+        final User user = ActiveUser.getUser();
+        Promise<Collection<Ride>> ridePromise = RideStore.getDriverAcceptedRequests();
+        ridePromise.addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
+            @Override
+            public void onSuccess(Collection<Ride> rides) {
+                Log.d("TestingViewRide", "success");
+                if (!rides.isEmpty()) {
+                    for (Ride ride : rides){
+                        // user is rider for the pending ride request
+                        if (ride.getRiderUsername().equals(user.getUsername())){
+                            ActiveUser.setCurrentRide(ride);
+                            new RiderAcceptedFragment().show(getSupportFragmentManager(), "Pending_Driver_Accept");
+                            //Toast.makeText(RiderMainPage.this, "Driver accepted", Toast.LENGTH_LONG).show();
+
+                        }
+                    }
+                } else {
+                    Log.d("TestingViewRide", "rides is empty");
+                }
+            }
+        });
+        ridePromise.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("TestingViewRide", "failure");
+            }
+        });
+    }
+
+
+
     /**
      * Hides views associated with ride requesting
      */
@@ -317,7 +426,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     }
 
     private void launchCurrentRequestActivity(){
-        Intent intent = new Intent(this, RiderCurrentRideRequestActivity.class);
+        Intent intent = new Intent(this, CurrentRideActivity.class);
         startActivity(intent);
     }
 

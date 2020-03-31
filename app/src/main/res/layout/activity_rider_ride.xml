@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DriverMainPage">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".CurrentRideActivity"
+    android:orientation="vertical">
 
-    <fragment
+    <fragment class="com.google.android.gms.maps.MapFragment"
         android:id="@+id/mapFragment"
-        class="com.google.android.gms.maps.MapFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"/>
 
     <Button
         android:id="@+id/viewProfileButton"
@@ -27,34 +26,23 @@
         android:layout_marginEnd="16dp"
         android:paddingHorizontal="10dp"
         android:background="@drawable/rounded_button_dark"
-        android:text="Profile"
+        android:text="Driver's Profile"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
+        android:id="@+id/finish_ride_button"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:paddingHorizontal="10dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/lato_black"
         android:background="@drawable/rounded_button_dark"
-        android:text="Logout"
-        android:textColor="#FFFFFF"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/viewRequestsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/rounded_button_dark"
+        android:textColor="@android:color/white"
         android:paddingHorizontal="40dp"
-        android:textColor="#FFFFFF"
+        android:text="Finish Ride"
         android:textSize="18sp"
-        android:text="View Requests"
+        android:layout_marginHorizontal="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

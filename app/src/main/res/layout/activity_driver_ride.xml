@@ -18,21 +18,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"/>
 
-
     <Button
-        android:id="@+id/finish_ride_button"
-        android:layout_width="match_parent"
+        android:id="@+id/viewProfileButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:fontFamily="@font/lato_black"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:paddingHorizontal="10dp"
         android:background="@drawable/rounded_button_dark"
-        android:textColor="@android:color/white"
-        android:paddingHorizontal="40dp"
-        android:text="Finish Ride"
-        android:textSize="18sp"
-        android:layout_marginHorizontal="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Rider's Profile"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
