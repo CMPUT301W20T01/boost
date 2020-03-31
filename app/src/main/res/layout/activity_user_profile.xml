@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <View
+        android:id="@+id/top_view"
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:background="@color/colourPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/profile_first_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:fontFamily="@font/lato_black"
+        android:text="First Name"
+        android:textColor="@color/colourPrimaryDark"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/profile_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/lato_black"
+        android:text="Username"
+        android:textColor="@color/colourPrimaryDark"
+        android:textSize="35sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_first_name" />
+
+    <ImageButton
+        android:id="@+id/edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/fui_transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top_view"
+        app:srcCompat="@drawable/ic_edit_black"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/email_icon_private"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="80dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top_view"
+        app:srcCompat="@drawable/ic_email" />
+
+    <TextView
+        android:id="@+id/profile_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:textColor="@color/colourPrimaryDark"
+        android:fontFamily="@font/lato"
+        android:textSize="25sp"
+        android:text="email"
+        app:layout_constraintBottom_toBottomOf="@+id/email_icon_private"
+        app:layout_constraintStart_toEndOf="@+id/email_icon_private"
+        app:layout_constraintTop_toTopOf="@+id/email_icon_private" />
+
+    <ImageView
+        android:id="@+id/call_icon_private"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email_icon_private"
+        app:srcCompat="@drawable/ic_phone" />
+
+    <TextView
+        android:id="@+id/profile_phone_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:textColor="@color/colourPrimaryDark"
+        android:fontFamily="@font/lato"
+        android:textSize="25sp"
+        android:text="phone number"
+        app:layout_constraintBottom_toBottomOf="@+id/call_icon_private"
+        app:layout_constraintStart_toEndOf="@+id/call_icon_private"
+        app:layout_constraintTop_toTopOf="@+id/call_icon_private" />
+
+    <ImageButton
+        android:id="@+id/profile_go_back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@color/fui_transparent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_left_black" />
+
+    <ImageView
+        android:id="@+id/thumbs_up_image"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="64dp"
+        app:srcCompat="@drawable/thumbs_up_pressed"
+        app:layout_constraintStart_toEndOf="@+id/thumbs_down_image"
+        app:layout_constraintTop_toBottomOf="@+id/call_icon_private" />
+
+    <ImageView
+        android:id="@+id/thumbs_down_image"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="64dp"
+        app:srcCompat="@drawable/thumbs_down_pressed"
+        app:layout_constraintStart_toEndOf="@+id/thumbs_down_text"
+        app:layout_constraintTop_toBottomOf="@+id/call_icon_private" />
+
+    <TextView
+        android:id="@+id/thumbs_down_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato_black"
+        android:text="##"
+        android:textColor="@color/colourPrimaryDark"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="@+id/thumbs_down_image"
+        app:layout_constraintStart_toEndOf="@+id/call_icon_private"
+        app:layout_constraintTop_toTopOf="@+id/thumbs_down_image" />
+
+    <TextView
+        android:id="@+id/thumbs_up_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/lato_black"
+        android:text="##"
+        android:textColor="@color/colourPrimaryDark"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="@+id/thumbs_up_image"
+        app:layout_constraintStart_toEndOf="@+id/thumbs_up_image"
+        app:layout_constraintTop_toTopOf="@+id/thumbs_up_image" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -42,7 +42,7 @@ public class Driver extends User {
      * @return
      *      Returns the number of thumbs up ratings the driver has
      */
-    public double getPositiveRating() {
+    public int getPositiveRating() {
         return thumbsUp;
     }
 

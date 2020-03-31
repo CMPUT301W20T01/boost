@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 /* Reference
          =>YouTube tutorial by 'Android Coding' on 'How to Send Email in Android Studio | SendEmail | Android Coding'
@@ -23,6 +24,7 @@ public class EmailActivity extends AppCompatActivity {
     EditText emailTo;
     EditText emailSubject;
     EditText emailMessage;
+    ImageButton backButton;
 
     //holds email from UserProfileActivity that was clicked
     String receiver ;
@@ -32,10 +34,11 @@ public class EmailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email);
 
-        //initialize EditTexts
+        //initialize Views
         emailTo = findViewById(R.id.editText_to);
         emailSubject = findViewById(R.id.subject_field);
         emailMessage = findViewById(R.id.message_field);
+        backButton = findViewById(R.id.message_go_back_button);
 
         //get email from UserProfileActivity and set emailTo
         receiver = getIntent().getExtras().getString("to");
@@ -51,6 +54,13 @@ public class EmailActivity extends AppCompatActivity {
                 intent.putExtra(Intent.EXTRA_SUBJECT, emailSubject.getText().toString());
                 intent.putExtra(Intent.EXTRA_TEXT, emailMessage.getText().toString());
                 startActivity(intent);
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
