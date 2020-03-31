@@ -254,6 +254,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         newRide.driverAccept();
         RideStore.saveRide(newRide);
         ActiveUser.setCurrentRide(newRide);
+        Log.d("ViewRideRequests", "ActiveUser ride set");
 
         new DriverAcceptedFragment().show(getSupportFragmentManager(), "Pending_Rider_Accept");
     }

@@ -98,7 +98,7 @@ public class CurrentRideActivity extends MapActivity implements RideEventListene
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(CurrentRideActivity.this, UserProfileActivity.class);
-                    intent.putExtra("someUsername",ride.getRiderUsername());
+                    intent.putExtra("username",ride.getRiderUsername());
                     startActivity(intent);
                 }
             });
@@ -113,7 +113,7 @@ public class CurrentRideActivity extends MapActivity implements RideEventListene
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(CurrentRideActivity.this, UserProfileActivity.class);
-                    intent.putExtra("someUsername",ride.getDriverUsername());
+                    intent.putExtra("username",ride.getDriverUsername());
                     startActivity(intent);
                 }
             });

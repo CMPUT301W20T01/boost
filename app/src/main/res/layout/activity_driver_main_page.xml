@@ -28,7 +28,7 @@
         android:paddingHorizontal="10dp"
         android:background="@drawable/rounded_button_dark"
         android:text="Profile"
-        android:textColor="#FFFFFF"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,7 +41,7 @@
         android:paddingHorizontal="10dp"
         android:background="@drawable/rounded_button_dark"
         android:text="Logout"
-        android:textColor="#FFFFFF"
+        android:textColor="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,7 +52,7 @@
         android:layout_marginBottom="24dp"
         android:background="@drawable/rounded_button_dark"
         android:paddingHorizontal="40dp"
-        android:textColor="#FFFFFF"
+        android:textColor="@android:color/white"
         android:textSize="18sp"
         android:text="View Requests"
         app:layout_constraintBottom_toBottomOf="parent"
