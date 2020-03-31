@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +32,7 @@ public class CallActivity extends AppCompatActivity {
     private static final int REQUEST_CALL =1;
     private TextView editTextNumber;
     private String driverNumberFromProfile;
+    private ImageButton backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class CallActivity extends AppCompatActivity {
 
         //initialize EditText and ImageView Buttons
         editTextNumber = findViewById(R.id.edit_text_number);
+        backButton = findViewById(R.id.call_go_back_button);
 
         //get driver's number from UserProfileActivity and set it as number to call
         driverNumberFromProfile = getIntent().getExtras().getString("call");
@@ -53,6 +56,12 @@ public class CallActivity extends AppCompatActivity {
             }
         });
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     /**

@@ -26,18 +26,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".CallActivity"></activity>
-        <activity android:name=".EmailActivity" />
-        <activity android:name=".CurrentRideActivity" />
-        <activity android:name=".ScannerActivity" android:exported="true"/>
-        <activity android:name=".QRCodeFragment" android:exported="true"/>
-        <activity android:name=".DriverAcceptedFragment" />
-        <activity android:name=".RiderCurrentRideRequestActivity" />
-        <activity android:name=".UserProfileActivity" />
-        <activity android:name=".EditUserProfileFragment" />
-        <activity android:name=".ViewRideRequestsActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".DriverMainPage" />
+        <activity android:name=".CallActivity" android:screenOrientation="portrait" />
+        <activity android:name=".EmailActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".CurrentRideActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ScannerActivity" android:exported="true" android:screenOrientation="portrait"/>
+        <activity android:name=".QRCodeFragment" android:exported="true" android:screenOrientation="portrait"/>
+        <activity android:name=".DriverAcceptedFragment" android:screenOrientation="portrait"/>
+        <activity android:name=".UserProfileActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".EditUserProfileFragment" android:screenOrientation="portrait"/>
+        <activity android:name=".ViewRideRequestsActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".SignUpActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".DriverMainPage" android:screenOrientation="portrait"/>
         <activity android:name=".OnCompleteActivity" android:screenOrientation="portrait"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
