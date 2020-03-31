@@ -78,6 +78,7 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
             mMap.setMyLocationEnabled(true);
             // get rid of top right corner button to center location
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            mMap.getUiSettings().setMapToolbarEnabled(false);
             // enable all zoom, rotate, tilt, etc gesture
             // mMap.getUiSettings().setAllGesturesEnabled(true);
             init();
@@ -152,22 +153,6 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
         return null;
     }
 
-    /**
-     * Builds a url that is used to get the directions between two locations
-     * @param startLocation
-     *      LatLng of the start location
-     * @param endLocation
-     *      LatLng of the end location
-     * @return
-     *      A string of the url
-     */
-    public String buildUrl(LatLng startLocation, LatLng endLocation){
-        String start_str = "origin=" + startLocation.latitude + "," + startLocation.longitude;
-        String end_str = "destination=" + endLocation.latitude + "," + endLocation.longitude;
-        String url = "https://maps.googleapis.com/maps/api/directions/json?" + start_str + "&"
-                + end_str + "&key=" + getString(R.string.google_api_key);
-        return url;
-    }
 
     /**
      * Moves the map camera so that it shows all markers that are on the map

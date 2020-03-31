@@ -39,6 +39,7 @@ public class ActiveUser {
         Log.d("ActiveUser", "setting ride: " + ride.id());
     }
 
+
     public static void cancelRide() {
         currentRide = null;
     }

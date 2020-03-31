@@ -27,33 +27,31 @@ import ca.ualberta.boost.stores.RideStore;
 public class CurrentRideActivity extends MapActivity implements RideEventListener, View.OnClickListener {
     // attributes
     private Button finishRideButton;
+    private Button viewProfileButton;
     public Marker pickupMarker;
     public Marker destinationMarker;
     private RideTracker tracker;
     private Ride ride;
+    private Boolean isDriver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        isDriver = ActiveUser.getUser().getType() == UserType.DRIVER;
         super.onCreate(savedInstanceState);
         Log.d("CurrentRideActivity", "inside OnCreate");
-        tracker = new RideTracker(ActiveUser.getCurrentRide());
-        tracker.addListener(this);
-        ride = ActiveUser.getCurrentRide();
-        finishRideButton = findViewById(R.id.finish_ride_button);
 
-        if (ActiveUser.getUser().getType() == UserType.DRIVER) {
-            finishRideButton.setVisibility(View.GONE);
-            Log.d("CurrentRideActivity", "User is a driver");
 
-        } else {
-//            Log.d("CurrentRideActivity", "User is a rider");
-            finishRideButton.setOnClickListener(this);
-        }
     }
 
     @Override
     protected int getLayoutResourceId() {
-        return R.layout.activity_driver_ride;
+        // user is the driver
+        if (isDriver) {
+            return R.layout.activity_driver_ride;
+        }
+        // user is the rider
+        return R.layout.activity_rider_ride;
+
     }
 
     @Override
@@ -65,8 +63,9 @@ public class CurrentRideActivity extends MapActivity implements RideEventListene
     protected void init() {
         GoogleMap mMap = getMap();
 
-        Toast.makeText(CurrentRideActivity.this, "Successfully transferred to CurrentRideActivity", Toast.LENGTH_SHORT).show();
-        Log.i("rideListener","CurrentRideActivity started");
+        tracker = new RideTracker(ActiveUser.getCurrentRide());
+        tracker.addListener(this);
+        ride = ActiveUser.getCurrentRide();
 
         // add the location markers for the ride
         pickupMarker = mMap.addMarker(new MarkerOptions()
@@ -78,6 +77,34 @@ public class CurrentRideActivity extends MapActivity implements RideEventListene
                 .title("Destination")
                 .position(ride.getEndLocation())
         );
+
+        viewProfileButton = findViewById(R.id.viewProfileButton);
+
+        if (isDriver){ // user is driver
+            viewProfileButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(CurrentRideActivity.this, UserProfileActivity.class);
+                    intent.putExtra("someUsername",ride.getRiderUsername());
+                    startActivity(intent);
+                }
+            });
+        } else{ // user is rider
+            finishRideButton = findViewById(R.id.finish_ride_button);
+            finishRideButton.setOnClickListener(this);
+            viewProfileButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(CurrentRideActivity.this, UserProfileActivity.class);
+                    intent.putExtra("someUsername",ride.getDriverUsername());
+                    startActivity(intent);
+                }
+            });
+        }
+
+        Toast.makeText(CurrentRideActivity.this, "Successfully transferred to CurrentRideActivity", Toast.LENGTH_SHORT).show();
+        Log.i("rideListener","CurrentRideActivity started");
+
     }
 
     @Override

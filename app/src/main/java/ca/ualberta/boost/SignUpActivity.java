@@ -3,6 +3,7 @@ package ca.ualberta.boost;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -53,6 +54,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_up);
+
 
         //get references to fireStore
         auth = FirebaseAuth.getInstance();
@@ -151,8 +153,10 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             if (typeSwitch.isChecked()) {
+                                finish();
                                 launchHomeDriver();
                             } else {
+                                finish();
                                 launchHomeRider();
                             }
                         }
@@ -162,10 +166,23 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
     //Return true if fields have values and password is longer than 6 characters
     private boolean isValidInput() {
+        if(firstName.getText().toString().matches("")){
+            Toast.makeText(this, "Enter a First Name", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(userName.getText().toString().matches("")){
+            Toast.makeText(this, "Enter a username", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         if(email.getText().toString().matches("")){
             Toast.makeText(this, "Enter a Email", Toast.LENGTH_SHORT).show();
             return false;
         }
+        if(phoneNumber.getText().toString().matches("")){
+            Toast.makeText(this, "Enter a phone number", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         if(password.getText().toString().matches("")){
             Toast.makeText(this, "Enter a password", Toast.LENGTH_SHORT).show();
             return false;
