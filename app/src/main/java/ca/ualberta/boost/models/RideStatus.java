@@ -15,7 +15,9 @@ public enum RideStatus {
     RIDERACCEPTED(2),
     FINISHED(3),
     PAID(4),
-    CANCELLED(5);
+    CANCELLED(5),
+    PICKEDUP(6); //added to confirm when driver pick up a rider
+
 
     private final int value;
     private static Map<Integer, RideStatus> map = new HashMap<>();
@@ -59,6 +61,8 @@ public enum RideStatus {
                 return "paid";
             case CANCELLED:
                 return "cancelled";
+            case PICKEDUP:
+                return "picked up";
             default:
                 throw new IllegalArgumentException("Bad status");
         }

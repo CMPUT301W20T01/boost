@@ -144,6 +144,10 @@ public class Ride {
     public void riderAccept() {
         this.status = RideStatus.RIDERACCEPTED;
     }
+    public void driverPickup() {
+        this.status = RideStatus.PICKEDUP;
+    }
+
 
     public void finish() {
         this.status = RideStatus.FINISHED;
