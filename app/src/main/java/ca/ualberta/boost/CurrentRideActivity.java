@@ -27,6 +27,8 @@ import ca.ualberta.boost.stores.RideStore;
 public class CurrentRideActivity extends MapActivity implements RideEventListener, View.OnClickListener {
     // attributes
     private Button finishRideButton;
+    private Button cancelRideButton;
+    private Button confirmPickupButton;
     private Button viewProfileButton;
     public Marker pickupMarker;
     public Marker destinationMarker;
@@ -88,6 +90,10 @@ public class CurrentRideActivity extends MapActivity implements RideEventListene
         viewProfileButton = findViewById(R.id.viewProfileButton);
 
         if (isDriver){ // user is driver
+            confirmPickupButton = findViewById(R.id.confirm_pickup_button);
+
+            confirmPickupButton.setOnClickListener(this);
+
             viewProfileButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -98,7 +104,11 @@ public class CurrentRideActivity extends MapActivity implements RideEventListene
             });
         } else{ // user is rider
             finishRideButton = findViewById(R.id.finish_ride_button);
+            cancelRideButton = findViewById(R.id.cancel_ride_button);
+
+            cancelRideButton.setOnClickListener(this);
             finishRideButton.setOnClickListener(this);
+
             viewProfileButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -117,6 +127,8 @@ public class CurrentRideActivity extends MapActivity implements RideEventListene
     @Override
     public void onClick(View v) {
         Log.d("CurrentRideActivity", "FinishedPressed");
+
+        //Rider Pressed Finished Button
         if (ActiveUser.getUser().getType() == UserType.RIDER && v.getId() == R.id.finish_ride_button) {
             Log.d("CurrentRideActivity", "User is a Rider");
             Ride ride = ActiveUser.getCurrentRide();
@@ -125,6 +137,28 @@ public class CurrentRideActivity extends MapActivity implements RideEventListene
 //            Intent intent = new Intent(this, OnCompleteActivity.class);
 //            startActivity(intent);
         }
+
+        //Rider Pressed Cancel Button
+        if (ActiveUser.getUser().getType() == UserType.RIDER && v.getId() == R.id.cancel_ride_button) {
+            Log.d("CurrentRideActivity", "User is a Rider");
+            Ride ride = ActiveUser.getCurrentRide();
+            ride.cancel();
+            RideStore.saveRide(ride);
+            ActiveUser.cancelRide();
+
+        }
+
+        //Driver pressed confirm pickup button
+        if (ActiveUser.getUser().getType() == UserType.DRIVER && v.getId() == R.id.confirm_pickup_button) {
+            Log.d("CurrentRideActivity", "User is a Driver");
+            //set status to pickup
+            ride.driverPickup();
+            RideStore.saveRide(ride);
+
+            //Hide the Button
+            confirmPickupButton.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
@@ -142,6 +176,28 @@ public class CurrentRideActivity extends MapActivity implements RideEventListene
             Toast.makeText(this, "Ride completed. Transferring to payment", Toast.LENGTH_LONG).show();
 
             Intent intent = new Intent(this, OnCompleteActivity.class);
+            startActivity(intent);
+        }
+
+        if (ride.getRideStatus() == RideStatus.PICKEDUP && ActiveUser.getUser().getType() == UserType.RIDER) {
+            Log.d("CurrentRideActivity", "RideStatus == PICKEDUP");
+            Toast.makeText(this, "Driver arrived at pickup location. Cannot cancel ride from now on", Toast.LENGTH_LONG).show();
+            cancelRideButton.setVisibility(View.GONE);
+        }
+
+        if (ride.getRideStatus() == RideStatus.CANCELLED && ActiveUser.getUser().getType() == UserType.RIDER) {
+            Log.d("CurrentRideActivity", "RideStatus == PICKEDUP");
+            Toast.makeText(this, "The ride has been cancelled", Toast.LENGTH_LONG).show();
+
+            Intent intent = new Intent(this, RiderMainPage.class);
+            startActivity(intent);
+        }
+
+        if (ride.getRideStatus() == RideStatus.CANCELLED && ActiveUser.getUser().getType() == UserType.DRIVER) {
+            Log.d("CurrentRideActivity", "RideStatus == PICKEDUP");
+            Toast.makeText(this, "Sorry, the ride has been cancelled", Toast.LENGTH_LONG).show();
+
+            Intent intent = new Intent(this, DriverMainPage.class);
             startActivity(intent);
         }
 
