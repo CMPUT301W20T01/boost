@@ -77,6 +77,12 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
             userEmail.setText(user1.getEmail());
             userPhoneNum.setText(user1.getPhoneNumber());
 //            userPassword.setText(user1.getPassword());
+            if (user1.getType() == UserType.DRIVER){
+                String positiveRating = Double.toString(((Driver) user1).getPositiveRating());
+                String negativeRating = Double.toString(((Driver) user1).getNegativeRating());
+                String rating = positiveRating + "\uD83D\uDC4D  " +  negativeRating + "  \uD83D\uDC4E";
+                userRating.setText(rating);
+            }
 
         } else {
             test = i.getStringExtra("someUsername");
@@ -98,8 +104,8 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                                                 if(task.isSuccessful()){
                                                     for(QueryDocumentSnapshot document: task.getResult()){
                                                         if(user1.getUsername().matches(document.get("username").toString())){
-                                                            String positiveRating = document.get("positiveRating").toString();
-                                                            String negativeRating = document.get("negativeRating").toString();
+                                                            String positiveRating = document.get("thumbsUp").toString();
+                                                            String negativeRating = document.get("thumbsDown").toString();
                                                             String rating = positiveRating + "\uD83D\uDC4D  " +  negativeRating + "  \uD83D\uDC4E";
                                                             userRating.setText(rating);
                                                         }
