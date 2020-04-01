@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:fontFamily="@font/lato_black"
-        android:text="Username"
+        tools:text="Username"
         android:textColor="@color/colourPrimaryDark"
         android:textSize="35sp"
         app:layout_constraintEnd_toEndOf="parent"

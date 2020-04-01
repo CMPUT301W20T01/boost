@@ -24,6 +24,8 @@ import ca.ualberta.boost.controllers.RideListAdapter;
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.User;
+import ca.ualberta.boost.models.UserType;
+import ca.ualberta.boost.stores.RideStore;
 
 public class RideHistoryActivity extends AppCompatActivity {
 
@@ -31,8 +33,6 @@ public class RideHistoryActivity extends AppCompatActivity {
     TextView username;
     ListView listView;
     User user;
-
-//    ArrayList<Ride> rides = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
