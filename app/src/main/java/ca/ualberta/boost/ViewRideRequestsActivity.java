@@ -2,13 +2,11 @@ package ca.ualberta.boost;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Debug;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -27,25 +25,15 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.core.Tag;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import ca.ualberta.boost.controllers.RideEventListener;
 import ca.ualberta.boost.controllers.RideTracker;
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.Ride;
-import ca.ualberta.boost.models.RideStatus;
-import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.stores.RideStore;
-import ca.ualberta.boost.stores.UserStore;
 
 /**
  * ViewRidesRequestsActivity is responsible for allowing drivers to search for
@@ -107,6 +95,8 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
                                 .position(new LatLng(0,0))
                                 .title("Destination")
                                 .visible(false));
+        // fill map with markers
+        fillRideList();
 
         // cancel button
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +142,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
                if (startMarkers.contains(marker)){
                    // make markers less opaque
                    for (Marker m : startMarkers){
-                       m.setAlpha(0.5f);
+                       m.setAlpha(0.2f);
                    }
                    int index = startMarkers.indexOf(marker);
                    chosenRide = rideList.get(index);
@@ -190,7 +180,6 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         String searchString = searchEditText.getText().toString();
         startLocation = geoLocate(searchString);
         moveCamera(startLocation, 15);
-        fillRideList();
     }
 
     /**
@@ -198,17 +187,9 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
      * of the Driver's specified start location
      */
     private void displayRequests(){
-        // clear map of previously searched requests
-        for (int i = 0; i < startMarkers.size(); i++){
-            Marker m = startMarkers.get(i);
-            m.remove();
-        }
-        startMarkers.clear();
         // place markers for rides
         for (int i = 0; i < rideList.size(); i++){
-            Log.d("TestingViewRide", "hi");
             Ride ride = rideList.get(i);
-            Log.d("TestingViewRide", ride.getRiderUsername());
             startMarkers.add(mMap.addMarker(new MarkerOptions()
                     .position(ride.getStartLocation())
                     .title("Pickup")));
@@ -259,15 +240,6 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
         new DriverAcceptedFragment().show(getSupportFragmentManager(), "Pending_Rider_Accept");
     }
 
-//    /**
-//     * Rider accepts the driver request offer
-//     * move over to CurrentRideActivity
-//     */
-//    @Override
-//    public void onRiderAcceptPressed(Ride newRide) {
-//        Intent intent = new Intent(this, CurrentRideActivity.class);
-//        startActivity(intent);
-//    }
 
     /**
      * Go to DriverMainPage activity and finish this activity

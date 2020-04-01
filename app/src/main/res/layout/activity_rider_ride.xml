@@ -39,12 +39,12 @@
         android:layout_marginHorizontal="100dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/rounded_button_dark"
         android:fontFamily="@font/lato_black"
-        android:paddingHorizontal="35dp"
+        android:background="@drawable/rounded_button_dark"
+        android:textColor="@android:color/white"
+        android:paddingHorizontal="40dp"
         android:text="Finish Ride"
         android:textAllCaps="true"
-        android:textColor="@android:color/white"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -63,7 +63,8 @@
         android:textAllCaps="true"
         android:textColor="@android:color/white"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/finish_ride_button"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
