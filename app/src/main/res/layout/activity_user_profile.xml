@@ -60,7 +60,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:background="@color/fui_transparent"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/edit_button"
         app:layout_constraintEnd_toStartOf="@+id/edit_button"
         app:layout_constraintTop_toTopOf="@+id/edit_button"

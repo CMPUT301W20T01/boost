@@ -61,6 +61,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         historyButton = findViewById(R.id.history_button);
 
         setDriverViewsVisibility(View.GONE);
+        historyButton.setVisibility(View.GONE);
 
         Intent i = getIntent();
         if(i.getStringExtra("username") == null) { // current user's profile
@@ -78,6 +79,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                                 Integer downVotes = new Integer(((Driver) user).getNegativeRating());
                                 userUpRating.setText(upVotes.toString());
                                 userDownRating.setText(downVotes.toString());
+                                historyButton.setVisibility(View.VISIBLE);
                                 setDriverViewsVisibility(View.VISIBLE);
                             }
                         }
@@ -211,7 +213,6 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         thumbsUpIcon.setVisibility(visibility);
         userDownRating.setVisibility(visibility);
         userUpRating.setVisibility(visibility);
-        historyButton.setVisibility(visibility);
     }
 }
 
