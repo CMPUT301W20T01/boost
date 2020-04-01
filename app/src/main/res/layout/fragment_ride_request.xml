@@ -16,7 +16,7 @@
         android:fontFamily="@font/lato_black"
         android:textColor="@color/colourPrimaryDark"
         android:text="Ride Details"
-        android:textSize="35sp"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

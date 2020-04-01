@@ -34,36 +34,36 @@
 
     <Button
         android:id="@+id/finish_ride_button"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="100dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_button_dark"
         android:fontFamily="@font/lato_black"
-        android:paddingHorizontal="40dp"
+        android:paddingHorizontal="35dp"
         android:text="Finish Ride"
         android:textAllCaps="true"
         android:textColor="@android:color/white"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/cancel_ride_button"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="100dp"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_button_dark"
         android:fontFamily="@font/lato_black"
-        android:paddingHorizontal="40dp"
+        android:paddingHorizontal="35dp"
         android:text="Cancel Ride"
         android:textAllCaps="true"
         android:textColor="@android:color/white"
         android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/finish_ride_button"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
