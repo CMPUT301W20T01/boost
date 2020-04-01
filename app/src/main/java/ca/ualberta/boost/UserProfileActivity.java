@@ -59,7 +59,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         callIcon = findViewById(R.id.call_icon_private);
 
         Intent i = getIntent();
-        if(i.getStringExtra("username") == null) { // didn't access from fragment, the user using it
+        if(i.getStringExtra("username") == null) { // current user's profile
             User user = ActiveUser.getUser();
             username.setText(user.getUsername());
             userFirstName.setText(user.getFirstName());
@@ -72,14 +72,14 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                 userUpRating.setText(upVotes.toString());
                 userDownRating.setText(downVotes.toString());
 
-            } else {
+            } else { //if (user.getType() == UserType.RIDER)
                 thumbsDownIcon.setVisibility(View.GONE);
                 thumbsUpIcon.setVisibility(View.GONE);
                 userDownRating.setVisibility(View.GONE);
                 userUpRating.setVisibility(View.GONE);
             }
 
-        } else {
+        } else { // another user's profile
             final String otherUsername = i.getStringExtra("username");
             editButton.setVisibility(View.GONE);
             UserStore.getUser(otherUsername)
