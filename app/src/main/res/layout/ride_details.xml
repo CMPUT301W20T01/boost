@@ -4,87 +4,59 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/rideDetailsDriverText"
-        android:layout_width="60dp"
+        android:id="@+id/lbl_past_rider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/lato"
+        android:text="Rider: "
+        android:textColor="@color/colourPrimaryDark"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/past_date"
+        app:layout_constraintTop_toBottomOf="@+id/past_date" />
+
+    <TextView
+        android:id="@+id/past_rider_username"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Driver: "
+        android:fontFamily="@font/lato"
+        android:text="rider name"
+        android:textColor="@color/colourPrimaryDark"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/lbl_past_rider"
+        app:layout_constraintStart_toEndOf="@+id/lbl_past_rider"
+        app:layout_constraintTop_toTopOf="@+id/lbl_past_rider" />
+
+    <TextView
+        android:id="@+id/past_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/lato_black"
+        android:text="MMM DD hh:mm"
+        android:textColor="@color/colourPrimaryDark"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/rideDetailsPickupText"
-        android:layout_width="75dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Pickup:"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/rideDetailsDriverText"
-        app:layout_constraintTop_toBottomOf="@+id/rideDetailsDriverText" />
-
-    <TextView
-        android:id="@+id/rideDetailsPickup"
+        android:id="@+id/past_fare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="start loc"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/rideDetailsPickupText"
-        app:layout_constraintTop_toTopOf="@+id/rideDetailsPickupText" />
-
-    <TextView
-        android:id="@+id/rideDetailsDropoff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="end loc"
-        app:layout_constraintStart_toEndOf="@+id/rideDetailsDropoffText"
-        app:layout_constraintTop_toTopOf="@+id/rideDetailsDropoffText"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/rideDetailsDropoffText"
-        android:layout_width="75dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Dropoff:"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/rideDetailsPickupText"
-        app:layout_constraintTop_toBottomOf="@+id/rideDetailsPickupText" />
-
-    <TextView
-        android:id="@+id/rideDetailsDriver"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Driver name"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/rideDetailsDriverText"
-        app:layout_constraintTop_toTopOf="@+id/rideDetailsDriverText" />
-
-    <TextView
-        android:id="@+id/rideDetailsRiderText"
-        android:layout_width="52dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Rider: "
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/rideDetailsDriver"
-        app:layout_constraintTop_toTopOf="@+id/rideDetailsDriver" />
-
-    <TextView
-        android:id="@+id/rideDetailsRider"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Rider name"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/rideDetailsRiderText"
-        app:layout_constraintTop_toTopOf="@+id/rideDetailsRiderText" />
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/lato_black"
+        android:text="Fare"
+        android:textColor="@color/colourPrimaryDark"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
