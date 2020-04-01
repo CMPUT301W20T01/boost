@@ -212,7 +212,7 @@ public class RiderAcceptedFragment extends DialogFragment implements RideEventLi
                             @Override
                             public boolean onLongClick(View v) {
                                 Intent intent = new Intent(getContext(), UserProfileActivity.class);
-                                intent.putExtra("someUsername", driverText.getText().toString());
+                                intent.putExtra("username", driverText.getText().toString());
                                 startActivity(intent);
                                 return true;
                             }

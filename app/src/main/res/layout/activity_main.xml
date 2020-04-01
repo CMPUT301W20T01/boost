@@ -42,11 +42,11 @@
     <Button
         android:id="@+id/sign_in_button"
         android:layout_width="wrap_content"
-        android:paddingHorizontal="40dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="60dp"
         android:background="@drawable/rounded_button_dark"
         android:fontFamily="@font/lato"
+        android:paddingHorizontal="40dp"
         android:text="@string/sign_in"
         android:textColor="@android:color/white"
         android:textSize="20sp"

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -74,7 +75,7 @@ public class RequestDetailsFragment extends DialogFragment {
             @Override
             public boolean onLongClick(View v) {
                 Intent intent = new Intent(getContext(), UserProfileActivity.class);
-                intent.putExtra("someUsername",riderText.getText().toString());
+                intent.putExtra("username",riderText.getText().toString());
                 startActivity(intent);
                 return true;
             }
@@ -93,6 +94,7 @@ public class RequestDetailsFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // send ride to parent activity
+                        Log.d("RequestDetailsFragment", "accept pressed");
                         listener.onAcceptPressed(ride);
                     }
                 }).create();

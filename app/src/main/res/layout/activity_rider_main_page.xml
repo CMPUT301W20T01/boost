@@ -116,30 +116,30 @@
 
     </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/viewRequestLayout"
-            android:layout_width="match_parent"
+    <RelativeLayout
+        android:id="@+id/viewRequestLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="24dp"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/requestRideButton"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="24dp"
-            android:orientation="horizontal">
+            android:layout_gravity="center"
+            android:background="@drawable/rounded_button_dark"
+            android:paddingHorizontal="40dp"
+            android:text="Request Ride"
+            android:textColor="@color/qr_code_white"
+            android:textSize="18sp"
+            android:layout_centerInParent="true" />
 
 
-            <Button
-                android:id="@+id/requestRideButton"
-                style="@style/Widget.AppCompat.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/rounded_button_dark"
-                android:paddingHorizontal="40dp"
-                android:text="Request Ride"
-                android:textColor="@color/qr_code_white"
-                android:textSize="18sp"
-                android:layout_centerInParent="true" />
-
-
-        </RelativeLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/confirmCancelLayout"

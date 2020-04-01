@@ -43,7 +43,8 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/riderDesc"
         app:layout_constraintStart_toEndOf="@+id/riderDesc"
-        app:layout_constraintTop_toTopOf="@+id/riderDesc" />
+        app:layout_constraintTop_toTopOf="@+id/riderDesc"
+        app:layout_constraintBaseline_toBaselineOf="@id/riderDesc" />
 
     <TextView
         android:id="@+id/fareDesc"

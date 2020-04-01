@@ -92,7 +92,7 @@ public class DriverAcceptedFragment extends DialogFragment {
             @Override
             public boolean onLongClick(View v) {
                 Intent intent = new Intent(getContext(), UserProfileActivity.class);
-                intent.putExtra("someUsername",riderText.getText().toString());
+                intent.putExtra("username",riderText.getText().toString());
                 startActivity(intent);
                 return true;
             }
@@ -103,7 +103,7 @@ public class DriverAcceptedFragment extends DialogFragment {
             public void onStatusChange(@Nonnull Ride ride) {
                 if (ride.getRideStatus() == RideStatus.RIDERACCEPTED) {
                     Log.i("rideListener","status changed to RIDERACCEPTED");
-                    Toast.makeText(mContext, "Rider accepted your offer. Moving to Current Ride Page", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "Ride offer accepted", Toast.LENGTH_LONG).show();
                     ActiveUser.setCurrentRide(ride);
                     Intent intent = new Intent(mContext, CurrentRideActivity.class);
                     mContext.startActivity(intent);
@@ -111,19 +111,16 @@ public class DriverAcceptedFragment extends DialogFragment {
                 } else if (ride.getRideStatus() == RideStatus.PENDING) {
                     Toast.makeText(mContext, "Ride offer rejected", Toast.LENGTH_LONG).show();
 
-                    Ride currentRide = ActiveUser.getCurrentRide();
-                    currentRide.cancel();
+                    ride.setDriverUsername("");
                     RideStore.saveRide(ride);
                     ActiveUser.cancelRide();
 
                     Intent intent = new Intent(mContext, ViewRideRequestsActivity.class);
                     startActivity(intent);
-                }  else if (ride.getRideStatus() == RideStatus.CANCELLED) { // TODO: Ride status is CANCELLED ??
-                    Toast.makeText(mContext, "Sorry, the ride request got cancelled by the rider", Toast.LENGTH_LONG).show();
 
-                    Ride currentRide = ActiveUser.getCurrentRide();
-                    currentRide.cancel();
-                    RideStore.saveRide(ride);
+                }  else if (ride.getRideStatus() == RideStatus.CANCELLED) {
+                    Toast.makeText(mContext, "Sorry, request cancelled by rider", Toast.LENGTH_LONG).show();
+
                     ActiveUser.cancelRide();
 
                     Intent intent = new Intent(mContext, ViewRideRequestsActivity.class);
