@@ -62,24 +62,35 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
 
         Intent i = getIntent();
         if(i.getStringExtra("username") == null) { // current user's profile
-            User user = ActiveUser.getUser();
-            username.setText(user.getUsername());
-            userFirstName.setText(user.getFirstName());
-            userEmail.setText(user.getEmail());
-            userPhoneNumber.setText(user.getPhoneNumber());
+            UserStore.getUser(ActiveUser.getUser().getUsername())
+                    .addOnSuccessListener(new OnSuccessListener<User>() {
+                        @Override
+                        public void onSuccess(User user) {
+                            username.setText(user.getUsername());
+                            userFirstName.setText(user.getFirstName());
+                            userEmail.setText(user.getEmail());
+                            userPhoneNumber.setText(user.getPhoneNumber());
 
-            if (user.getType() == UserType.DRIVER) {
-                Integer upVotes = new Integer(((Driver) user).getPositiveRating());
-                Integer downVotes = new Integer(((Driver) user).getNegativeRating());
-                userUpRating.setText(upVotes.toString());
-                userDownRating.setText(downVotes.toString());
+                            if (user.getType() == UserType.DRIVER) {
+                                Integer upVotes = new Integer(((Driver) user).getPositiveRating());
+                                Integer downVotes = new Integer(((Driver) user).getNegativeRating());
+                                userUpRating.setText(upVotes.toString());
+                                userDownRating.setText(downVotes.toString());
 
-            } else { //if (user.getType() == UserType.RIDER)
-                thumbsDownIcon.setVisibility(View.GONE);
-                thumbsUpIcon.setVisibility(View.GONE);
-                userDownRating.setVisibility(View.GONE);
-                userUpRating.setVisibility(View.GONE);
-            }
+                            } else { //if (user.getType() == UserType.RIDER)
+                                thumbsDownIcon.setVisibility(View.GONE);
+                                thumbsUpIcon.setVisibility(View.GONE);
+                                userDownRating.setVisibility(View.GONE);
+                                userUpRating.setVisibility(View.GONE);
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("UserProfileActivity", e.toString());
+                    Toast.makeText(UserProfileActivity.this, "Cannot show profile", Toast.LENGTH_SHORT).show();
+                }
+            });
 
         } else { // another user's profile
             final String otherUsername = i.getStringExtra("username");
