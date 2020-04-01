@@ -33,8 +33,6 @@ public class RideHistoryActivity extends AppCompatActivity {
     ListView listView;
     User user;
 
-//    ArrayList<Ride> rides = new ArrayList<>();
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
