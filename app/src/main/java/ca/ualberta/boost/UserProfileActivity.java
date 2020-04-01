@@ -32,6 +32,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
     TextView userPhoneNumber;
     ImageButton editButton;
     ImageButton backButton;
+    ImageButton historyButton;
     ImageView thumbsUpIcon;
     ImageView thumbsDownIcon;
     ImageView emailIcon;
@@ -57,27 +58,36 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         backButton = findViewById(R.id.profile_go_back_button);
         emailIcon = findViewById(R.id.email_icon_private);
         callIcon = findViewById(R.id.call_icon_private);
+        historyButton = findViewById(R.id.history_button);
+
+        setDriverViewsVisibility(View.GONE);
 
         Intent i = getIntent();
         if(i.getStringExtra("username") == null) { // current user's profile
-            User user = ActiveUser.getUser();
-            username.setText(user.getUsername());
-            userFirstName.setText(user.getFirstName());
-            userEmail.setText(user.getEmail());
-            userPhoneNumber.setText(user.getPhoneNumber());
+            UserStore.getUser(ActiveUser.getUser().getUsername())
+                    .addOnSuccessListener(new OnSuccessListener<User>() {
+                        @Override
+                        public void onSuccess(User user) {
+                            username.setText(user.getUsername());
+                            userFirstName.setText(user.getFirstName());
+                            userEmail.setText(user.getEmail());
+                            userPhoneNumber.setText(user.getPhoneNumber());
 
-            if (user.getType() == UserType.DRIVER) {
-                Integer upVotes = new Integer(((Driver) user).getPositiveRating());
-                Integer downVotes = new Integer(((Driver) user).getNegativeRating());
-                userUpRating.setText(upVotes.toString());
-                userDownRating.setText(downVotes.toString());
-
-            } else { //if (user.getType() == UserType.RIDER)
-                thumbsDownIcon.setVisibility(View.GONE);
-                thumbsUpIcon.setVisibility(View.GONE);
-                userDownRating.setVisibility(View.GONE);
-                userUpRating.setVisibility(View.GONE);
-            }
+                            if (user.getType() == UserType.DRIVER) {
+                                Integer upVotes = new Integer(((Driver) user).getPositiveRating());
+                                Integer downVotes = new Integer(((Driver) user).getNegativeRating());
+                                userUpRating.setText(upVotes.toString());
+                                userDownRating.setText(downVotes.toString());
+                                setDriverViewsVisibility(View.VISIBLE);
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("UserProfileActivity", e.toString());
+                    Toast.makeText(UserProfileActivity.this, "Cannot show profile", Toast.LENGTH_SHORT).show();
+                }
+            });
 
         } else { // another user's profile
             final String otherUsername = i.getStringExtra("username");
@@ -98,12 +108,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                                 String downVotes = String.format("%d", otherUser.getNegativeRating());
                                 userUpRating.setText(upVotes);
                                 userDownRating.setText(downVotes);
-
-                            } else { //if (user.getType() == UserType.RIDER)
-                                thumbsDownIcon.setVisibility(View.GONE);
-                                thumbsUpIcon.setVisibility(View.GONE);
-                                userDownRating.setVisibility(View.GONE);
-                                userUpRating.setVisibility(View.GONE);
+                                setDriverViewsVisibility(View.VISIBLE);
                             }
                         }
                     })
@@ -115,7 +120,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                 }
             });
         }
-      
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,6 +163,13 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
            }
        });
 
+        historyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openRideHistoryActivity();
+            }
+        });
+
     }
 
     @Override
@@ -187,6 +199,19 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         Intent intent = new Intent(UserProfileActivity.this, CallActivity.class);
         intent.putExtra("call", phone);
         startActivity(intent);
+    }
+
+    public void openRideHistoryActivity(){
+        Intent intent = new Intent(UserProfileActivity.this, RideHistoryActivity.class);
+        startActivity(intent);
+    }
+
+    private void setDriverViewsVisibility(int visibility) {
+        thumbsDownIcon.setVisibility(visibility);
+        thumbsUpIcon.setVisibility(visibility);
+        userDownRating.setVisibility(visibility);
+        userUpRating.setVisibility(visibility);
+        historyButton.setVisibility(visibility);
     }
 }
 

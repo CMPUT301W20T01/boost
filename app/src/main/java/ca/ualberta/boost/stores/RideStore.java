@@ -18,14 +18,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-import ca.ualberta.boost.models.Driver;
 import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.PromiseImpl;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.RideStatus;
-import ca.ualberta.boost.models.Rider;
-import ca.ualberta.boost.models.User;
-import ca.ualberta.boost.models.UserType;
 
 /**
  * This class stores a Ride in the FireStore database.
@@ -131,7 +127,7 @@ public class RideStore {
         return ridePromise;
     }
 
-    public static Promise<Collection<Ride>> getPastRides(final String driver_username) {
+    public static PromiseImpl<Collection<Ride>> getPastRides(final String driver_username) {
         RideStore store = getInstance();
 
         final PromiseImpl<Collection<Ride>> ridesPromise = new PromiseImpl<>();
