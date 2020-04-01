@@ -24,8 +24,7 @@ import ca.ualberta.boost.controllers.RideListAdapter;
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.User;
-
-import static ca.ualberta.boost.stores.RideStore.getPastRides;
+import ca.ualberta.boost.stores.RideStore;
 
 public class RideHistoryActivity extends AppCompatActivity {
 
@@ -34,7 +33,7 @@ public class RideHistoryActivity extends AppCompatActivity {
     ListView listView;
     User user;
 
-    ArrayList<Ride> rides = new ArrayList<Ride>();
+//    ArrayList<Ride> rides = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,16 +61,16 @@ public class RideHistoryActivity extends AppCompatActivity {
     /**
      * Retrieves and displays ride requests that the driver was a part of
      */
-    private void getHistory(){
-        getPastRides(user.getUsername()).addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
+    private void getHistory() {
+        RideStore.getPastRides(user.getUsername()).addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
             @Override
             public void onSuccess(Collection<Ride> rideCollection) {
                 Log.d("TestingViewRide", "success");
                 if (!rideCollection.isEmpty()) {
-                    rides.addAll(rideCollection);
-                    // add fnxality to remove rides that were canceled?  just go thru rides and throw out ones w/ status 5 or w.e it is
+                    ArrayList<Ride> past_rides = new ArrayList<>();
+                    past_rides.addAll(rideCollection);
 
-                    ListAdapter adapter = new RideListAdapter(RideHistoryActivity.this, rides);
+                    ListAdapter adapter = new RideListAdapter(RideHistoryActivity.this, past_rides);
                     listView.setAdapter(adapter);
 
                 } else {
