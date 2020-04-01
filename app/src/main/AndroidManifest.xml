@@ -34,6 +34,7 @@
         <activity android:name=".DriverAcceptedFragment" android:screenOrientation="portrait"/>
         <activity android:name=".UserProfileActivity" android:screenOrientation="portrait"/>
         <activity android:name=".EditUserProfileFragment" android:screenOrientation="portrait"/>
+        <activity android:name=".RideHistoryActivity" android:screenOrientation="portrait"/>
         <activity android:name=".ViewRideRequestsActivity" android:screenOrientation="portrait"/>
         <activity android:name=".SignUpActivity" android:screenOrientation="portrait"/>
         <activity android:name=".DriverMainPage" android:screenOrientation="portrait"/>
