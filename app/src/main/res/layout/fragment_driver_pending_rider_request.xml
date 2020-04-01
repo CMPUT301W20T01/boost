@@ -25,7 +25,7 @@
         android:layout_marginStart="16dp"
         android:fontFamily="@font/lato"
         android:paddingTop="16dp"
-        android:text="Waiting for confirmation from:"
+        android:text="Waiting for rider..."
         android:textColor="@color/colourPrimaryDark"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
