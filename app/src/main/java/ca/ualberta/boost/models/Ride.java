@@ -208,11 +208,14 @@ public class Ride {
     public static Ride build(Map<String, Object> data) {
         Timestamp timestamp = (Timestamp) data.get("request_time");
         Long status = (Long) data.get("status");
-        Log.d("Ride", data.get("status").toString());
+//        Long longFare = (Long) data.get("fare");
+//        double fare = longFare.doubleValue();
+//        Log.d("Ride", data.get("status").toString());
         return new Ride(
                 // convert GeoPoints to LatLng
                 toLatLng((GeoPoint) data.get("start_location")),
                 toLatLng((GeoPoint) data.get("end_location")),
+//                fare,
                 (double) data.get("fare"),
                 (String) data.get("driver"),
                 (String) data.get("rider"),
