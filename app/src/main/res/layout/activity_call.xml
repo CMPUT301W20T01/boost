@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="150dp"
-        android:hint="@string/phoneHint"
+        tools:text="###-###-####"
         android:inputType="phone"
         android:textSize="40sp"
         app:layout_constraintStart_toStartOf="parent"

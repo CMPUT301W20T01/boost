@@ -60,6 +60,8 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         callIcon = findViewById(R.id.call_icon_private);
         historyButton = findViewById(R.id.history_button);
 
+        setDriverViewsVisibility(View.GONE);
+
         Intent i = getIntent();
         if(i.getStringExtra("username") == null) { // current user's profile
             UserStore.getUser(ActiveUser.getUser().getUsername())
@@ -76,12 +78,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                                 Integer downVotes = new Integer(((Driver) user).getNegativeRating());
                                 userUpRating.setText(upVotes.toString());
                                 userDownRating.setText(downVotes.toString());
-
-                            } else { //if (user.getType() == UserType.RIDER)
-                                thumbsDownIcon.setVisibility(View.GONE);
-                                thumbsUpIcon.setVisibility(View.GONE);
-                                userDownRating.setVisibility(View.GONE);
-                                userUpRating.setVisibility(View.GONE);
+                                setDriverViewsVisibility(View.VISIBLE);
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -111,12 +108,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                                 String downVotes = String.format("%d", otherUser.getNegativeRating());
                                 userUpRating.setText(upVotes);
                                 userDownRating.setText(downVotes);
-
-                            } else { //if (user.getType() == UserType.RIDER)
-                                thumbsDownIcon.setVisibility(View.GONE);
-                                thumbsUpIcon.setVisibility(View.GONE);
-                                userDownRating.setVisibility(View.GONE);
-                                userUpRating.setVisibility(View.GONE);
+                                setDriverViewsVisibility(View.VISIBLE);
                             }
                         }
                     })
@@ -212,6 +204,14 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
     public void openRideHistoryActivity(){
         Intent intent = new Intent(UserProfileActivity.this, RideHistoryActivity.class);
         startActivity(intent);
+    }
+
+    private void setDriverViewsVisibility(int visibility) {
+        thumbsDownIcon.setVisibility(visibility);
+        thumbsUpIcon.setVisibility(visibility);
+        userDownRating.setVisibility(visibility);
+        userUpRating.setVisibility(visibility);
+        historyButton.setVisibility(visibility);
     }
 }
 

@@ -24,6 +24,7 @@ import ca.ualberta.boost.controllers.RideListAdapter;
 import ca.ualberta.boost.models.ActiveUser;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.User;
+import ca.ualberta.boost.models.UserType;
 import ca.ualberta.boost.stores.RideStore;
 
 public class RideHistoryActivity extends AppCompatActivity {
