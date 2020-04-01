@@ -32,6 +32,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
     TextView userPhoneNumber;
     ImageButton editButton;
     ImageButton backButton;
+    ImageButton historyButton;
     ImageView thumbsUpIcon;
     ImageView thumbsDownIcon;
     ImageView emailIcon;
@@ -57,6 +58,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         backButton = findViewById(R.id.profile_go_back_button);
         emailIcon = findViewById(R.id.email_icon_private);
         callIcon = findViewById(R.id.call_icon_private);
+        historyButton = findViewById(R.id.history_button);
 
         Intent i = getIntent();
         if(i.getStringExtra("username") == null) { // current user's profile
@@ -115,7 +117,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
                 }
             });
         }
-      
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,6 +160,13 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
            }
        });
 
+        historyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openRideHistoryActivity();
+            }
+        });
+
     }
 
     @Override
@@ -186,6 +195,11 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         String phone = userPhoneNumber.getText().toString();
         Intent intent = new Intent(UserProfileActivity.this, CallActivity.class);
         intent.putExtra("call", phone);
+        startActivity(intent);
+    }
+
+    public void openRideHistoryActivity(){
+        Intent intent = new Intent(UserProfileActivity.this, RideHistoryActivity.class);
         startActivity(intent);
     }
 }
