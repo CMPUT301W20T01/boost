@@ -4,10 +4,16 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.GeoPoint;
 
 import ca.ualberta.boost.models.Driver;
 import ca.ualberta.boost.models.Ride;
+import ca.ualberta.boost.models.RideStatus;
 import ca.ualberta.boost.models.Rider;
 
 public class TestRide {
@@ -28,6 +34,17 @@ public class TestRide {
         return ride;
     }
 
+    private Ride mockRide2() {
+        Ride ride = mockRide1();
+        String driverUserName = new Driver("Jimi",
+                                            "theExperience",
+                                            "purpleHaze",
+                                            "jimiHendrix@gmail.com",
+                                            "2727272727").getUsername();
+        ride.setDriverUsername(driverUserName);
+        return ride;
+    }
+
     @Test
     void testFareCalc() {
         Ride ride = mockRide1();
@@ -36,6 +53,23 @@ public class TestRide {
 
         assertEquals(13.83, ride.baseFare());
         
+    }
+
+    @Test
+    void testData() {
+        Ride ride = mockRide2();
+        Map<String, Object> correctMap = new HashMap<>();
+        correctMap.put("start_location", new GeoPoint(ride.getStartLocation().latitude,
+                                                        ride.getStartLocation().longitude));
+        correctMap.put("end_location", new GeoPoint(ride.getEndLocation().latitude,
+                                                        ride.getEndLocation().longitude));
+        correctMap.put("fare", ride.getFare());
+        correctMap.put("driver", ride.getDriverUsername());
+        correctMap.put("rider", ride.getRiderUsername());
+        correctMap.put("status", ride.getRideStatus().getValue());
+        correctMap.put("request_time", ride.getRequestTime());
+        Map<String, Object> map = ride.data();
+        assertEquals(correctMap, map);
     }
 
 
