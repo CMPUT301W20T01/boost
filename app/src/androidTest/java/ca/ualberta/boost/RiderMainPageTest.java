@@ -92,35 +92,7 @@ public class RiderMainPageTest {
         ActiveUser.logout();
     }
 
-//    idk how to move map markers using solo
-//    @Test
-//    public void testGeoLocations() {
-//        solo.clickOnButton("Request Ride");
-//        solo.typeText((EditText) solo.getView(R.id.searchPickupEditText), "beercade");
-//        solo.pressSoftKeyboardSearchButton();
-//        solo.typeText((EditText) solo.getView(R.id.searchDestinationEditText), "cafe mosaics");
-//    }
 
-    /**
-     * Tests that an estimate of a fair fare is shown to riders
-     * US 01.06.01
-     */
-    @Test
-    public void testFairFare() {
-        Rider rider = new Rider("Test Rider", "IntentTestRider", "password", "IntentTestRider@gmail.com", "7801234567");
-        ActiveUser.login(rider);
-        solo.clickOnButton("Request Ride");
-        solo.typeText((EditText) solo.getView(R.id.searchPickupEditText), "beercade");
-        solo.pressSoftKeyboardSearchButton();
-        solo.typeText((EditText) solo.getView(R.id.searchDestinationEditText), "cafe mosaics");
-        solo.pressSoftKeyboardSearchButton();
-        solo.sleep(1000);
-        solo.clickOnButton("Confirm");
-        // get the cost text
-        // assert that its nonzero or something
-        // change end location to wem
-        // assert that fare is bigger than old one
-    }
     /**
      * Close activity after each test
      * @throws Exception

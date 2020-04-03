@@ -42,8 +42,6 @@ public class Ride {
         this.status = status;
         this.requestTime = requestTime;
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Log.d("Ride", dateFormat.format(requestTime));
-        Log.d("Ride", "creating new ride with id: " + this.id());
 
     }
 
