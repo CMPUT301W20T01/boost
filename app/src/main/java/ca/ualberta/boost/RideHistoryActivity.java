@@ -27,6 +27,10 @@ import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.models.UserType;
 import ca.ualberta.boost.stores.RideStore;
 
+/**
+ * This class is responsible for retrieving a drivers ride history and displaying it
+ */
+
 public class RideHistoryActivity extends AppCompatActivity {
 
     ImageButton backButton;

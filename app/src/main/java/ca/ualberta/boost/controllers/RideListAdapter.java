@@ -19,6 +19,10 @@ import java.util.Locale;
 import ca.ualberta.boost.R;
 import ca.ualberta.boost.models.Ride;
 
+/**
+ * The RideListAdapter is responsible for displaying the ride in the list view
+ */
+
 public class RideListAdapter extends ArrayAdapter<Ride> {
 
     private static final DateFormat dateFormat = new SimpleDateFormat("MMM dd   h:mm a", Locale.CANADA);
