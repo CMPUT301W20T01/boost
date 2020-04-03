@@ -1,6 +1,5 @@
 package ca.ualberta.boost;
 
-import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -18,23 +17,14 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-
 import javax.annotation.Nonnull;
 
 import ca.ualberta.boost.controllers.RideEventListener;
 import ca.ualberta.boost.controllers.RideTracker;
-import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.controllers.ActiveUser;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.RideStatus;
-import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.stores.RideStore;
-import ca.ualberta.boost.stores.UserStore;
-
-import static com.firebase.ui.auth.AuthUI.TAG;
 
 /**
  * DriverAcceptedRidePendingFragment defines a fragment after
@@ -46,17 +36,9 @@ import static com.firebase.ui.auth.AuthUI.TAG;
 public class DriverAcceptedFragment extends DialogFragment {
     private DriverAcceptedFragment.OnFragmentInteractionListener listener;
     private TextView riderText;
-    private Ride ride;
-    private RideTracker rideTracker;
     private Context mContext;
 
-
-    DriverAcceptedFragment(Ride ride){
-        this.ride = ride;
-    }
-
-    DriverAcceptedFragment(){}
-
+    DriverAcceptedFragment() {}
 
     /**
      * Interface that enforces the implementing class to handle
@@ -127,12 +109,7 @@ public class DriverAcceptedFragment extends DialogFragment {
                     startActivity(intent);
                 }
             }
-
-            @Override
-            public void onLocationChanged() { }
         });
-
-        Log.i("rideListener","called ride Listener for: " + activeRide.id());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                 .setView(view)
@@ -148,7 +125,6 @@ public class DriverAcceptedFragment extends DialogFragment {
                         ActiveUser.cancelRide();
                     }
                 });
-        //TODO:NEED TO IMPLEMENT CHANGE RIDE STATUS TO PENDING AGAIN;
 
         AlertDialog alert = builder.create();
         alert.setCanceledOnTouchOutside(false);

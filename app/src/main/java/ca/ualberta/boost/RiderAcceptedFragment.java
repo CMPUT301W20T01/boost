@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
-import android.nfc.Tag;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,31 +15,20 @@ import androidx.fragment.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 
 import ca.ualberta.boost.controllers.RideEventListener;
 import ca.ualberta.boost.controllers.RideTracker;
-import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.controllers.ActiveUser;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.RideStatus;
 
-import ca.ualberta.boost.models.User;
-import ca.ualberta.boost.models.UserType;
 import ca.ualberta.boost.stores.RideStore;
-import ca.ualberta.boost.stores.UserStore;
-
-import static com.firebase.ui.auth.AuthUI.TAG;
 
 /**
  * DriverAcceptedRidePendingFragment defines a fragment after
@@ -52,17 +40,12 @@ import static com.firebase.ui.auth.AuthUI.TAG;
 public class RiderAcceptedFragment extends DialogFragment implements RideEventListener {
     private RiderAcceptedFragment.OnFragmentInteractionListener listener;
     private TextView driverText;
-    private Ride ride;
 
     private TextView message;
     private Context mContext;
-    Button positiveButton;
     private String driver;
     private ProgressBar progressBar;
 
-    RiderAcceptedFragment(Ride ride){
-        this.ride = ride;
-    }
     RiderAcceptedFragment(){}
 
     /**
@@ -169,6 +152,12 @@ public class RiderAcceptedFragment extends DialogFragment implements RideEventLi
         dialog.setCanceledOnTouchOutside(false);
     }
 
+    /**
+     * Checks if the status of the ride has changed and launches RiderMainPage
+     * after the driver has accepted the payment
+     * @param ride
+     *      ride to check the status of
+     */
     @Override
     public void onStatusChange(@NonNull Ride ride) {
         if (ride.getRideStatus() == RideStatus.RIDERACCEPTED) {
@@ -221,11 +210,6 @@ public class RiderAcceptedFragment extends DialogFragment implements RideEventLi
                 }
             });
         }
-    }
-
-    @Override
-    public void onLocationChanged() {
-
     }
 }
 

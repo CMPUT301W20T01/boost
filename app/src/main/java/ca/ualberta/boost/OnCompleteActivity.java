@@ -21,9 +21,8 @@ import java.text.NumberFormat;
 
 import ca.ualberta.boost.controllers.RideEventListener;
 import ca.ualberta.boost.controllers.RideTracker;
-import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.controllers.ActiveUser;
 import ca.ualberta.boost.models.Driver;
-import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.RideStatus;
 import ca.ualberta.boost.models.User;
@@ -110,6 +109,9 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    /**
+     * Changes the total fare amount based in tip
+     */
     private void changeTotal() {
         totalAmount = new BigDecimal(ActiveUser.getCurrentRide().baseFare()).add(tipAmount).setScale(2, BigDecimal.ROUND_FLOOR);
         Log.d("OnComplete fare amount", totalAmount.toString());
@@ -117,17 +119,30 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
         totalAmountView.setText(totalFormatted);
     }
 
+    /**
+     * Changes the tip view
+     * @param tip
+     *      BigDecimal of tip amount
+     */
     private void changeTipText(BigDecimal tip) {
         tipAmountView.setText(tip.toString());
     }
 
+    /**
+     * Launches the QR code
+     * @see QRCodeFragment
+     */
     public void launchQrCode() {
         QRCodeFragment fragment = new QRCodeFragment(totalAmount.doubleValue());
         fragment.show(getSupportFragmentManager(),"QRCode");
-        //if thumbsUpButton.isSelected, add to driver's ratings, vice versa for thumbs down,
-        //don't change driver's rating otherwise
     }
 
+    /**
+     * Checks if the status of the ride has changed and launches RiderMainPage
+     * after the driver has accepted the payment
+     * @param ride
+     *      ride to check the status of
+     */
     @Override
     public void onStatusChange(@NonNull Ride ride) {
         if (ride.getRideStatus() == RideStatus.PAID && ActiveUser.getUser().getType() == UserType.RIDER) {
@@ -138,6 +153,11 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    /**
+     * Updates the driver in the database
+     * @param ride
+     *      the ride to check the driver of
+     */
     private void changeDriver(Ride ride) {
         String driverUsername = ride.getDriverUsername();
         UserStore.getUser(driverUsername).addOnSuccessListener(new OnSuccessListener<User>() {
@@ -151,9 +171,10 @@ public class OnCompleteActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
-    @Override
-    public void onLocationChanged() { }
-
+    /**
+     * Subclass that changes the tip view so it is always in a correct format
+     * even while the user is typing in the text view
+     */
     private class MoneyTextWatcher implements TextWatcher {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) { }

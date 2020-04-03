@@ -16,7 +16,7 @@ public enum RideStatus {
     FINISHED(3),
     PAID(4),
     CANCELLED(5),
-    PICKEDUP(6); //added to confirm when driver pick up a rider
+    PICKEDUP(6);
 
 
     private final int value;

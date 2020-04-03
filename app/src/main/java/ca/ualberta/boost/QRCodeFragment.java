@@ -30,20 +30,23 @@ import ca.ualberta.boost.models.Ride;
  * QR Code with the fare amount for driver to scan
  */
 public class QRCodeFragment extends DialogFragment {
-    private RequestDetailsFragment.OnFragmentInteractionListener listener;
     private double fare;
     private ImageView QRCode;
 
+    /**
+     * QRCodeFragment constructor
+     * @param fare
+     *      amount owed to the driver by the rider
+     */
     QRCodeFragment(double fare){
         this.fare = fare;
-        Log.i("RESULT","FRAGMENT QR");
+        Log.i("QRCodeFragment", Double.valueOf(fare).toString());
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_qr_code, null);
-        Log.i("RESULT","FRAGMENT QR");
 
         //generate QR
         QRCode =view.findViewById(R.id.qr_code);

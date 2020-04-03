@@ -28,10 +28,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Collection;
 
-import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.controllers.ActiveUser;
 import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.Ride;
-import ca.ualberta.boost.models.RideStatus;
 import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.stores.RideStore;
 
@@ -43,15 +42,10 @@ import ca.ualberta.boost.stores.RideStore;
  */
 
 public class RiderMainPage extends MapActivity implements RideRequestSummaryFragment.OnFragmentInteractionListener, RiderAcceptedFragment.OnFragmentInteractionListener {
-
-    // constant values
     private static final String TAG = "RiderMainPage";
-
-    //firebase
     private FirebaseAuth auth;
 
     // views
-    private Button viewRequestButton;
     private Button requestRideButton;
     private Button viewProfileButton;
     private Button confirmRequestButton;
@@ -64,7 +58,6 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     private RelativeLayout viewRequestLayout;
     private RelativeLayout topButtonsLayout;
 
-    // attributes
     private Ride ride;
     public Marker pickupMarker;
     public Marker destinationMarker;
@@ -303,7 +296,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     }
 
     // method to check if user is involved in a pending request
-    private void checkForPendingRequest(){
+    private void checkForPendingRequest() {
         final User user = ActiveUser.getUser();
         Promise<Collection<Ride>> ridePromise = RideStore.getRequests();
         ridePromise.addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
@@ -311,7 +304,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
             public void onSuccess(Collection<Ride> rides) {
                 Log.d("TestingViewRide", "success");
                 if (!rides.isEmpty()) {
-                    for (Ride ride : rides){
+                    for (Ride ride : rides) {
                         // user is rider for the pending ride request
                         if (ride.getRiderUsername().equals(user.getUsername())){
                             ActiveUser.setCurrentRide(ride);
@@ -332,14 +325,14 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     }
 
     // method to check if user is involved in an active request
-    private void checkForActiveRequest(){
+    private void checkForActiveRequest() {
         final User user = ActiveUser.getUser();
         Promise<Collection<Ride>> ridePromise = RideStore.getActiveRides();
         ridePromise.addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
             @Override
             public void onSuccess(Collection<Ride> rides) {
                 if (!rides.isEmpty()) {
-                    for (Ride ride : rides){
+                    for (Ride ride : rides) {
                         // user is rider for the pending ride request
                         if (ride.getRiderUsername().equals(user.getUsername())){
                             ActiveUser.setCurrentRide(ride);
@@ -360,7 +353,7 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
     }
 
     // method to check if user is involved in a driver accepted request
-    private void checkForPendingDriverAcceptedRequest(){
+    private void checkForPendingDriverAcceptedRequest() {
         final User user = ActiveUser.getUser();
         Promise<Collection<Ride>> ridePromise = RideStore.getDriverAcceptedRequests();
         ridePromise.addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
@@ -425,12 +418,12 @@ public class RiderMainPage extends MapActivity implements RideRequestSummaryFrag
         destinationMarker.setVisible(false);
     }
 
-    private void launchCurrentRequestActivity(){
+    private void launchCurrentRequestActivity() {
         Intent intent = new Intent(this, CurrentRideActivity.class);
         startActivity(intent);
     }
 
-    private void launchHomeScreen(){
+    private void launchHomeScreen() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();

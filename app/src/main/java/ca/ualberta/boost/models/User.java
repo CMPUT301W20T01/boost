@@ -22,8 +22,6 @@ public abstract class User {
     private String email;
     private String phoneNumber;
     private Location currentLocation;
-    private double qrBalance;
-    private @Nullable Ride activeRide;
 
     // constructor
     protected User(UserType type, String firstName, String username, String password, String email, String phoneNumber) {
@@ -67,15 +65,6 @@ public abstract class User {
         return currentLocation;
     }
 
-    public double getQrBalance() {
-        return qrBalance;
-    }
-
-    @Nullable
-    public Ride getActiveRide() {
-        return activeRide;
-    }
-
     // setters
     public void setType(UserType type) {
         this.type = type;
@@ -103,13 +92,5 @@ public abstract class User {
 
     public void setCurrentLocation(Location currentLocation) {
         this.currentLocation = currentLocation;
-    }
-
-    public void setQrBalance(double qrBalance) {
-        this.qrBalance = qrBalance;
-    }
-
-    public void setActiveRide(@Nullable Ride activeRide) {
-        this.activeRide = activeRide;
     }
 }

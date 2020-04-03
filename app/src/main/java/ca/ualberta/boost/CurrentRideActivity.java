@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.Marker;
@@ -18,7 +16,7 @@ import javax.annotation.Nonnull;
 
 import ca.ualberta.boost.controllers.RideEventListener;
 import ca.ualberta.boost.controllers.RideTracker;
-import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.controllers.ActiveUser;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.RideStatus;
 import ca.ualberta.boost.models.UserType;
@@ -200,9 +198,5 @@ public class CurrentRideActivity extends MapActivity implements RideEventListene
             Intent intent = new Intent(this, DriverMainPage.class);
             startActivity(intent);
         }
-
     }
-
-    @Override
-    public void onLocationChanged() { }
 }

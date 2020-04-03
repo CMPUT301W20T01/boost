@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import ca.ualberta.boost.controllers.RideTracker;
-import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.controllers.ActiveUser;
 import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.stores.RideStore;
@@ -41,35 +41,21 @@ import ca.ualberta.boost.stores.RideStore;
  */
 
 public class ViewRideRequestsActivity extends MapActivity implements RequestDetailsFragment.OnFragmentInteractionListener, DriverAcceptedFragment.OnFragmentInteractionListener{
-
-    // constants
-    BitmapDescriptor SPECIAL = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
-
-    // views
-    private LinearLayout searchesLayout;
     private EditText searchStartText;
     private Button cancelButton;
     private Button detailsButton;
 
-    // attributes
-    private LatLng startLocation;
     private ArrayList<Ride> rideList;
     private GoogleMap mMap;
     private ArrayList<Marker> startMarkers;
     private Marker endMarker;
     private Ride chosenRide;
-    private FragmentManager fragmentManager;
-    private FragmentTransaction fragmentTransaction;
-
-    //RIDE EVENT LISTENER
-    RideTracker rideTracker;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // get views
-        searchesLayout = findViewById(R.id.searchesLayout);
         searchStartText = findViewById(R.id.searchStartEditText);
         cancelButton = findViewById(R.id.cancelButton);
         detailsButton = findViewById(R.id.detailsButton);
@@ -156,8 +142,8 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
                    // show button that says VIEW DETAILS
                    detailsButton.setVisibility(View.VISIBLE);
                }
-               // show both markers titles
 
+               // show both markers titles
                marker.showInfoWindow();
                 return true;
             }
@@ -172,13 +158,13 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
      * @param searchEditText
      *      The EditText of the search bar
      */
-    private void handleSearch(EditText searchEditText){
+    private void handleSearch(EditText searchEditText) {
         // hide VIEW DETAILS button
         detailsButton.setVisibility(View.GONE);
         // set end marker as invisible
         endMarker.setVisible(false);
         String searchString = searchEditText.getText().toString();
-        startLocation = geoLocate(searchString);
+        LatLng startLocation = geoLocate(searchString);
         moveCamera(startLocation, 15);
     }
 
@@ -186,7 +172,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
      * Displays open ride requests that are within a certain distance
      * of the Driver's specified start location
      */
-    private void displayRequests(){
+    private void displayRequests() {
         // place markers for rides
         for (int i = 0; i < rideList.size(); i++){
             Ride ride = rideList.get(i);
@@ -201,7 +187,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
     /**
      * Fills the rideList with pending ride requests from the database
      */
-    private void fillRideList(){
+    private void fillRideList() {
         rideList = new ArrayList<>();
         Promise<Collection<Ride>> ridePromise = RideStore.getRequests();
         ridePromise.addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
@@ -244,7 +230,7 @@ public class ViewRideRequestsActivity extends MapActivity implements RequestDeta
     /**
      * Go to DriverMainPage activity and finish this activity
      */
-    private void launchDriverMainPage(){
+    private void launchDriverMainPage() {
         Intent intent = new Intent(this, DriverMainPage.class);
         startActivity(intent);
         finish();

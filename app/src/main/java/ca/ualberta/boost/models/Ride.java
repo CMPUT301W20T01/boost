@@ -22,29 +22,45 @@ import javax.annotation.Nullable;
  * This class represents a Ride. It handles building a Map object that represents the Ride,
  * which can be put in a database, and building a Ride from a map object.
  */
-
 public class Ride {
     private LatLng startLocation;
     private LatLng endLocation;
     private double fare;
-    private @Nullable String driver_username;
-    private String rider_username;
+    private @Nullable String driverUsername;
+    private String riderUsername;
     private RideStatus status;
     private Date requestTime;
 
+    /**
+     * Ride constructor for build function
+     * @param startLocation
+     * @param endLocation
+     * @param fare
+     * @param driver
+     * @param rider
+     * @param status
+     * @param requestTime
+     */
     private Ride(LatLng startLocation, LatLng endLocation, double fare, @Nonnull String driver, String rider,
                  RideStatus status, Date requestTime) {
         this.startLocation = startLocation;
         this.endLocation = endLocation;
         this.fare = fare;
-        this.driver_username = driver;
-        this.rider_username = rider;
+        this.driverUsername = driver;
+        this.riderUsername = rider;
         this.status = status;
         this.requestTime = requestTime;
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
     }
 
+    /**
+     * Ride constructor to create a ride
+     * @param startLocation
+     * @param endLocation
+     * @param fare
+     * @param rider
+     */
     public Ride(LatLng startLocation, LatLng endLocation, double fare, String rider) {
         this(startLocation, endLocation, fare, null, rider, RideStatus.PENDING, new Date());
     }
@@ -69,8 +85,8 @@ public class Ride {
         map.put("start_location", toGeoPoint(this.startLocation));
         map.put("end_location", toGeoPoint(this.endLocation));
         map.put("fare", this.fare);
-        map.put("driver", this.driver_username);
-        map.put("rider", this.rider_username);
+        map.put("driver", this.driverUsername);
+        map.put("rider", this.riderUsername);
         map.put("status", this.status.getValue());
         map.put("request_time", this.requestTime);
         return map;
@@ -84,7 +100,7 @@ public class Ride {
      */
     @SuppressLint("DefaultLocale")
     public String id() {
-        return String.format("%s_%d", rider_username, requestTime.getTime());
+        return String.format("%s_%d", riderUsername, requestTime.getTime());
     }
 
     public LatLng getStartLocation() {
@@ -107,11 +123,11 @@ public class Ride {
     }
 
     public String getDriverUsername() {
-        return driver_username;
+        return driverUsername;
     }
 
     public String getRiderUsername() {
-        return rider_username;
+        return riderUsername;
     }
 
     public RideStatus getRideStatus() {
@@ -135,11 +151,7 @@ public class Ride {
     }
 
     public void setDriverUsername(String driver) {
-        this.driver_username = driver;
-    }
-
-    public void setRiderUsername(String rider) {
-        this.rider_username = rider;
+        this.driverUsername = driver;
     }
 
     public void setPending() {
@@ -153,10 +165,10 @@ public class Ride {
     public void riderAccept() {
         this.status = RideStatus.RIDERACCEPTED;
     }
+
     public void driverPickup() {
         this.status = RideStatus.PICKEDUP;
     }
-
 
     public void finish() {
         this.status = RideStatus.FINISHED;

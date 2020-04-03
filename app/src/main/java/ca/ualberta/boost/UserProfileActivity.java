@@ -17,12 +17,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import ca.ualberta.boost.models.Driver;
 import ca.ualberta.boost.models.User;
-import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.controllers.ActiveUser;
 import ca.ualberta.boost.models.UserType;
 import ca.ualberta.boost.stores.UserStore;
 
-/**RETRIEVE USER PROFILE AND DISPLAY IT
- * EDIT PROFILE TO FIREBASE IF REQUIRED
+/**
+ * Retrieves a user's profile to display
  */
 public class UserProfileActivity extends AppCompatActivity implements EditUserProfileFragment.OnFragmentInteractionListener {
 
@@ -45,7 +45,6 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        //Initialize
         username = findViewById(R.id.profile_username);
         userFirstName = findViewById(R.id.profile_first_name);
         userEmail = findViewById(R.id.profile_email);
@@ -189,25 +188,43 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         UserStore.saveUser(ActiveUser.getUser());
     }
 
-    public void openEmailActivity(){
+    /**
+     * Launches EmailActivity
+     * @see EmailActivity
+     */
+    public void openEmailActivity() {
         String email = userEmail.getText().toString();
         Intent intent = new Intent(UserProfileActivity.this, EmailActivity.class);
         intent.putExtra("to", email);
         startActivity(intent);
     }
 
-    public void openCallActivity(){
+    /**
+     * Launches CallActivity
+     * @see CallActivity
+     */
+    public void openCallActivity() {
         String phone = userPhoneNumber.getText().toString();
         Intent intent = new Intent(UserProfileActivity.this, CallActivity.class);
         intent.putExtra("call", phone);
         startActivity(intent);
     }
 
-    public void openRideHistoryActivity(){
+    /**
+     * Launches RideHistoryActivity
+     * @see RideHistoryActivity
+     */
+    public void openRideHistoryActivity() {
         Intent intent = new Intent(UserProfileActivity.this, RideHistoryActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Sets the driver's views' visibilities
+     * @param visibility
+     *      visibility to set the views to. One of:
+     *      View.GONE, View.VISIBLE, View.INVISIBLE
+     */
     private void setDriverViewsVisibility(int visibility) {
         thumbsDownIcon.setVisibility(visibility);
         thumbsUpIcon.setVisibility(visibility);

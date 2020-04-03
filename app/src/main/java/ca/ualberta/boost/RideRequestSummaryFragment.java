@@ -29,7 +29,11 @@ public class RideRequestSummaryFragment extends DialogFragment{
     private Ride ride;
     private TextView fareText;
 
-
+    /**
+     * RideRequestSummaryFragment constructor
+     * @param ride
+     *      ride request to get and display a summary of
+     */
     RideRequestSummaryFragment(Ride ride){
         this.ride = ride;
     }

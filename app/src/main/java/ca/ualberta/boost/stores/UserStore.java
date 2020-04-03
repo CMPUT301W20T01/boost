@@ -144,6 +144,13 @@ public class UserStore {
         return userPromise;
     }
 
+    /**
+     *
+     * @param email
+     * @return
+     *      Promise<User>
+     * @see Promise
+     */
     public static Promise<User> getUserByEmail(final String email) {
         UserStore store = getInstance();
 

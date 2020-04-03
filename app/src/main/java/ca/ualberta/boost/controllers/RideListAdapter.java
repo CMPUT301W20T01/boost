@@ -27,10 +27,24 @@ public class RideListAdapter extends ArrayAdapter<Ride> {
 
     private static final DateFormat dateFormat = new SimpleDateFormat("MMM dd   h:mm a", Locale.CANADA);
 
+    /**
+     * RideListAdapter constructor
+     * @param context
+     * @param rides
+     *      Rides of the
+     */
     public RideListAdapter(@NonNull Context context, ArrayList<Ride> rides) {
         super(context, R.layout.ride_details, rides);
     }
 
+    /**
+     * Gets the view of the fragment
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     *      customView, the inflated View
+     */
     @Override
     public View getView (int position, View convertView, ViewGroup parent){
         LayoutInflater inflater = LayoutInflater.from(getContext());

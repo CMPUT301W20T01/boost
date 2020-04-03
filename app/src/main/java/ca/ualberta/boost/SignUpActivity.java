@@ -3,7 +3,6 @@ package ca.ualberta.boost;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,8 +10,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
@@ -23,12 +20,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.w3c.dom.Text;
-
-import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.controllers.ActiveUser;
 import ca.ualberta.boost.models.Driver;
-import ca.ualberta.boost.models.Promise;
-import ca.ualberta.boost.models.PromiseImpl;
 import ca.ualberta.boost.models.Rider;
 import ca.ualberta.boost.models.User;
 import ca.ualberta.boost.stores.UserStore;
@@ -38,7 +31,7 @@ import ca.ualberta.boost.stores.UserStore;
  * on a successful registration the user is taken to the correct page depending on their role
  */
 
-public class SignUpActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class SignUpActivity extends AppCompatActivity{
 
     private FirebaseAuth auth;
     private EditText firstName;
@@ -91,7 +84,10 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         });
     }
 
-    // adds user to database
+    /**
+     * Adds the user signing up to the database after checking if their
+     * input is valid
+     */
     private void addUser() {
         if(isValidInput()) {
             auth.createUserWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim())
@@ -111,22 +107,27 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                         }
                     });
         }
-
     }
 
-    //launches the home activity for a rider
+    /**
+     * Launches the main page for a rider
+     */
     private void launchHomeRider(){
         Intent intent = new Intent(this, RiderMainPage.class);
         startActivity(intent);
     }
 
-    //launches the home activity for a driver
+    /**
+     * Launches the main page for a driver
+     */
     private void launchHomeDriver(){
         Intent intent = new Intent(this, DriverMainPage.class);
         startActivity(intent);
     }
 
-    //stores user into database users
+    /**
+     * Stores the user to teh database
+     */
     private void storeUser() {
         User user;
 
@@ -145,7 +146,9 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         ActiveUser.login(user);
     }
 
-    //signs in user and launches the home activity
+    /**
+     * Signs in the user and launches the appropriate main page
+     */
     private void signInUser () {
         if (isValidInput()) {
             auth.signInWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim())
@@ -164,7 +167,11 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         }
     }
 
-    //Return true if fields have values and password is longer than 6 characters
+    /**
+     * Checks if the information entered is valid
+     * @return
+     *      true if all input is valid, false otherwise
+     */
     private boolean isValidInput() {
         if(firstName.getText().toString().matches("")){
             Toast.makeText(this, "Enter a First Name", Toast.LENGTH_SHORT).show();
@@ -194,19 +201,11 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         return true;
     }
 
-
-    //spinner methods
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-       //String text = adapterView.getItemAtPosition(i).toString();
-       //Toast.makeText(adapterView.getContext(), text, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
-
+    /**
+     * Tells the user if the username entered is already taken
+     * @param username
+     *      username the user has entered, to be checked
+     */
     public void uniqueUsername(String username) {
         if (!username.equals("")) {
             UserStore.getUser(username).addOnSuccessListener(new OnSuccessListener<User>() {
