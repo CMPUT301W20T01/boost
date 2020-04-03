@@ -91,7 +91,7 @@ public class RiderMainPageTest {
         });
         ActiveUser.logout();
     }
-    
+
 
     /**
      * Close activity after each test
