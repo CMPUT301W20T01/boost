@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
 import ca.ualberta.boost.models.Driver;
@@ -45,6 +47,8 @@ public class TestRide {
         return ride;
     }
 
+    private
+
     @Test
     void testFareCalc() {
         Ride ride = mockRide1();
@@ -70,6 +74,24 @@ public class TestRide {
         correctMap.put("request_time", ride.getRequestTime());
         Map<String, Object> map = ride.data();
         assertEquals(correctMap, map);
+    }
+
+    @Test
+    void testBuild() {
+        Ride ride = mockRide2();
+        Timestamp timestamp = new Timestamp(ride.getRequestTime());
+        Long status = new Long(ride.getRideStatus().getValue());
+        Map<String, Object> map = ride.data();
+        map.put("request_time", timestamp);
+        map.put("status", status);
+        Ride newRide = Ride.build(map);
+        assertEquals(ride.getDriverUsername(), newRide.getDriverUsername());
+        assertEquals(ride.getEndLocation(), newRide.getEndLocation());
+        assertEquals(ride.getFare(), newRide.getFare());
+        assertEquals(ride.getRequestTime(), newRide.getRequestTime());
+        assertEquals(ride.getRiderUsername(), newRide.getRiderUsername());
+        assertEquals(ride.getRideStatus(), newRide.getRideStatus());
+        assertEquals(ride.getStartLocation(), newRide.getStartLocation());
     }
 
 
