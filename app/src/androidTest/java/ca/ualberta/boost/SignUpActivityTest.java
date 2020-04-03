@@ -100,8 +100,6 @@ public class SignUpActivityTest {
         solo.sleep(4000);
     }
 
-
-
     /**
      * Close activity after each test
      * @throws Exception
