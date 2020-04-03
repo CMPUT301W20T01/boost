@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -44,6 +45,7 @@ public class CallActivity extends AppCompatActivity {
         backButton = findViewById(R.id.call_go_back_button);
 
         //get driver's number from UserProfileActivity and set it as number to call
+        Log.d("CallActivity", getIntent().getExtras().getString("call"));
         driverNumberFromProfile = getIntent().getExtras().getString("call");
         editTextNumber.setText(driverNumberFromProfile);
 

@@ -207,6 +207,7 @@ public class UserProfileActivity extends AppCompatActivity implements EditUserPr
         String phone = userPhoneNumber.getText().toString();
         Intent intent = new Intent(UserProfileActivity.this, CallActivity.class);
         intent.putExtra("call", phone);
+        Log.d("UserProfileActivity", phone);
         startActivity(intent);
     }
 
