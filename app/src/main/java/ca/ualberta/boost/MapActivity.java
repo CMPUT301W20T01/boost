@@ -37,6 +37,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The MapActivity class contains a google map and all methods necessary to set up the map.
+ * It also defines methods that are useful to any activities that contain a map.
+ * MapActivity follows the Template Method Pattern.
+ */
 public abstract class MapActivity extends FragmentActivity implements OnMapReadyCallback {
     // constants
     private static final String TAG = "MapActivity";
