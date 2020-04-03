@@ -21,7 +21,6 @@ public abstract class User {
     private String password;
     private String email;
     private String phoneNumber;
-    private Location currentLocation;
 
     // constructor
     protected User(UserType type, String firstName, String username, String password, String email, String phoneNumber) {
@@ -61,15 +60,7 @@ public abstract class User {
         return phoneNumber;
     }
 
-    public Location getCurrentLocation() {
-        return currentLocation;
-    }
-
     // setters
-    public void setType(UserType type) {
-        this.type = type;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -78,19 +69,11 @@ public abstract class User {
         this.username = userName;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public void setEmail(String email) {
         this.email = email;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public void setCurrentLocation(Location currentLocation) {
-        this.currentLocation = currentLocation;
     }
 }
