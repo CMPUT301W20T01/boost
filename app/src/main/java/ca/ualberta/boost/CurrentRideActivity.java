@@ -95,6 +95,7 @@ public class CurrentRideActivity extends MapActivity implements RideEventListene
             viewProfileButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+//                  profile: https://stackoverflow.com/users/4755700/atiar-talukdar, link to question: https://stackoverflow.com/questions/6707900/pass-a-string-from-one-activity-to-another-activity-in-android
                     Intent intent = new Intent(CurrentRideActivity.this, UserProfileActivity.class);
                     intent.putExtra("username",ride.getRiderUsername());
                     startActivity(intent);
