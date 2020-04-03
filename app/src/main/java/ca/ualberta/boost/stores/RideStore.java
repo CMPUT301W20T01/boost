@@ -127,6 +127,13 @@ public class RideStore {
         return ridePromise;
     }
 
+    /**
+     * get past rides of a driver
+     * @param driver_username
+     * @return
+     *      Promise<Collection<Ride>>
+     * @see Promise
+     */
     public static PromiseImpl<Collection<Ride>> getPastRides(final String driver_username) {
         RideStore store = getInstance();
 
@@ -160,7 +167,12 @@ public class RideStore {
         return ridesPromise;
     }
 
-
+    /**
+     * Get requests
+     * @return
+     *      Promise<Collection<Ride>>
+     * @see Promise
+     */
     public static Promise<Collection<Ride>> getRequests() {
         RideStore store = getInstance();
 
@@ -197,6 +209,8 @@ public class RideStore {
     /**
      * Get requests that have a driver who has accepted the request
      * @return
+     *      Promise<Collection<Ride>>
+     * @see Promise
      */
     public static Promise<Collection<Ride>> getDriverAcceptedRequests() {
         RideStore store = getInstance();
@@ -234,6 +248,8 @@ public class RideStore {
     /**
      * Get requests that are currently in progress (rider and driver have accepted)
      * @return
+     *      Promise<Collection<Ride>>
+     * @see Promise
      */
     public static Promise<Collection<Ride>> getActiveRides() {
         RideStore store = getInstance();

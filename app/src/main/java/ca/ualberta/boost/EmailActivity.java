@@ -20,14 +20,13 @@ import android.widget.ImageButton;
  */
 
 public class EmailActivity extends AppCompatActivity {
-    //Declare EditTexts
-    EditText emailTo;
-    EditText emailSubject;
-    EditText emailMessage;
-    ImageButton backButton;
+    private EditText emailTo;
+    private EditText emailSubject;
+    private EditText emailMessage;
+    private ImageButton backButton;
 
     //holds email from UserProfileActivity that was clicked
-    String receiver ;
+    private String receiver ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

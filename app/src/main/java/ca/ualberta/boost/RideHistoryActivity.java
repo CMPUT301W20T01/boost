@@ -21,18 +21,17 @@ import java.util.Collection;
 import javax.annotation.Nullable;
 
 import ca.ualberta.boost.controllers.RideListAdapter;
-import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.controllers.ActiveUser;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.User;
-import ca.ualberta.boost.models.UserType;
 import ca.ualberta.boost.stores.RideStore;
 
 public class RideHistoryActivity extends AppCompatActivity {
 
-    ImageButton backButton;
-    TextView username;
-    ListView listView;
-    User user;
+    private ImageButton backButton;
+    private TextView username;
+    private ListView listView;
+    private User user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

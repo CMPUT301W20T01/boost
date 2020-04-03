@@ -1,7 +1,5 @@
 package ca.ualberta.boost.models;
 
-import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +29,17 @@ public class Driver extends User {
         super(UserType.DRIVER, firstName, username, password, email, phoneNumber);
     }
 
+    /**
+     * Driver constructor to create a Driver from data in the build function
+     * @param firstName
+     * @param username
+     * @param password
+     * @param email
+     * @param phoneNumber
+     * @param thumbsUp
+     * @param thumbsDown
+     * @param balance
+     */
     private Driver(String firstName, String username, String password, String email, String phoneNumber, int thumbsUp, int thumbsDown, double balance) {
         super(UserType.DRIVER, firstName, username, password, email, phoneNumber);
         this.thumbsUp = thumbsUp;

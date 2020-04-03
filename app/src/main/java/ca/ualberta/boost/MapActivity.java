@@ -135,7 +135,7 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
      * @return
      *      Returns a String of the address
      */
-    public String reverseGeoLocate(LatLng latLng){
+    public String reverseGeoLocate(LatLng latLng) {
         Geocoder geocoder = new Geocoder(MapActivity.this);
         List<Address> results = new ArrayList<>();
         // get a list of results from the search location string
@@ -161,7 +161,7 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
      * from an answer to the stack overflow post
      * https://stackoverflow.com/questions/14828217/android-map-v2-zoom-to-show-all-the-markers
      */
-    public void zoomToMarkers(Marker marker1, Marker marker2){
+    public void zoomToMarkers(Marker marker1, Marker marker2) {
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         builder.include(marker1.getPosition());
@@ -179,14 +179,14 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
      * @param zoom
      *      The zoom level of the camera
      */
-    public void moveCamera(LatLng latLng, float zoom){
+    public void moveCamera(LatLng latLng, float zoom) {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
     /**
      * Links the map object to the map fragment
      */
-    private void initMap(){
+    private void initMap() {
         MapFragment mapFragment = getMapFragment();
         mapFragment.getMapAsync(MapActivity.this);
     }
@@ -200,7 +200,7 @@ public abstract class MapActivity extends FragmentActivity implements OnMapReady
     /**
      *  Gets the device's current location
      */
-    public void getDeviceLocation(){
+    public void getDeviceLocation() {
         /* get the device's current location */
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 

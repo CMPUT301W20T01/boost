@@ -19,7 +19,7 @@ import androidx.core.content.ContextCompat;
 
 import com.blikoon.qrcodescanner.QrCodeActivity;
 
-import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.controllers.ActiveUser;
 import ca.ualberta.boost.models.Driver;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.stores.RideStore;
@@ -34,7 +34,6 @@ public class ScannerActivity extends AppCompatActivity implements View.OnClickLi
     private static final int REQUEST_CODE_QR_SCAN = 101;
     private static final int PERMISSION_REQUEST_CODE = 1;
     private Button scanButton;
-    private Button generateButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +118,7 @@ public class ScannerActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

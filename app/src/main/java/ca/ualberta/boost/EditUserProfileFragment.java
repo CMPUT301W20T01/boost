@@ -13,22 +13,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.controllers.ActiveUser;
 import ca.ualberta.boost.models.User;
 
 /**TAKE NEW UPDATE ON USER CONTACT (EMAIL, PHONE NUMBER)
  * UPDATE TEXTVIEW AND SEND DATA TO PREVIOUS ACTIVITY TO UPDATE ON FIREBASE
  */
 public class EditUserProfileFragment extends DialogFragment {
-//    FirebaseUser currentUser;
-    User user;
-
+    private User user;
     private EditText email;
     private EditText phone;
     private EditText name;
     private OnFragmentInteractionListener listener;
 
-    EditUserProfileFragment(){}
+    EditUserProfileFragment() {}
 
     public interface OnFragmentInteractionListener {
         void onOkPressedEdit(String newEmail, String newPhone,String newName);

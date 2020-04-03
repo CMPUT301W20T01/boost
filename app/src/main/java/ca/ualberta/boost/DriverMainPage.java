@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Collection;
 
-import ca.ualberta.boost.models.ActiveUser;
+import ca.ualberta.boost.controllers.ActiveUser;
 import ca.ualberta.boost.models.Promise;
 import ca.ualberta.boost.models.Ride;
 import ca.ualberta.boost.models.User;
@@ -30,15 +30,10 @@ import ca.ualberta.boost.stores.RideStore;
  */
 
 public class DriverMainPage extends MapActivity implements DriverAcceptedFragment.OnFragmentInteractionListener {
-
     private static final String TAG = "DriverMainPage";
-
-    // views
     private Button viewRequestsButton;
     private Button logoutButton;
     private Button viewProfileButton;
-
-    // firebase
     private FirebaseAuth auth;
 
     @Override
@@ -91,27 +86,39 @@ public class DriverMainPage extends MapActivity implements DriverAcceptedFragmen
         });
     }
 
-    //function to launch the ViewRideRequests Activity
-    private void displayRequests(){
+    /**
+     * Launches the view requests activity
+     * @see ViewRideRequestsActivity
+     */
+    private void displayRequests() {
         Intent intent = new Intent(this, ViewRideRequestsActivity.class);
         startActivity(intent);
-        //finish();
     }
 
-    //function to launch the home screen
-    private void launchHomeScreen(){
+    /**
+     * Launches the driver's home screen
+     * @see MainActivity
+     */
+    private void launchHomeScreen() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }
 
+    /**
+     * Launches the driver's profile
+     * @see UserProfileActivity
+     */
     private void launchProfileScreen() {
         Intent intent = new Intent(this, UserProfileActivity.class);
         startActivity(intent);
     }
 
-    // method to check if user is involved in an active request
-    private void checkForActiveRequest(){
+    /**
+     * Checks if the user is involved in an active request and launches
+     * the current request activity is they are
+     */
+    private void checkForActiveRequest() {
         final User user = ActiveUser.getUser();
         Promise<Collection<Ride>> ridePromise = RideStore.getActiveRides();
         ridePromise.addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
@@ -122,7 +129,8 @@ public class DriverMainPage extends MapActivity implements DriverAcceptedFragmen
                         // user is driver for the active ride
                         if (ride.getDriverUsername().equals(user.getUsername())){
                             ActiveUser.setCurrentRide(ride);
-                            launchCurrentRequestActivity();
+                            Intent intent = new Intent(DriverMainPage.this, CurrentRideActivity.class);
+                            startActivity(intent);
                         }
                     }
                 } else {
@@ -138,8 +146,11 @@ public class DriverMainPage extends MapActivity implements DriverAcceptedFragmen
         });
     }
 
-    // method to check if user is involved in a driver accepted request
-    private void checkForPendingDriverAcceptedRequest(){
+    /**
+     * Checks if the active user is involved in a driver accepted request and
+     * opens the driver accepted fragment is they are
+     */
+    private void checkForPendingDriverAcceptedRequest() {
         final User user = ActiveUser.getUser();
         Promise<Collection<Ride>> ridePromise = RideStore.getDriverAcceptedRequests();
         ridePromise.addOnSuccessListener(new OnSuccessListener<Collection<Ride>>() {
@@ -152,8 +163,6 @@ public class DriverMainPage extends MapActivity implements DriverAcceptedFragmen
                         if (ride.getDriverUsername().equals(user.getUsername())){
                             ActiveUser.setCurrentRide(ride);
                             new DriverAcceptedFragment().show(getSupportFragmentManager(), "Pending_Driver_Accept");
-                            //Toast.makeText(RiderMainPage.this, "Driver accepted", Toast.LENGTH_LONG).show();
-
                         }
                     }
                 } else {
@@ -182,11 +191,6 @@ public class DriverMainPage extends MapActivity implements DriverAcceptedFragmen
         ActiveUser.setCurrentRide(newRide);
 
         new DriverAcceptedFragment().show(getSupportFragmentManager(), "Pending_Rider_Accept");
-    }
-
-    private void launchCurrentRequestActivity(){
-        Intent intent = new Intent(this, CurrentRideActivity.class);
-        startActivity(intent);
     }
 }
 

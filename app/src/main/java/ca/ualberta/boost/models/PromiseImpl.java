@@ -6,10 +6,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 /**
  * This class resolves or rejects a Promise.
  * @param <TResult>
+ * @see Promise
  */
 
 public class PromiseImpl<TResult> implements Promise<TResult> {
-    // Lambda functions to run on success or failure
+    // Callback functions to run on success or failure
     private OnSuccessListener<TResult> resolveCallback = null;
     private OnFailureListener rejectCallback = null;
 
