@@ -1,6 +1,7 @@
 package ca.ualberta.boost;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -16,6 +17,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import java.util.Random;
 
 import ca.ualberta.boost.stores.UserStore;
 
@@ -68,6 +70,27 @@ public class SignUpActivityTest {
         solo.searchText("Username is taken");
         // signup should fail and remain on signup activity
         solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
+    }
+
+    /**
+     * Tests that a rider can successfully sign up with unique information
+     */
+    @Test
+    public void signupAsRider(){
+        Activity activity = rule.getActivity();
+        Random rand = new Random();
+        int randomNum = rand.nextInt(1000000);
+        solo.enterText((EditText) solo.getView(R.id.sign_up_first_name), "Test Name");
+        // riderMichelle is already taken
+        solo.enterText((EditText) solo.getView(R.id.sign_up_username), "testRider"+randomNum);
+        solo.enterText((EditText) solo.getView(R.id.sign_up_email), "testRider"+randomNum+"@gmail.com");
+        solo.enterText((EditText) solo.getView(R.id.sign_up_phone_number), "7809999999");
+        solo.enterText((EditText) solo.getView(R.id.sign_up_password), "testPassword");
+        solo.clickOnButton("Sign Up");
+//        solo.searchText("Username is taken");
+        // signup should fail and remain on signup activity
+        solo.sleep(4000);
+        solo.assertCurrentActivity("Correct Activity", RiderMainPage.class);
     }
 
 
